@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.vision.GoogleTagManager;
+import org.usfirst.frc4904.standard.util.CmdUtil;
 import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
@@ -440,19 +441,14 @@ public class SwerveSubsystem extends SubsystemBase {
      * Combination of {@link #c_rotateTo(Supplier) c_rotateTo} and {@link #c_gotoPos(Supplier) c_gotoPos}.
      */
     public Command c_gotoPose(Supplier<? extends Pose2d> getPose) {
-        return new ParallelCommandGroup() {
-            Pose2d lastPose;
-            {
-                addCommands(
-                    c_rotateTo(() -> {
-                        lastPose = getPose.get();
-                        return lastPose != null ? lastPose.getRotation().getRotations() : null;
-                    }),
-                    c_gotoPos(() -> lastPose != null ? lastPose.getTranslation() : null)
-                );
-                addRequirements(SwerveSubsystem.this);
-            }
-        };
+        return CmdUtil.withState(
+            getPose,
+            state -> new ParallelCommandGroup(
+                c_rotateTo(() -> state.get() != null ? state.get().getRotation().getRotations() : null),
+                c_gotoPos(() -> state.get() != null ? state.get().getTranslation() : null)
+            ),
+            this
+        );
     }
 
     /**
