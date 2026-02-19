@@ -2,8 +2,6 @@ package org.usfirst.frc4904.robot.subsystems.IO;
 
 import java.util.Optional;
 
-import org.usfirst.frc4904.robot.subsystems.IO.ArmState.OutputState;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;

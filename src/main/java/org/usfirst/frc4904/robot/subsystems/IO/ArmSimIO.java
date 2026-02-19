@@ -1,7 +1,5 @@
 package org.usfirst.frc4904.robot.subsystems.IO;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import org.usfirst.frc4904.robot.subsystems.IO.ArmState.InputState;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmState.OutputState;
 
@@ -18,7 +16,7 @@ public class ArmSimIO implements ArmIO{
         Units.inchesToMeters(25),
         -2 * Math.PI,
         2 * Math.PI, 
-        true, 0, null
+        true, 0, 0, 0
     );
 
     @Override

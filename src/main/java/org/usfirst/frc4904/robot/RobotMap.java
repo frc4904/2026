@@ -7,9 +7,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
+import org.usfirst.frc4904.robot.Simulation.MechanismSimulator;
 import org.usfirst.frc4904.robot.subsystems.ClimberSubsystem;
 import org.usfirst.frc4904.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
+import org.usfirst.frc4904.robot.subsystems.IO.ArmSimIO;
+import org.usfirst.frc4904.robot.subsystems.IO.ArmSubsystem;
 import org.usfirst.frc4904.robot.swerve.SwerveModule;
 import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
 import org.usfirst.frc4904.robot.vision.VisionSubsystem;
@@ -21,7 +24,7 @@ import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
 import org.usfirst.frc4904.standard.custom.sensors.CustomNavx;
 
 public final class RobotMap {
-
+     
     public static class Port {
 
         public static class HumanInput {
@@ -58,6 +61,7 @@ public final class RobotMap {
         public static ClimberSubsystem climber;
         public static IntakeSubsystem intake;
 
+      
         // motors
         public static CustomTalonFX flDrive;
         public static CustomTalonFX flTurn;

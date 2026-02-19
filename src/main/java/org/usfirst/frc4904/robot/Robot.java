@@ -23,6 +23,8 @@ import org.usfirst.frc4904.standard.util.CmdUtil;
 import org.usfirst.frc4904.standard.util.Logging;
 
 public class Robot extends CommandRobotBase {
+    private SimulationContainer m_SimulationContainer;
+
     @Override
     public void initialize() {
         // BEGONE
@@ -38,6 +40,8 @@ public class Robot extends CommandRobotBase {
         driverChooser.setDefaultOption("swerve", new SwerveGain());
 
         operatorChooser.setDefaultOption("default", new DefaultOperator());
+
+        m_SimulationContainer = new SimulationContainer(isSimulation());
 
     
     }
@@ -119,6 +123,6 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void simulationPeriodic() {
-        Component.sim.periodic();
+        m_SimulationContainer.sim.periodic();
     }
 }
