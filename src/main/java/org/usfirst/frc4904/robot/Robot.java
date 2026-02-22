@@ -25,7 +25,7 @@ public class Robot extends CommandRobotBase {
 
     private static final FieldObject2d
         autonPreview = Dashboard.previewField.getObject("auton_preview"),
-        autonStart   = Dashboard.previewField.getObject("auton_start"),
+        autonStart   = Dashboard.previewField.getRobotObject(),
         autonEnd     = Dashboard.previewField.getObject("auton_end");
 
     @Override
@@ -37,7 +37,7 @@ public class Robot extends CommandRobotBase {
         autonChooser.setDefaultOption("none", new NoOp());
         autonChooser.addOption("straight", Auton.c_jankStraight());
         autonChooser.addOption("reverse", Auton.c_jankReverse());
-        Auton.initPathplanner(autonChooser, "STRET", "4", "7", "romtater", "aaahhh","4904");
+        Auton.initPathplanner(autonChooser, "STRET", "4", "7", "romtater", "aaahhh", "4904");
 
         driverChooser.setDefaultOption("swerve", new SwerveGain());
 
