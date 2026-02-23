@@ -1,7 +1,5 @@
 package org.usfirst.frc4904.standard.custom.sensors;
 
-import org.usfirst.frc4904.standard.util.Logging;
-
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Preferences;
 
@@ -30,6 +28,8 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
 
     public void setResetOffset(double offset) {
         offset %= 1;
+        if (offset < 0) offset++;
+
         resetOffset = offset;
         Preferences.setDouble(key, offset);
     }
