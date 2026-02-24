@@ -19,6 +19,8 @@ import java.util.function.Predicate;
 
 public class ShooterSubsystem extends MotorSubsystem {
 
+    /// MEASUREMENTS
+
     public static final double GRAVITY = 9.8;
 
     // TODO get measurements
@@ -59,6 +61,11 @@ public class ShooterSubsystem extends MotorSubsystem {
         return RED_HUB.isOwn() ? RED_HUB : BLUE_HUB;
     }
 
+    /// TUNING
+
+    // TODO tune
+    private static final double MAX_VEL = 10;
+
     private static final Slot0Configs pidfConfig = new Slot0Configs();
     static {
         // TODO tune
@@ -70,6 +77,8 @@ public class ShooterSubsystem extends MotorSubsystem {
         pidfConfig.kA = 0;
         pidfConfig.kG = 0;
     }
+
+    /// IMPL
 
     public ShooterSubsystem(CustomTalonFX motor1, CustomTalonFX motor2) {
         super(
@@ -122,7 +131,11 @@ public class ShooterSubsystem extends MotorSubsystem {
         double dx = pos.getDistance(robotPos) - SHOOTER_POS.getX();
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
 
-        return dx * secA * Math.sqrt(GRAVITY / (2 * (dx * tanA - dz)));
+        double determinant = dx * tanA - dz;
+        if (determinant <= 0) return MAX_VEL;
+
+        double vel = dx * secA * Math.sqrt(GRAVITY / (2 * determinant));
+        return Math.min(vel, MAX_VEL);
     }
 
     private boolean hasSufficientDistance(Translation2d pos) {
