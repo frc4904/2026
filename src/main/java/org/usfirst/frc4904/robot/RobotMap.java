@@ -1,16 +1,10 @@
 package org.usfirst.frc4904.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc4904.robot.subsystems.ClimberSubsystem;
 import org.usfirst.frc4904.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
+import org.usfirst.frc4904.robot.subsystems.MotorSubsystem;
+import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.robot.swerve.SwerveModule;
 import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
 import org.usfirst.frc4904.robot.vision.VisionSubsystem;
@@ -20,6 +14,16 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
 import org.usfirst.frc4904.standard.custom.sensors.CustomNavx;
+import org.usfirst.frc4904.standard.custom.sensors.LinearDutyCycleEncoder;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class RobotMap {
 
@@ -58,6 +62,8 @@ public final class RobotMap {
         public static VisionSubsystem vision;
         public static ClimberSubsystem climber;
         public static IntakeSubsystem intake;
+        public static ShooterSubsystem shooter;
+        public static MotorSubsystem indexer;
 
         // motors
         public static CustomTalonFX flDrive;
@@ -72,12 +78,21 @@ public final class RobotMap {
         public static SmartMotorController climbMotor;
         public static SmartMotorController intakeVerticalMotor;
         public static SmartMotorController intakeRollerMotor;
+        public static SmartMotorController indexerMotorBottom;
+        public static SmartMotorController indexerMotorTop;
+        public static CustomTalonFX shooterMotorOne;
+        public static CustomTalonFX shooterMotorTwo;
+
+
+
 
         // misc
         public static AddressableLED ledStrip;
 
         // encoders
         public static DutyCycleEncoder intakeEncoder;
+        public static LinearDutyCycleEncoder climberEncoder;
+
 
     }
 
@@ -166,13 +181,25 @@ public final class RobotMap {
         //     new boolean[] { false, true, false, true }
         // );
 
-        // Component.climbMotor = new CustomTalonFX(32);
+        Component.climbMotor = new CustomTalonFX(32);
+        Component.climberEncoder = new LinearDutyCycleEncoder(-1);
 
-        // Component.intakeVerticalMotor = new CustomTalonFX(17);
-        // Component.intakeRollerMotor = new CustomTalonFX(2);
-        // Component.intakeEncoder = new DutyCycleEncoder(Port.PWM.ENCODER_FL);
+        Component.intakeVerticalMotor = new CustomTalonFX(17);
+        Component.intakeRollerMotor = new CustomTalonFX(2);
+        Component.intakeEncoder = new DutyCycleEncoder(-1);
 
-        // Component.intake = new IntakeSubsystem(Component.intakeVerticalMotor, Component.intakeRollerMotor, Component.intakeEncoder);
+        Component.indexerMotorBottom = new CustomTalonFX(-1);
+        Component.indexerMotorTop = new CustomTalonFX(-1);
+
+
+        Component.intake = new IntakeSubsystem(Component.intakeVerticalMotor, Component.intakeRollerMotor, Component.intakeEncoder);
+        Component.climber = new ClimberSubsystem(Component.climbMotor, Component.climberEncoder);
+        Component.shooter = new ShooterSubsystem(Component.shooterMotorOne, Component.shooterMotorTwo);
+        Component.indexer = new MotorSubsystem(
+            new SmartMotorController[] { Component.indexerMotorBottom, Component.indexerMotorTop },
+            4
+        );
+
 
         HumanInput.Driver.xyJoystick = new CustomCommandJoystick(
             Port.HumanInput.xyJoystickPort,
