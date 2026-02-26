@@ -17,6 +17,7 @@ public class CustomCommandJoystick extends CommandJoystick {
     public enum Axis {
         X(0),
         Y(1),
+        TWIST(2),
         SLIDER(3);
 
         public final int axis;

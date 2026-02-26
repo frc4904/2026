@@ -128,13 +128,17 @@ public class ShooterSubsystem extends MotorSubsystem {
     private double calcShooterVelocity(Translation2d pos) {
         Translation2d robotPos = Component.chassis.getPoseEstimate().getTranslation();
 
-        double dx = pos.getDistance(robotPos) - SHOOTER_POS.getX();
+        double dist = pos.getDistance(robotPos) - SHOOTER_POS.getX();
+        return getShooterVelocityForDistance(dist);
+    }
+
+    public double getShooterVelocityForDistance(double dist) {
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
 
-        double determinant = dx * tanA - dz;
+        double determinant = dist * tanA - dz;
         if (determinant <= 0) return MAX_VEL;
 
-        double vel = dx * secA * Math.sqrt(GRAVITY / (2 * determinant));
+        double vel = dist * secA * Math.sqrt(GRAVITY / (2 * determinant));
         return Math.min(vel, MAX_VEL);
     }
 
