@@ -85,6 +85,23 @@ public final class Util {
         return Math.max(min, Math.min(max, value));
     }
 
+    /**
+     * Transform a number from one range into another.
+     * For example, transforming an input from [-1, 1] to [0, 10]:
+     * <pre>{@code
+     * transformRange(getInput(), -1, 1, 0, 10);
+     * }</pre>
+     * @param x Input number. Does <em>not</em> have to be within [fromMin, fromMax] and will <em>not</em> be clamped
+     * @param fromMin Minimum value of the initial range
+     * @param fromMax Maximum value of the initial range
+     * @param toMin Minimum value of the target range
+     * @param toMax Maximum value of the target range
+     * @return The transformed value. Will be <em>outside</em> of [toMin, toMax] if the initial value was outside of [fromMin, fromMax]
+     */
+    public static double transformRange(double x, double fromMin, double fromMax, double toMin, double toMax) {
+        return (x - fromMin) / fromMax * toMax + toMin;
+    }
+
     public record Range(double min, double max) {
         public Range {
             if (min > max) {
