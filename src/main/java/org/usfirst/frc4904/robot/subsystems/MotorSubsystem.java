@@ -3,8 +3,12 @@ package org.usfirst.frc4904.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
+import org.usfirst.frc4904.standard.util.Util;
 
 public class MotorSubsystem extends SubsystemBase {
+
+    // for minimizing the damage of the first physical testing
+    public static final double MAX_VOLTAGE = 1.5;
 
     public final SmartMotorController[] motors;
 
@@ -71,6 +75,7 @@ public class MotorSubsystem extends SubsystemBase {
     }
 
     public void setVoltage(double voltage) {
+        voltage = Util.clamp(voltage, -MAX_VOLTAGE, MAX_VOLTAGE);
         for (var motor : motors) motor.setVoltage(voltage);
     }
 
