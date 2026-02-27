@@ -32,27 +32,24 @@ public class DefaultOperator extends Operator {
         var joystick = RobotMap.HumanInput.Operator.joystick;
 
         /// TEMPORARY INTAKE
-        joystick.button10.whileTrue(
-            new ParallelCommandGroup(
-                Component.intake.c_extend(),
-                Component.intake.c_intake()
-            )
-        );
-        joystick.button10.whileFalse(Component.intake.c_retract());
+        // joystick.button10.whileTrue(
+        //     new ParallelCommandGroup(
+        //         Component.intake.c_extend(),
+        //         Component.intake.c_intake()
+        //     )
+        // );
+        // joystick.button10.whileFalse(Component.intake.c_retract());
 
         /// SHOOTER
-        joystick.button1.whileTrue(Component.shooter.c_smartShoot());
-        joystick.button2.whileTrue(Component.shooter.c_controlVelocity(this::getVelocity));
+        // joystick.button1.whileTrue(Component.shooter.c_smartShoot());
+        // joystick.button2.whileTrue(Component.shooter.c_controlVelocity(this::getVelocity));
 
         /// CLIMBER
-        joystick.button11.onTrue(Component.climber.c_up());
-        joystick.button12.onTrue(Component.climber.c_down());
+        // joystick.button11.onTrue(Component.climber.c_up());
+        // joystick.button12.onTrue(Component.climber.c_down());
 
         /// MANUAL INDEXER
-        joystick.button7.whileTrue(Component.indexer.c_forward());
-
-        ///
-
+        // joystick.button7.whileTrue(Component.indexer.c_forward());
 
         /// NOTIFS TEST
         // joystick.button10.onTrue(Notifications.c_testNotif());

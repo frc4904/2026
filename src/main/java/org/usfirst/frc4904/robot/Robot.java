@@ -115,9 +115,8 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void alwaysExecute() {
-        SmartDashboard.putNumber("navxTemp", Component.imu.getTemperature());
+        SmartDashboard.putNumber("imu temp", Component.imu.getTemperature());
         SmartDashboard.putNumber("match time", Timer.getMatchTime());
-        SmartDashboard.putNumber("navx cheese", Component.imu.getYaw());
 
         // IntBuffer messageID = IntBuffer.allocate(16);
         // ByteBuffer timestamp = ByteBuffer.allocate(16);

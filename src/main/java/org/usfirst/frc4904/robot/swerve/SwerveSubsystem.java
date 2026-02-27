@@ -67,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
         estimator = new SwerveDrivePoseEstimator(
             kinematics,
-            Component.navx.getRotation2d(),
+            Component.imu.getRotation2d(),
             getModulePositions(),
             Pose2d.kZero // unused
         );
@@ -223,7 +223,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         if (estimatorEnabled) {
-            estimator.update(Component.navx.getRotation2d(), getModulePositions());
+            estimator.update(Component.imu.getRotation2d(), getModulePositions());
 
             var tags = GoogleTagManager.getTagsSince(lastTagUpdateTime);
             lastTagUpdateTime = GoogleTagManager.getLastTime();
@@ -247,11 +247,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Component.navx.getYaw();
+        return Component.imu.getYaw();
     }
 
     private Rotation2d getRotation() {
-        return Component.navx.getRotation2d();
+        return Component.imu.getRotation2d();
     }
 
     /// COMMANDS
@@ -512,7 +512,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /// MISC CONFIG
 
     public void resetOdometry() {
-        Component.navx.zeroYaw();
+        Component.imu.zeroYaw();
         estimator.resetRotation(Rotation2d.kZero);
     }
 

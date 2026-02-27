@@ -14,6 +14,8 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
 import org.usfirst.frc4904.standard.custom.sensors.CustomNavx;
+import org.usfirst.frc4904.standard.custom.sensors.CustomPigeon;
+import org.usfirst.frc4904.standard.custom.sensors.IMU;
 import org.usfirst.frc4904.standard.custom.sensors.LinearDutyCycleEncoder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -54,7 +56,7 @@ public final class RobotMap {
 
     public static class Component {
 
-        public static CustomNavx navx;
+        public static IMU imu;
 
         // subsystems
         public static SwerveSubsystem chassis;
@@ -136,7 +138,7 @@ public final class RobotMap {
         }
         initialized = true;
 
-        Component.navx = new CustomNavx(0);
+        Component.imu = new CustomPigeon(59);
 
         Component.chassis = new SwerveSubsystem(
             new SwerveModule(
@@ -181,24 +183,24 @@ public final class RobotMap {
         //     new boolean[] { false, true, false, true }
         // );
 
-        Component.climbMotor = new CustomTalonFX(32);
-        Component.climberEncoder = new LinearDutyCycleEncoder(-1);
+        // Component.climbMotor = new CustomTalonFX(32);
+        // Component.climberEncoder = new LinearDutyCycleEncoder(-1);
 
-        Component.intakeVerticalMotor = new CustomTalonFX(17);
-        Component.intakeRollerMotor = new CustomTalonFX(2);
-        Component.intakeEncoder = new DutyCycleEncoder(-1);
+        // Component.intakeVerticalMotor = new CustomTalonFX(17);
+        // Component.intakeRollerMotor = new CustomTalonFX(2);
+        // Component.intakeEncoder = new DutyCycleEncoder(-1);
 
-        Component.indexerMotorBottom = new CustomTalonFX(-1);
-        Component.indexerMotorTop = new CustomTalonFX(-1);
+        // Component.indexerMotorBottom = new CustomTalonFX(-1);
+        // Component.indexerMotorTop = new CustomTalonFX(-1);
 
 
-        Component.intake = new IntakeSubsystem(Component.intakeVerticalMotor, Component.intakeRollerMotor, Component.intakeEncoder);
-        Component.climber = new ClimberSubsystem(Component.climbMotor, Component.climberEncoder);
-        Component.shooter = new ShooterSubsystem(Component.shooterMotorOne, Component.shooterMotorTwo);
-        Component.indexer = new MotorSubsystem(
-            new SmartMotorController[] { Component.indexerMotorBottom, Component.indexerMotorTop },
-            4
-        );
+        // Component.intake = new IntakeSubsystem(Component.intakeVerticalMotor, Component.intakeRollerMotor, Component.intakeEncoder);
+        // Component.climber = new ClimberSubsystem(Component.climbMotor, Component.climberEncoder);
+        // Component.shooter = new ShooterSubsystem(Component.shooterMotorOne, Component.shooterMotorTwo);
+        // Component.indexer = new MotorSubsystem(
+        //     new SmartMotorController[] { Component.indexerMotorBottom, Component.indexerMotorTop },
+        //     4
+        // );
 
 
         HumanInput.Driver.xyJoystick = new CustomCommandJoystick(
