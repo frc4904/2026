@@ -15,4 +15,6 @@ public class ArmState {
    public record GoalState(
         double position
    ){}
+   //Put in goal states
 }
+//Whatever the arm state

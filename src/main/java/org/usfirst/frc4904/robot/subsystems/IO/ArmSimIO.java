@@ -36,3 +36,4 @@ public class ArmSimIO implements ArmIO{
     }
 
 }
+//Info for the sim to make inputs and outputs

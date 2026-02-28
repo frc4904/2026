@@ -22,3 +22,4 @@ public class ArmRealIO implements ArmIO{
     }
 
 }
+//Defining the real inputs and outputs

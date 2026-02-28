@@ -25,8 +25,8 @@ public class ArmSubsystem extends SubsystemBase{
     public ArmSubsystem(ArmIO armIO) {
         this.io = armIO;
 
-        this.controller = new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
-        this.ff = new ArmFeedforward(0, 0, 0);
+        this.controller = new ProfiledPIDController(0.001, 0, 0, new Constraints(100, 100));
+        this.ff = new ArmFeedforward(0, 2.6057, 0);
     }
 
     @Override
@@ -56,3 +56,4 @@ public class ArmSubsystem extends SubsystemBase{
         return new InstantCommand(() -> this.goal = new ArmState.GoalState(degrees));
     }
 }
+//The actual subsystem is the same
