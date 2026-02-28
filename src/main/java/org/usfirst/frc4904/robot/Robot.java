@@ -6,15 +6,12 @@
 /*----------------------------------------------------------------------------*/
 package org.usfirst.frc4904.robot;
 
-import edu.wpi.first.hal.can.CANJNI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import org.usfirst.frc4904.robot.Auton.PathPlannerCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
@@ -22,7 +19,6 @@ import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.commands.NoOp;
-import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 public class Robot extends CommandRobotBase {
@@ -118,29 +114,7 @@ public class Robot extends CommandRobotBase {
         SmartDashboard.putNumber("imu temp", Component.imu.getTemperature());
         SmartDashboard.putNumber("match time", Timer.getMatchTime());
 
-        // IntBuffer messageID = IntBuffer.allocate(16);
-        // ByteBuffer timestamp = ByteBuffer.allocate(16);
-
-        // byte[] data = CANJNI.FRCNetCommCANSessionMuxReceiveMessage(
-        //     messageID,
-        //     0x0fffffff,
-        //     timestamp
-        // );
-
-        // if (messageID.get(0) == 0x4090180) {
-        //     System.out.println("x");
-        // }
-
-        // if (Logging.cooldown("Robot.alwaysExecute", 1)) {
-        //     List<Tag> tags = Component.vision.gtm.getTags();
-        //     if (!tags.isEmpty()) System.out.println("WE FOUND A TAG: " + tags);
-        // }
-
-        // if (Logging.cooldown("equis para nav", 0.5)) {
-        //     int[] test = new int[8];
-        //     int status = Component.navx.selfTest(test);
-        //     System.out.println("navx test: " + status + " test: " + Arrays.toString(test));
-        // }
-        // Logging.log("navx rot", Component.navx.getYaw());
+        SmartDashboard.putNumber("climber encoder", Component.climberEncoder.get());
+        SmartDashboard.putNumber("intake encoder", Component.intakeEncoder.get());
     }
 }

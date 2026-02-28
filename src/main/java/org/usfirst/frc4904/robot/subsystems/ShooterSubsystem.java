@@ -8,7 +8,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.commands.SwitchingIfElseCommand;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
@@ -107,16 +106,12 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     public Command c_smartShoot() {
         // TODO prefer closest instead? (maybe helpful for testing)
-        Hub hub = getOwnHub();
 
         return new SwitchingIfElseCommand(
-            new ParallelCommandGroup(
-                c_controlVelocity(() -> calcShooterVelocity(hub.pos)),
-                Component.chassis.c_rotateTo(() -> calcRobotAngle(hub.pos))
-            ),
+            c_controlVelocity(() -> calcShooterVelocity(getOwnHub().pos)),
             c_stop(), // TODO fun lights, elastic notif?, etc. on fail
-            () -> hub.isInRange(Component.chassis.getPoseEstimate().getTranslation()),
-            () -> hasSufficientDistance(hub.pos)
+            () -> getOwnHub().isInRange(Component.chassis.getPoseEstimate().getTranslation()),
+            () -> hasSufficientDistance(getOwnHub().pos)
         ).andThen(this::stop);
     }
 
@@ -125,14 +120,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         tanA = Math.tan(SHOOTER_ANGLE),
         secA = 1 / Math.cos(SHOOTER_ANGLE);
 
-    private double calcShooterVelocity(Translation2d pos) {
-        Translation2d robotPos = Component.chassis.getPoseEstimate().getTranslation();
-
-        double dist = pos.getDistance(robotPos) - SHOOTER_POS.getX();
-        return getShooterVelocityForDistance(dist);
-    }
-
-    public double getShooterVelocityForDistance(double dist) {
+    public static double getShooterVelocityForDistance(double dist) {
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
 
         double determinant = dist * tanA - dz;
@@ -142,7 +130,25 @@ public class ShooterSubsystem extends MotorSubsystem {
         return Math.min(vel, MAX_VEL);
     }
 
-    private boolean hasSufficientDistance(Translation2d pos) {
+    public static double calcRobotAngle(Translation2d pos) {
+        Translation2d robotPos = Component.chassis.getPoseEstimate().getTranslation();
+        Translation2d dist = pos.minus(robotPos);
+
+        double angle = Math.atan2(dist.getY(), dist.getX());
+        // account for the fact that the shooter is not aligned with the center of the robot
+        double offset = Math.asin(-SHOOTER_POS.getY() / dist.getNorm());
+
+        return Units.radiansToRotations(angle + offset);
+    }
+
+    private static double calcShooterVelocity(Translation2d pos) {
+        Translation2d robotPos = Component.chassis.getPoseEstimate().getTranslation();
+
+        double dist = pos.getDistance(robotPos) - SHOOTER_POS.getX();
+        return getShooterVelocityForDistance(dist);
+    }
+
+    private static boolean hasSufficientDistance(Translation2d pos) {
         Translation2d robotPos = Component.chassis.getPoseEstimate().getTranslation();
 
         double dx = pos.getDistance(robotPos) - SHOOTER_POS.getX();
@@ -152,17 +158,6 @@ public class ShooterSubsystem extends MotorSubsystem {
         // double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
         // double apex = (dx * dx * sin2A * secA * secA) / (4 * (dx * tanA - dz));
         // return dx > apex;
-    }
-
-    private double calcRobotAngle(Translation2d pos) {
-        Translation2d robotPos = Component.chassis.getPoseEstimate().getTranslation();
-        Translation2d dist = pos.minus(robotPos);
-
-        double angle = Math.atan2(dist.getY(), dist.getX());
-        // account for the fact that the shooter is not aligned with the center of the robot
-        double offset = Math.asin(-SHOOTER_POS.getY() / dist.getNorm());
-
-        return Units.radiansToRotations(angle + offset);
     }
 
 }

@@ -291,6 +291,8 @@ public class VisionSubsystem extends SubsystemBase {
      * @param failed Whether positioning was stopped due to some sort of failure. Only for the purpose of fancy lights.
      */
     public void stopPositioning(String reason, boolean failed) {
+        if (!isPositioning()) return;
+
         targetTagOptions = null;
         targetTagId = null;
         desiredOffset = null;

@@ -5,11 +5,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
+import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.standard.commands.AlwaysRunnableInstantCommand;
 import org.usfirst.frc4904.standard.commands.RunUnless;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 
 import static org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig.JOYSTICK_DEADZONE;
+import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.calcRobotAngle;
 
 public class SwerveGain extends Driver {
 
@@ -33,6 +35,10 @@ public class SwerveGain extends Driver {
                 .withName("Driver - swerve drive")
         );
 
+        turnJoystick.button1.whileTrue(
+            Component.chassis.c_rotateTo(() -> calcRobotAngle(ShooterSubsystem.getOwnHub().pos))
+        );
+
         /// ODOMETRY RESETTING
         xyJoystick.button1.onTrue(
             new AlwaysRunnableInstantCommand(() -> Component.chassis.resetOdometry())
@@ -45,7 +51,7 @@ public class SwerveGain extends Driver {
                 DriverStation::isTeleopEnabled
             )
         );
-        turnJoystick.button1.onTrue(
+        turnJoystick.button2.onTrue(
             new RunUnless(
                 new AlwaysRunnableInstantCommand(() -> Component.chassis.flipZero()),
                 DriverStation::isTeleopEnabled

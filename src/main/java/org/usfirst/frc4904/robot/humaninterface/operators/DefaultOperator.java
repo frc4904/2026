@@ -1,6 +1,5 @@
 package org.usfirst.frc4904.robot.humaninterface.operators;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.usfirst.frc4904.robot.RobotMap;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick.Axis;
@@ -32,28 +31,24 @@ public class DefaultOperator extends Operator {
         var joystick = RobotMap.HumanInput.Operator.joystick;
 
         /// INTAKE
-        // joystick.button10.whileTrue(
-        //     new ParallelCommandGroup(
-        //         Component.intake.c_extend(),
-        //         Component.intake.c_intake()
-        //     )
-        // );
-        // joystick.button10.whileFalse(Component.intake.c_retract());
-        joystick.button10.whileTrue(Component.intake.c_forward(true));
+        joystick.button5.onTrue(Component.intake.c_retract());
 
-        joystick.button3.whileTrue(Component.TEMPORARY_INTAKE_SHENANIGANS.c_forward(true));
-        joystick.button5.whileTrue(Component.TEMPORARY_INTAKE_SHENANIGANS.c_backward(true));
+        joystick.button3.onTrue(Component.intake.c_extend());
+        joystick.button3.whileTrue(Component.intake.c_intake());
+
+        joystick.button4.whileTrue(Component.TEMPORARY_INTAKE_SHENANIGANS.c_forward(true));
+        joystick.button6.whileTrue(Component.TEMPORARY_INTAKE_SHENANIGANS.c_backward(true));
 
         /// SHOOTER
         joystick.button1.whileTrue(Component.shooter.c_smartShoot());
         joystick.button2.whileTrue(Component.shooter.c_controlVelocity(this::getVelocity));
 
         /// CLIMBER
-        joystick.button11.onTrue(Component.climber.c_up());
-        joystick.button12.onTrue(Component.climber.c_down());
+        joystick.button7.onTrue(Component.climber.c_down());
+        joystick.button8.onTrue(Component.climber.c_up());
 
         /// INDEXER
-        joystick.button7.whileTrue(Component.indexer.c_forward());
+        joystick.button9.whileTrue(Component.indexer.c_forward());
 
         /// NOTIFS TEST
         // joystick.button10.onTrue(Notifications.c_testNotif());
