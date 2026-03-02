@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Preferences;
 
 /**
  * Converts a DutyCycleEncoder into encoding a linear position
- * by storing the number of full revolutions since initialization.
+ * by keeping track of the number of full revolutions.
  */
 public class LinearDutyCycleEncoder {
 
