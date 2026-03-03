@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
+import static edu.wpi.first.units.Units.*;
+
 /**
  * Common utilities
  */
@@ -177,6 +179,10 @@ public final class Util {
         }
 
         return seconds + fpgaTimeOffset;
+    }
+
+    public static double fahrenheit(double celsius) {
+        return Celsius.of(celsius).in(Fahrenheit);
     }
 
     /**

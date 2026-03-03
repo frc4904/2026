@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc4904.robot.subsystems.*;
@@ -75,11 +76,10 @@ public final class RobotMap {
         public static CustomTalonFX shooterMotorRight;
         public static CustomTalonFX shooterMotorLeft;
 
-
-
-
         // misc
         public static AddressableLED ledStrip;
+
+        public static PowerDistribution pdh;
 
         // encoders
         public static DutyCycleEncoder intakeEncoder;
@@ -127,6 +127,8 @@ public final class RobotMap {
             return;
         }
         initialized = true;
+
+        Component.pdh = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
 
         Component.imu = new CustomPigeon(59);
 

@@ -18,6 +18,7 @@ import org.usfirst.frc4904.robot.RobotMap.Dashboard;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
+import org.usfirst.frc4904.standard.Silly;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.util.Util;
 
@@ -55,6 +56,8 @@ public class Robot extends CommandRobotBase {
         });
 
         Component.chassis.startPoseEstimator(Pose2d.kZero);
+
+        Silly.initialize();
     }
 
     @Override
@@ -111,7 +114,10 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void alwaysExecute() {
+        Silly.periodic();
+
         SmartDashboard.putNumber("imu temp", Component.imu.getTemperature());
+        SmartDashboard.putNumber("pdh temp", Util.fahrenheit(Component.pdh.getTemperature()));
         SmartDashboard.putNumber("match time", Timer.getMatchTime());
 
         SmartDashboard.putNumber("climber encoder", Component.climberEncoder.get());
