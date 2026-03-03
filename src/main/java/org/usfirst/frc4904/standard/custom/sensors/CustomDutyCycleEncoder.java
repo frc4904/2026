@@ -14,7 +14,6 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
 
         key = "zeros/" + channel;
 
-        Preferences.initDouble(key, 0);
         resetOffset = Preferences.getDouble(key, 0);
     }
 

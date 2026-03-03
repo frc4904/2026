@@ -9,28 +9,32 @@ import edu.wpi.first.wpilibj.Preferences;
  */
 public class LinearDutyCycleEncoder {
 
-    private final String key;
+    private final String resetOffsetKey, lastReadingKey;
     public final DutyCycleEncoder encoder;
 
     private double resetOffset;
-
     Double lastReading;
 
     public LinearDutyCycleEncoder(int channel) {
-        key = "zeros/" + channel;
+        resetOffsetKey = "zeros/" + channel;
+        lastReadingKey = "lastReading/" + channel;
         encoder = new DutyCycleEncoder(channel);
 
-        Preferences.initDouble(key, 0);
-        resetOffset = Preferences.getDouble(key, 0);
+        resetOffset = Preferences.getDouble(resetOffsetKey, 0);
+
+        if (Preferences.containsKey(lastReadingKey)) {
+            lastReading = Preferences.getDouble(lastReadingKey, 0);
+        }
     }
 
     public void reset() {
         resetOffset = encoder.get();
-        Preferences.setDouble(key, resetOffset);
+        Preferences.setDouble(resetOffsetKey, resetOffset);
     }
 
     public double get() {
         double reading = encoder.get();
+        Preferences.setDouble(lastReadingKey, reading);
 
         if (lastReading == null) {
             lastReading = reading;
@@ -44,7 +48,7 @@ public class LinearDutyCycleEncoder {
                 resetOffset++;
             }
 
-            Preferences.setDouble(key, resetOffset);
+            Preferences.setDouble(resetOffsetKey, resetOffset);
         }
 
         lastReading = reading;

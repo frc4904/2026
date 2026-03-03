@@ -26,12 +26,9 @@ public final class Silly {
 
     public static void initialize() {
         // odometer
-        Preferences.initDouble(odometerDistanceKey, 0);
         odometerDistance = Preferences.getDouble(odometerDistanceKey, 0);
 
         // progress
-        Preferences.initDouble(progressKey, 0);
-        Preferences.initInt(progressCompletedKey, 0);
         progress = Preferences.getDouble(progressKey, 0);
         progressCompleted = Preferences.getInt(progressCompletedKey, 0);
 
