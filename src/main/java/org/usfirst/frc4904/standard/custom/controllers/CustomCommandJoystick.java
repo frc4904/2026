@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import org.usfirst.frc4904.robot.Robot;
 
 /**
  * A joystick that implements the generic controller interface and the 2023
@@ -70,6 +71,8 @@ public class CustomCommandJoystick extends CommandJoystick {
         button10 = button(10);
         button11 = button(11);
         button12 = button(12);
+
+        Robot.addClearBindingCallback(this::clearBindings);
     }
 
     @Override
@@ -112,7 +115,6 @@ public class CustomCommandJoystick extends CommandJoystick {
     /**
      * Returns true if a given axis is above the move threshold.
      *
-     * @param axis
      * @return whether the current value of that axis is outside the deadzone
      */
     public boolean active(Axis axis) {

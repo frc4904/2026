@@ -4,13 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-/**
- * A joystick that implements the generic controller interface and the 2023
- * trigger interface. This allows us to use a joystick as a controller. This
- * contains 12 buttons to reflect the joysticks we are typically using.
- *
- * TO DO: should probably extend or be replaced with https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/button/CommandJoystick.html
- */
 public class CustomCommandDS extends Joystick {
     protected final int port;
     // Buttons

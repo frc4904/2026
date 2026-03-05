@@ -6,12 +6,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.usfirst.frc4904.robot.RobotMap;
-import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.standard.custom.CommandSendableChooser;
 import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 import org.usfirst.frc4904.standard.util.CmdUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * IterativeRobot is normally the base class for command based code, but we
@@ -19,6 +21,8 @@ import org.usfirst.frc4904.standard.util.CmdUtil;
  * CommandRobotBase class. Robot should extend this instead of iterative robot.
  */
 public abstract class CommandRobotBase extends TimedRobot {
+
+    /// CHOOSERS
 
     private Command autonCommand;
     private Driver driver;
@@ -32,18 +36,6 @@ public abstract class CommandRobotBase extends TimedRobot {
         SmartDashboard.putData("chooser/auton", autonChooser);
         SmartDashboard.putData("chooser/driver", driverChooser);
         SmartDashboard.putData("chooser/operator", operatorChooser);
-    }
-
-    private void clearBindings() {
-        // TODO does not clear xbox bindings
-        //      this is not really doable since CommandXboxController has a lot of methods
-        //      that would all have to be overridden to use a custom EventLoop
-
-        if (driver != null) driver.unbindCommands();
-        if (operator != null) operator.unbindCommands();
-
-        HumanInput.Driver.ps4.clearBindings();
-        HumanInput.Operator.joystick.clearBindings();
     }
 
     private void updateHumanInput(Driver driver) {
@@ -63,6 +55,28 @@ public abstract class CommandRobotBase extends TimedRobot {
         if (driver != null) driver.bindCommands();
         if (operator != null) operator.bindCommands();
     }
+
+    /// BINDINGS
+
+    private static final Set<Runnable> clearBindingCallbacks = new HashSet<>();
+
+    /**
+     * Add a callback that will be called to unbind commands from a joystick/controller
+     */
+    public static void addClearBindingCallback(Runnable callback) {
+        clearBindingCallbacks.add(callback);
+    }
+
+    private void clearBindings() {
+        if (driver != null) driver.unbindCommands();
+        if (operator != null) operator.unbindCommands();
+
+        for (var callback : clearBindingCallbacks) {
+            callback.run();
+        }
+    }
+
+    /// LIFECYCLE CODE
 
     // The following methods are 'final' to prevent accidentally overriding robot
     // functionality when implementing year specific code. Instead, use the methods

@@ -1,23 +1,56 @@
 package org.usfirst.frc4904.standard.custom.controllers;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import org.usfirst.frc4904.robot.Robot;
 
 public class CustomCommandXbox extends CommandXboxController {
+
+    // public so that the loop can be used with custom triggers. for example:
+    // new Trigger(joystick.loop, () -> joystick.getAxis(Axis.X) > 0.5)
+    public final EventLoop loop;
+
     private final double deadzone;
-    private final CommandXboxController hid;
 
     public CustomCommandXbox(int port, double deadzone) {
         super(port);
-        hid = new CommandXboxController(port);
+
         if (deadzone < 0 || deadzone >= 1) {
-            throw new IllegalArgumentException("CustomCommandXbox deadzone must be in [0, 1]");
+            throw new IllegalArgumentException("CustomCommandXbox deadzone must be in [0, 1)");
         }
         this.deadzone = deadzone;
+
+        loop = new EventLoop();
+        CommandScheduler.getInstance().getDefaultButtonLoop().bind(loop::poll);
+
+        Robot.addClearBindingCallback(this::clearBindings);
+    }
+
+    @Override
+    public Trigger button(int button) {
+        return super.button(button, loop);
+    }
+
+    /**
+     * Not actually "deprecated"; do not remove.
+     * Should not be used in our code, use {@link #button(int)} instead.
+     */
+    @Override @Deprecated
+    public Trigger button(int button, EventLoop _loop) {
+        // use our loop instead
+        return super.button(button, this.loop);
+    }
+
+    public void clearBindings() {
+        loop.clear();
     }
 
     @Override
     public double getLeftX() {
-        return applyDeadzone(hid.getLeftX(), deadzone);
+        return deadzone(super.getLeftX());
     }
 
     /**
@@ -27,7 +60,7 @@ public class CustomCommandXbox extends CommandXboxController {
      */
     @Override
     public double getRightX() {
-        return applyDeadzone(hid.getRightX(), deadzone);
+        return deadzone(super.getRightX());
     }
 
     /**
@@ -37,7 +70,7 @@ public class CustomCommandXbox extends CommandXboxController {
      */
     @Override
     public double getLeftY() {
-        return applyDeadzone(hid.getLeftY(), deadzone);
+        return deadzone(super.getLeftY());
     }
 
     /**
@@ -47,21 +80,20 @@ public class CustomCommandXbox extends CommandXboxController {
      */
     @Override
     public double getRightY() {
-        return applyDeadzone(hid.getRightY(), deadzone);
+        return deadzone(super.getRightY());
     }
 
     @Override
     public double getRightTriggerAxis() {
-        return applyDeadzone(hid.getRightTriggerAxis(), deadzone);
+        return deadzone(super.getRightTriggerAxis());
     }
 
     @Override
     public double getLeftTriggerAxis() {
-        return applyDeadzone(hid.getLeftTriggerAxis(), deadzone);
+        return deadzone(super.getLeftTriggerAxis());
     }
 
-    public static double applyDeadzone(double input, double deadzone) {
-        if (Math.abs(input) < deadzone) return 0;
-        return (input - Math.signum(input) * deadzone) / (1 - deadzone); // linear between 0 and 1 in the remaining range
+    protected double deadzone(double input) {
+        return MathUtil.applyDeadband(input, deadzone);
     }
 }

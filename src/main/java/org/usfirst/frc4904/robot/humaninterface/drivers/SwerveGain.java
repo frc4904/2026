@@ -48,7 +48,7 @@ public class SwerveGain extends Driver {
             )
         );
 
-        // explode operator joystick
+        // explode operator joystick (shooter testing)
         ps4.povRight().whileTrue(Component.shooter.c_forward(true));
 
         // swerve reset
@@ -61,6 +61,8 @@ public class SwerveGain extends Driver {
 
         // climber up
         ps4.triangle().whileTrue(Component.climber.c_up());
+        // climber down
+        ps4.cross().whileTrue(Component.climber.c_down());
 
         // testing shooter
         ps4.square().whileTrue(
@@ -70,14 +72,11 @@ public class SwerveGain extends Driver {
         // indexer
         ps4.circle().whileTrue(Component.indexer.c_forward(true));
 
-        // climber down
-        ps4.cross().whileTrue(Component.climber.c_down());
-
-        // retract
+        // intake retract
         ps4.L1().onTrue(Component.intake.c_retract());
-
-        // (extend and) intake
-        ps4.L2().onTrue(Component.intake.c_intake());
+        // intake extend and run
+        ps4.L2().onTrue(Component.intake.c_extend());
+        ps4.L2().whileTrue(Component.intake.c_intake());
 
         // align
         ps4.R1().whileTrue(
@@ -94,10 +93,10 @@ public class SwerveGain extends Driver {
     }
 
     protected double getRawForward() {
-        return -HumanInput.Driver.ps4.getLeftX();
+        return -HumanInput.Driver.ps4.getLeftY();
     }
     protected double getRawLeft() {
-        return -HumanInput.Driver.ps4.getLeftY();
+        return -HumanInput.Driver.ps4.getLeftX();
     }
 
     @Override
@@ -112,7 +111,7 @@ public class SwerveGain extends Driver {
 
     @Override
     public double getTurnSpeed() {
-        double turnSpeed = -HumanInput.Driver.turnJoystick.getX();
+        double turnSpeed = -HumanInput.Driver.ps4.getRightX();
         return scaleGain(turnSpeed, TURN_EXP);
     }
 }
