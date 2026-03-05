@@ -188,7 +188,7 @@ public final class RobotMap {
         Component.shooterMotorLeft = new CustomTalonFX(23);
         Component.shooterMotorRight = new CustomTalonFX(24, true);
 
-        Component.indexerMotorBottom = new CustomTalonFX(4);
+        Component.indexerMotorBottom = new CustomTalonFX(5);
         Component.indexerMotorTop = new CustomTalonFX(41, true);
 
         Component.TEMPORARY_INTAKE_SHENANIGANS = new MotorSubsystem(
@@ -200,8 +200,8 @@ public final class RobotMap {
         Component.climber = new ClimberSubsystem(Component.climbMotor, Component.climberEncoder);
         Component.shooter = new ShooterSubsystem(Component.shooterMotorRight, Component.shooterMotorLeft);
         Component.indexer = new MotorSubsystem(
-            new SmartMotorController[] { Component.indexerMotorTop },
-            // new SmartMotorController[] { Component.indexerMotorBottom },
+            // new SmartMotorController[] { Component.indexerMotorTop },
+            new SmartMotorController[] { Component.indexerMotorBottom },
             3
         );
 
