@@ -70,7 +70,7 @@ public class SwerveGain extends Driver {
         );
 
         // indexer
-        ps4.circle().whileTrue(Component.indexer.c_forward(true));
+        ps4.circle().whileTrue(Component.indexer.c_pulse());
 
         // intake retract
         ps4.L1().onTrue(Component.intake.c_retract());

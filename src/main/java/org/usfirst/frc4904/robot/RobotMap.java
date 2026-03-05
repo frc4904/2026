@@ -55,7 +55,7 @@ public final class RobotMap {
         public static ClimberSubsystem climber;
         public static IntakeSubsystem intake;
         public static ShooterSubsystem shooter;
-        public static MotorSubsystem indexer;
+        public static IndexerSubsystem indexer;
         public static MotorSubsystem TEMPORARY_INTAKE_SHENANIGANS;
 
         // motors
@@ -199,10 +199,7 @@ public final class RobotMap {
         Component.intake = new IntakeSubsystem(Component.intakeVerticalMotor, Component.intakeRollerMotor, Component.intakeEncoder);
         Component.climber = new ClimberSubsystem(Component.climbMotor, Component.climberEncoder);
         Component.shooter = new ShooterSubsystem(Component.shooterMotorRight, Component.shooterMotorLeft);
-        Component.indexer = new MotorSubsystem(
-            new SmartMotorController[] { Component.indexerMotorTop, Component.indexerMotorBottom },
-            3
-        );
+        Component.indexer = new IndexerSubsystem(Component.indexerMotorTop, Component.indexerMotorBottom);
 
         HumanInput.Driver.ps4 = new CustomCommandPS4(Port.HumanInput.ps4Port, 0.01);
         HumanInput.Operator.joystick = new CustomCommandJoystick(Port.HumanInput.joystick, 0.01);

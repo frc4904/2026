@@ -51,7 +51,7 @@ public class DefaultOperator extends Operator {
         joystick.button8.whileTrue(Component.climber.c_up());
 
         /// INDEXER
-        joystick.button9.whileTrue(Component.indexer.c_forward(true));
+        joystick.button9.whileTrue(Component.indexer.c_pulse());
 
         /// NOTIFS TEST
         // joystick.button10.onTrue(Notifications.c_testNotif());
