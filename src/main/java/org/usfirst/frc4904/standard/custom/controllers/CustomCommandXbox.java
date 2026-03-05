@@ -44,6 +44,21 @@ public class CustomCommandXbox extends CommandXboxController {
         return super.button(button, this.loop);
     }
 
+    public Trigger pov(int pov, int angle) {
+        return super.pov(pov, angle, loop);
+    }
+
+    /**
+     * Not actually "deprecated"; do not remove.
+     * Should not be used in our code, use other pov methods instead like
+     * {@link #pov(int)}, {@link #pov(int, int)}, or {@link #povUp()}.
+     */
+    @Override @Deprecated
+    public Trigger pov(int pov, int angle, EventLoop _loop) {
+        // use our loop instead
+        return super.pov(pov, angle, this.loop);
+    }
+
     public void clearBindings() {
         loop.clear();
     }

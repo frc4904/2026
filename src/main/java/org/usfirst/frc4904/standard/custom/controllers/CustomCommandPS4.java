@@ -59,6 +59,7 @@ public class CustomCommandPS4 extends CommandPS4Controller {
      */
     @Override @Deprecated
     public Trigger pov(int pov, int angle, EventLoop _loop) {
+        // use our loop instead
         return super.pov(pov, angle, this.loop);
     }
 
