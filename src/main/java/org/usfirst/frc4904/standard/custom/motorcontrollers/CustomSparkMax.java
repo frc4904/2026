@@ -45,11 +45,6 @@ public class CustomSparkMax extends SparkMax implements SmartMotorController {
     }
 
     @Override
-    public void neutralOutput() {
-        stopMotor();
-    }
-
-    @Override
     public boolean isFwdLimitSwitchPressed() throws IllegalAccessException {
         if (!limitSwitch) throw new IllegalAccessException("Cannot read forward limit switch state when CustomSparkMax was constructed without limit switch.");
         return getForwardLimitSwitch().isPressed();

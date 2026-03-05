@@ -1,12 +1,11 @@
 package org.usfirst.frc4904.standard.custom.motorcontrollers;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitValue;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 
 public class CustomTalonFX extends TalonFX implements SmartMotorController {
 
@@ -58,8 +57,4 @@ public class CustomTalonFX extends TalonFX implements SmartMotorController {
         return inverted;
     }
 
-    @Override
-    public void neutralOutput() {
-        stopMotor();
-    }
 }
