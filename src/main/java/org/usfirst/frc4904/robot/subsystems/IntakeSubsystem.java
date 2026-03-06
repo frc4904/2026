@@ -1,21 +1,15 @@
 package org.usfirst.frc4904.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.standard.custom.motioncontrollers.ezControl;
-import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion;
-import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
-import org.usfirst.frc4904.standard.util.Logging;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import org.usfirst.frc4904.robot.RobotMap.Component;
+import org.usfirst.frc4904.standard.custom.motioncontrollers.ezControl;
+import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion;
+import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class IntakeSubsystem extends MotorSubsystem {
 
@@ -50,13 +44,13 @@ public class IntakeSubsystem extends MotorSubsystem {
 
         this.verticalMotor = verticalMotor;
         this.encoder = encoder;
-        this.feedforward = new ArmFeedforward(kS, kG, kV, kA);        
+        this.feedforward = new ArmFeedforward(kS, kG, kV, kA);
     }
 
     public double getAngle() {
         return encoder.get();
     }
-    
+
     public Command c_intake() {
         return c_forward(true);
     }
@@ -65,39 +59,25 @@ public class IntakeSubsystem extends MotorSubsystem {
     private final Subsystem verticalMotorRequirement = Component.TEMPORARY_INTAKE_SHENANIGANS;
 
     public Command c_gotoAngle(double angle) {
-        var pid = new PIDController(kP, kI, kD);
-        pid.enableContinuousInput(0, 1);
-        ezControl controller = new ezControl(
-            pid,
+        ezControl control = new ezControl(
+            kP, kI, kD,
             (position, velocity) -> feedforward.calculate(
                 Units.rotationsToRadians(getAngle() - HORIZONTAL),
                 velocity
             )
         );
+        control.pid.enableContinuousInput(0, 1);
         var constraints = new TrapezoidProfile.Constraints(MAX_VEL, MAX_ACCEL);
 
         return new ezMotion(
-            controller,
+            control,
             this::getAngle,
-            // verticalMotor::setVoltage,
-            v -> {
-                Logging.log("volt age", v);
-                verticalMotor.setVoltage(v);
-            },
-            () -> {
-                double current = getAngle();
-                double goal = MathUtil.inputModulus(angle, current - 0.5, current + 0.5);
-
-                var profile = new TrapezoidProfile(constraints);
-                var startState = new TrapezoidProfile.State(current, 0);
-                var goalState = new TrapezoidProfile.State(goal, 0);
-
-                return (elapsed) -> profile.calculate(elapsed, startState, goalState);
-            },
+            verticalMotor::setVoltage,
+            angle,
+            1,
+            constraints,
             verticalMotorRequirement
-        ).finallyDo(this::stop).alongWith(new RunCommand(() -> {
-            Logging.log("tax", "current: " + getAngle() + ", goal: " + angle);
-        }));
+        ).finallyDo(this::stop);
     }
 
     public Command c_extend() {
@@ -108,4 +88,3 @@ public class IntakeSubsystem extends MotorSubsystem {
         return c_gotoAngle(retractAngle);
     }
 }
-

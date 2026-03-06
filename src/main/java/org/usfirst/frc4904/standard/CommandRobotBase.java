@@ -110,6 +110,8 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #alwaysExecute()} for year-specific code. */
     @Override
     public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+
         alwaysExecute();
     }
 
@@ -122,7 +124,6 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #teleopExecute()} for year-specific code. */
     @Override
     public final void teleopPeriodic() {
-        CommandScheduler.getInstance().run();
         teleopExecute();
     }
 
@@ -146,7 +147,6 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #autonomousExecute()} for year-specific code. */
     @Override
     public final void autonomousPeriodic() {
-        CommandScheduler.getInstance().run();
         autonomousExecute();
     }
 
@@ -169,7 +169,6 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #disabledExecute()} for year-specific code. */
     @Override
     public final void disabledPeriodic() {
-        CommandScheduler.getInstance().run();
         disabledExecute();
     }
 
@@ -188,7 +187,6 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #testExecute()} for year-specific code. */
     @Override
     public final void testPeriodic() {
-        CommandScheduler.getInstance().run();
         testExecute();
     }
 
