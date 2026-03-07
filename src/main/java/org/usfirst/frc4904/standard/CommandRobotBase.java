@@ -11,6 +11,7 @@ import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 import org.usfirst.frc4904.standard.util.CmdUtil;
+import org.usfirst.frc4904.standard.util.Storage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -110,9 +111,12 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #alwaysExecute()} for year-specific code. */
     @Override
     public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
+        // tick command scheduler in mode-specific periodic methods since they run first
 
         alwaysExecute();
+
+        // robotPeriodic runs last, except for simulationPeriodic, so use that if sim is enabled
+        if (!isSimulation()) Storage.save();
     }
 
     /** Use {@link #teleopInitialize()} for year-specific code. */
@@ -124,6 +128,8 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #teleopExecute()} for year-specific code. */
     @Override
     public final void teleopPeriodic() {
+        CommandScheduler.getInstance().run();
+
         teleopExecute();
     }
 
@@ -147,6 +153,8 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #autonomousExecute()} for year-specific code. */
     @Override
     public final void autonomousPeriodic() {
+        CommandScheduler.getInstance().run();
+
         autonomousExecute();
     }
 
@@ -169,6 +177,8 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #disabledExecute()} for year-specific code. */
     @Override
     public final void disabledPeriodic() {
+        CommandScheduler.getInstance().run();
+
         disabledExecute();
     }
 
@@ -187,6 +197,8 @@ public abstract class CommandRobotBase extends TimedRobot {
     /** Use {@link #testExecute()} for year-specific code. */
     @Override
     public final void testPeriodic() {
+        CommandScheduler.getInstance().run();
+
         testExecute();
     }
 
@@ -196,6 +208,21 @@ public abstract class CommandRobotBase extends TimedRobot {
         testCleanup();
     }
 
+    /** Use {@link #simulationInitialize()} for year-specific code. */
+    @Override
+    public void simulationInit() {
+        simulationInitialize();
+    }
+
+    /** Use {@link #simulationExecute()} for year-specific code. */
+    @Override
+    public void simulationPeriodic() {
+        simulationExecute();
+
+        // simulationPeriodic runs latest of all methods (when sim is enabled)
+        Storage.save();
+    }
+
 
     /**
      * Function for year-specific code to be run on robot code launch, after {@link RobotMap#initialize() RobotMap initialization}.
@@ -203,7 +230,10 @@ public abstract class CommandRobotBase extends TimedRobot {
      */
     public abstract void initialize();
 
-    /** Function for year-specific code to be run in every robot mode. */
+    /**
+     * Function for year-specific code to be run in every robot mode.
+     * This function runs <em>after</em> the mode-specific execute function.
+     */
     public abstract void alwaysExecute();
 
 
@@ -237,7 +267,7 @@ public abstract class CommandRobotBase extends TimedRobot {
     public abstract void disabledCleanup();
 
 
-    /** Function for year-specific code to be run on disabled initialize. */
+    /** Function for year-specific code to be run on test initialize. */
     public abstract void testInitialize();
 
     /** Function for year-specific code to be run while in test mode. */
@@ -245,5 +275,12 @@ public abstract class CommandRobotBase extends TimedRobot {
 
     /** Function for year-specific code to be run when test mode ends. */
     public abstract void testCleanup();
+
+
+    /** Function for year-specific code to be run on simulation initialize. */
+    public abstract void simulationInitialize();
+
+    /** Function for year-specific code to be run while in simulation mode. */
+    public abstract void simulationExecute();
 
 }
