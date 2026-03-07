@@ -3,10 +3,7 @@ package org.usfirst.frc4904.robot.swerve;
 import edu.wpi.first.math.ComputerVisionUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -14,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -224,6 +222,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private double lastTagUpdateTime;
 
+    // TODO VISION not very accurate
+    private static final Transform3d CAMERA_OFFSET =
+        new Transform3d(Units.inchesToMeters(-4), 0, 0, Rotation3d.kZero);
+
     @Override
     public void periodic() {
         if (DriverStation.isEnabled()) {
@@ -243,24 +245,37 @@ public class SwerveSubsystem extends SubsystemBase {
                 Pose2d pose = ComputerVisionUtil.objectToRobotPose(
                     tag.fieldPos(),
                     tag.pos(),
-                    Transform3d.kZero // TODO VISION camera offset
+                    CAMERA_OFFSET
                 ).toPose2d();
 
                 Logging.log("WE HAVE A POS", tag.pos());
 
                 addVisionPoseEstimate(
-                    new Pose2d(pose.getTranslation(), getRotation()),
+                    new Pose2d(pose.getTranslation(), Rotation2d.fromRotations(getTrueHeading())),
                     Timer.getFPGATimestamp() // TODO VISION use frame time (probably fixed now?)
                 );
             }
         }
     }
 
-    public double getHeading() {
+    double getHeading() {
         return Component.imu.getYaw();
     }
 
-    private Rotation2d getRotation() {
+    /**
+     * Heading that accounts for alliance flip.
+     * <p>
+     * Bottom right corner of the blue side is (0, 0, 0).
+     * Accordingly, blue —> red is 0deg, red —> blue is 180deg.
+     */
+    double getTrueHeading() {
+        double heading = getHeading();
+        return DriverStation.getAlliance().orElse(null) == Alliance.Red
+            ? (heading + 0.5) % 1
+            : heading;
+    }
+
+    Rotation2d getRotation() {
         return Component.imu.getRotation2d();
     }
 

@@ -13,9 +13,8 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController
 
 public class IntakeSubsystem extends MotorSubsystem {
 
-    // TODO change all these
     public static final double kP = 4;
-    public static final double kI = 4;
+    public static final double kI = 4; // dubious
     public static final double kD = 0;
 
     public static final double kS = 0;
@@ -23,10 +22,9 @@ public class IntakeSubsystem extends MotorSubsystem {
     public static final double kA = 0;
     public static final double kG = -0.5; // negative b/c positive voltage is down
 
-    public static final double retractAngle = 0.94;
-    public static final double extendAngle = 0.18;
+    public static final double RETRACT_ANGLE = 0.94;
+    public static final double EXTEND_ANGLE = 0.18;
     public static final double HORIZONTAL = 0.18;
-    //TODO: find real angles
 
     public static final double MAX_VEL = 1;
     public static final double MAX_ACCEL = MAX_VEL * 4; // accelerate to max speed in 1/4 of a second
@@ -81,10 +79,10 @@ public class IntakeSubsystem extends MotorSubsystem {
     }
 
     public Command c_extend() {
-        return c_gotoAngle(extendAngle);
+        return c_gotoAngle(EXTEND_ANGLE);
     }
 
     public Command c_retract() {
-        return c_gotoAngle(retractAngle);
+        return c_gotoAngle(RETRACT_ANGLE);
     }
 }
