@@ -127,4 +127,10 @@ public class Robot extends CommandRobotBase {
         SmartDashboard.putNumber("climber encoder", Component.climberEncoder.get());
         SmartDashboard.putNumber("intake encoder", Component.intakeEncoder.get());
     }
+
+    @Override
+    public void simulationInitialize() {}
+
+    @Override
+    public void simulationExecute() {}
 }
