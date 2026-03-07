@@ -73,6 +73,10 @@ public class ShooterSubsystem extends MotorSubsystem {
     // in theory, this would be ~2 to account for the rotation of the fuel as it leaves the shooter
     private static final double VELOCITY_MULT = 2;
 
+    // hardcoded offset between the robot angle and the exit angle of the fuel
+    // positive means that the fuel exits the robot to the left/counterclockwise of the expected angle
+    private static final double ANGLE_OFFSET = Units.degreesToRotations(0);
+
     // TODO tune
     private static final double MAX_VEL = 8;
 
@@ -150,7 +154,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         // account for the fact that the shooter is not aligned with the center of the robot
         double offset = Math.asin(-SHOOTER_POS.getY() / dist.getNorm());
 
-        return Units.radiansToRotations(angle + offset);
+        return Units.radiansToRotations(angle + offset) - ANGLE_OFFSET;
     }
 
     private static double calcShooterVelocity(Translation2d pos) {
