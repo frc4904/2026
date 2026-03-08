@@ -275,7 +275,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * Bottom right corner of the blue side is (0, 0, 0).
      * Accordingly, blue —> red is 0deg, red —> blue is 180deg.
      */
-    double getTrueHeading() {
+    double getAbsoluteHeading() {
         double heading = getHeading();
         return DriverStation.getAlliance().orElse(null) == Alliance.Red
             ? (heading + 0.5) % 1
@@ -287,7 +287,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     Rotation2d getTrueRotation() {
-        return Rotation2d.fromRotations(getTrueHeading());
+        return Rotation2d.fromRotations(getAbsoluteHeading());
     }
 
     /// COMMANDS
@@ -297,24 +297,24 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * @param theta Field-relative angle to rotate to
-     * @param useTrueHeading When {@code true}, flips the IMU angle when on red alliance. This makes
+     * @param useAbsoluteHeading When {@code true}, flips the IMU angle when on red alliance. This makes
      *                       the angles "properly" field-relative instead of "alliance-relative"
      * @return A command that uses PID to rotate to the provided angle.
      *         Overrides any rotation from any other drive commands or methods while the command is running
      */
-    public Command c_rotateTo(double theta, boolean useTrueHeading) {
-        return c_rotateTo(() -> theta, useTrueHeading);
+    public Command c_rotateTo(double theta, boolean useAbsoluteHeading) {
+        return c_rotateTo(() -> theta, useAbsoluteHeading);
     }
 
     /**
      * @param getTheta Supplier of field-relative angles to rotate to
-     * @param useTrueHeading When {@code true}, flips the IMU angle when on red alliance. This makes
+     * @param useAbsoluteHeading When {@code true}, flips the IMU angle when on red alliance. This makes
      *                       the angles "properly" field-relative instead of "alliance-relative"
      * @return A command that uses PID to rotate to the provided angle.
      *         Overrides any rotation from any other drive commands or methods while the command is running
      */
-    public Command c_rotateTo(Supplier<Double> getTheta, boolean useTrueHeading) {
-        return new RotateCommand(getTheta, useTrueHeading);
+    public Command c_rotateTo(Supplier<Double> getTheta, boolean useAbsoluteHeading) {
+        return new RotateCommand(getTheta, useAbsoluteHeading);
     }
 
     /**
@@ -332,11 +332,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
         private final PIDController rotPID;
         private final Supplier<Double> getTheta;
-        private final boolean useTrueHeading;
+        private final boolean useAbsoluteHeading;
 
-        RotateCommand(Supplier<Double> getTheta, boolean useTrueHeading) {
+        RotateCommand(Supplier<Double> getTheta, boolean useAbsoluteHeading) {
             this.getTheta = getTheta;
-            this.useTrueHeading = useTrueHeading;
+            this.useAbsoluteHeading = useAbsoluteHeading;
 
             rotPID = new PIDController(40, 0, 0);
             rotPID.enableContinuousInput(0, 1);
@@ -358,7 +358,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         @Override
         public void execute() {
-            double current = useTrueHeading ? getTrueHeading() : getHeading();
+            double current = useAbsoluteHeading ? getAbsoluteHeading() : getHeading();
             Double goal = getTheta.get();
 
             if (goal == null) {
@@ -481,11 +481,11 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Combination of {@link #c_rotateTo(Supplier, boolean) c_rotateTo} and {@link #c_gotoPos(Supplier) c_gotoPos}.
      */
-    public Command c_gotoPose(Supplier<? extends Pose2d> getPose, boolean useTrueHeading) {
+    public Command c_gotoPose(Supplier<? extends Pose2d> getPose, boolean useAbsoluteHeading) {
         return CmdUtil.withState(
             getPose,
             state -> new ParallelCommandGroup(
-                c_rotateTo(() -> state.get() != null ? state.get().getRotation().getRotations() : null, useTrueHeading),
+                c_rotateTo(() -> state.get() != null ? state.get().getRotation().getRotations() : null, useAbsoluteHeading),
                 c_gotoPos(() -> state.get() != null ? state.get().getTranslation() : null)
             ),
             this
