@@ -178,7 +178,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         Translation2d robotPos = Component.chassis.getPositionEstimate();
 
         double dx = pos.getDistance(robotPos) - SHOOTER_POS.getX();
-        // TODO tune
+        // TODO tune (currently unused)
         return dx > 1; // just tune it - the math is not particularly accurate in practice anyway
 
         // double dz = HUB_HEIGHT - SHOOTER_POS.getZ();

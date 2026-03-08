@@ -33,12 +33,10 @@ final class SwerveConstants {
 
     static final double DRIVE_GEAR_RATIO = 1.0545; // 5.625; // motor rots/wheel rots
 
-    // TODO: get real measurements
-    static final double DRIVE_RPM = 6380;
+    static final double DRIVE_RPM = 6380; // TODO get real measurement
 
-    // TODO: get real measurements
     static final double WHEEL_DIAMETER = Units.inchesToMeters(3.5); // meters
-    static final double ROBOT_DIAGONAL = 1.15; // meters
+    static final double ROBOT_DIAGONAL = 1.15; // meters - TODO get real measurement
 
     static final double WHEEL_CIRC = Math.PI * WHEEL_DIAMETER; // meters
 
