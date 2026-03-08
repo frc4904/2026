@@ -80,7 +80,7 @@ public class SwerveGain extends Driver {
 
         // align
         ps4.R1().whileTrue(
-            Component.chassis.c_rotateTo(() -> calcRobotAngle(ShooterSubsystem.getOwnHub().pos))
+            Component.chassis.c_rotateTo(() -> calcRobotAngle(ShooterSubsystem.getOwnHub().pos), true)
         );
 
         // (index and) shooter

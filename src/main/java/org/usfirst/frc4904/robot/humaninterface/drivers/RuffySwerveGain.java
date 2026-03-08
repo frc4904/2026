@@ -36,7 +36,7 @@ public class RuffySwerveGain extends Driver {
         );
 
         turnJoystick.button1.whileTrue(
-            Component.chassis.c_rotateTo(() -> calcRobotAngle(ShooterSubsystem.getOwnHub().pos))
+            Component.chassis.c_rotateTo(() -> calcRobotAngle(ShooterSubsystem.getOwnHub().pos), true)
         );
 
         /// ODOMETRY RESETTING
