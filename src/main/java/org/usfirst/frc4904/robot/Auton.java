@@ -149,11 +149,10 @@ public final class Auton {
             // which can't reference class fields like `startTime` or `offset`.
             // so i'll wrap it myself i guess.
             gotoPoseCommand = Component.chassis.c_gotoPose(() -> {
+                if (atEnd) return null;
+
                 double time = (Timer.getFPGATimestamp() - startTime) / PATHPLANNER_SLOWDOWN_FACTOR;
-                if (time >= duration) {
-                    if (atEnd) return null;
-                    else atEnd = true;
-                }
+                if (time >= duration) atEnd = true;
 
                 Pose2d target = sampleTraj(traj, start, time);
                 liveTarget.setPose(target);

@@ -69,7 +69,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
         estimator = new SwerveDrivePoseEstimator(
             kinematics,
-            Component.imu.getRotation2d(),
+            getTrueRotation(),
             getModulePositions(),
             Pose2d.kZero // unused
         );
@@ -89,6 +89,10 @@ public class SwerveSubsystem extends SubsystemBase {
                      .toArray(SwerveModuleState[]::new);
     }
 
+    public void startPoseEstimator(Translation2d currentPos) {
+        startPoseEstimator(new Pose2d(currentPos, getTrueRotation()));
+    }
+
     public void startPoseEstimator(Pose2d currentPose) {
         estimator.resetPose(currentPose);
         estimatorEnabled = true;
@@ -102,20 +106,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public boolean poseEstimatorEnabled() {
         return estimatorEnabled;
-    }
-
-    /**
-     * Add a vision measurement to the pose estimator.
-     * @param pose Pose of the robot (according to the tag measurement)
-     * @param time Time of the vision measurement, from {@link Timer#getFPGATimestamp()}
-     */
-    public void addVisionPoseEstimate(Pose2d pose, double time) {
-        if (!estimatorEnabled) {
-            System.err.println("SwerveSubsystem.addVisionPoseEstimate() called while pose estimator is disabled.");
-            return;
-        }
-
-        estimator.addVisionMeasurement(pose, time);
     }
 
     /**
@@ -246,7 +236,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         if (estimatorEnabled) {
-            estimator.update(Component.imu.getRotation2d(), getModulePositions());
+            estimator.update(getTrueRotation(), getModulePositions());
 
             var tags = GoogleTagManager.getTagsSince(lastTagUpdateTime);
             lastTagUpdateTime = GoogleTagManager.getLastTime();
@@ -263,8 +253,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 Logging.log("WE HAVE A POS", tag.pos());
 
-                addVisionPoseEstimate(
-                    new Pose2d(pose.getTranslation(), Rotation2d.fromRotations(getTrueHeading())),
+                estimator.addVisionMeasurement(
+                    new Pose2d(pose.getTranslation(), getTrueRotation()),
                     Timer.getFPGATimestamp() // TODO VISION use frame time (probably fixed now?)
                 );
             }
@@ -296,6 +286,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     Rotation2d getRotation() {
         return Component.imu.getRotation2d();
+    }
+
+    Rotation2d getTrueRotation() {
+        return Rotation2d.fromRotations(getTrueHeading());
     }
 
     /// COMMANDS
@@ -552,7 +546,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void resetOdometry() {
         Component.imu.zeroYaw();
-        estimator.resetRotation(Rotation2d.kZero);
+        estimator.resetRotation(getTrueRotation());
     }
 
     /**
