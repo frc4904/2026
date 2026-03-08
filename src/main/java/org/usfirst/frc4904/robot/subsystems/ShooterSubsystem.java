@@ -2,6 +2,9 @@ package org.usfirst.frc4904.robot.subsystems;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+
+import org.usfirst.frc4904.robot.subsystems.IO.ShootIO;
+import org.usfirst.frc4904.robot.subsystems.IO.ShootSimIO;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
@@ -23,10 +26,10 @@ public class ShooterSubsystem extends MotorSubsystem {
         pidfConfig.kG = 0;
     }
 
-    public ShooterSubsystem(CustomTalonFX shooterMotor1, CustomTalonFX shooterMotor2) {
+    public ShooterSubsystem(ShootSimIO shootIO) {
         super(
-            new SmartMotorController[] { shooterMotor1, shooterMotor2 },
-            4
+            //todo add wmart motor controller
+            //4
         );
 
         shooterMotor1.getConfigurator().apply(pidfConfig);
