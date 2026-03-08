@@ -135,7 +135,7 @@ public final class Auton {
                 Pose2d target = sampleTraj(traj, start, time);
                 liveTarget.setPose(target);
                 return target;
-            });
+            }, true);
         }
 
         @Override

@@ -182,7 +182,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param translation Movement speed in meters per second
      *                    Will be overridden if a {@link #c_gotoPos(Supplier) c_gotoPos()} command is active
      * @param theta Rotation speed in rotations per second.
-     *              Will be overridden if a {@link #c_rotateTo(double) c_rotateTo()} command is active
+     *              Will be overridden if a {@link #c_rotateTo(double, boolean) c_rotateTo()} command is active
      */
     public void driveRobotRelative(Translation2d translation, double theta) {
         if (posCommand != null) translation = posPIDEffort;
@@ -297,20 +297,24 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * @param theta Field-relative angle to rotate to
+     * @param useTrueHeading When {@code true}, flips the IMU angle when on red alliance. This makes
+     *                       the angles "properly" field-relative instead of "alliance-relative"
      * @return A command that uses PID to rotate to the provided angle.
      *         Overrides any rotation from any other drive commands or methods while the command is running
      */
-    public Command c_rotateTo(double theta) {
-        return c_rotateTo(() -> theta);
+    public Command c_rotateTo(double theta, boolean useTrueHeading) {
+        return c_rotateTo(() -> theta, useTrueHeading);
     }
 
     /**
      * @param getTheta Supplier of field-relative angles to rotate to
+     * @param useTrueHeading When {@code true}, flips the IMU angle when on red alliance. This makes
+     *                       the angles "properly" field-relative instead of "alliance-relative"
      * @return A command that uses PID to rotate to the provided angle.
      *         Overrides any rotation from any other drive commands or methods while the command is running
      */
-    public Command c_rotateTo(Supplier<Double> getTheta) {
-        return new RotateCommand(getTheta);
+    public Command c_rotateTo(Supplier<Double> getTheta, boolean useTrueHeading) {
+        return new RotateCommand(getTheta, useTrueHeading);
     }
 
     /**
@@ -319,7 +323,7 @@ public class SwerveSubsystem extends SubsystemBase {
      *         Overrides any rotation from any other drive commands or methods while the command is running
      */
     public Command c_controlRotation(DoubleSupplier getTheta) {
-        return new RotateCommand(() -> getTheta.getAsDouble() + getHeading());
+        return new RotateCommand(() -> getTheta.getAsDouble() + getHeading(), false);
     }
 
     private class RotateCommand extends Command {
@@ -328,9 +332,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
         private final PIDController rotPID;
         private final Supplier<Double> getTheta;
+        private final boolean useTrueHeading;
 
-        RotateCommand(Supplier<Double> getTheta) {
+        RotateCommand(Supplier<Double> getTheta, boolean useTrueHeading) {
             this.getTheta = getTheta;
+            this.useTrueHeading = useTrueHeading;
 
             rotPID = new PIDController(40, 0, 0);
             rotPID.enableContinuousInput(0, 1);
@@ -352,7 +358,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         @Override
         public void execute() {
-            double current = getHeading();
+            double current = useTrueHeading ? getTrueHeading() : getHeading();
             Double goal = getTheta.get();
 
             if (goal == null) {
@@ -473,13 +479,13 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Combination of {@link #c_rotateTo(Supplier) c_rotateTo} and {@link #c_gotoPos(Supplier) c_gotoPos}.
+     * Combination of {@link #c_rotateTo(Supplier, boolean) c_rotateTo} and {@link #c_gotoPos(Supplier) c_gotoPos}.
      */
-    public Command c_gotoPose(Supplier<? extends Pose2d> getPose) {
+    public Command c_gotoPose(Supplier<? extends Pose2d> getPose, boolean useTrueHeading) {
         return CmdUtil.withState(
             getPose,
             state -> new ParallelCommandGroup(
-                c_rotateTo(() -> state.get() != null ? state.get().getRotation().getRotations() : null),
+                c_rotateTo(() -> state.get() != null ? state.get().getRotation().getRotations() : null, useTrueHeading),
                 c_gotoPos(() -> state.get() != null ? state.get().getTranslation() : null)
             ),
             this
