@@ -1,7 +1,7 @@
 package org.usfirst.frc4904.standard.custom.sensors;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Preferences;
+import org.usfirst.frc4904.standard.util.Storage;
 
 public class CustomDutyCycleEncoder extends DutyCycleEncoder {
 
@@ -14,7 +14,7 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
 
         key = "zeros/" + channel;
 
-        resetOffset = Preferences.getDouble(key, 0);
+        resetOffset = Storage.getDouble(key, 0);
     }
 
     public void reset() {
@@ -30,7 +30,7 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
         if (offset < 0) offset++;
 
         resetOffset = offset;
-        Preferences.setDouble(key, offset);
+        Storage.setDouble(key, offset);
     }
 
     public double getResetOffset() {

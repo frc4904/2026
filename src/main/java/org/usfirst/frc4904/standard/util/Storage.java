@@ -107,6 +107,10 @@ public final class Storage {
         map.remove(key);
     }
 
+    public static boolean has(String key) {
+        return map.containsKey(key);
+    }
+
     public static byte getByte(String key, byte backup) {
         Item val = map.get(key);
         return val != null && val.type == BYTE ? (byte) val.value : backup;

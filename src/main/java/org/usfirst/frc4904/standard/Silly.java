@@ -1,10 +1,10 @@
 package org.usfirst.frc4904.standard;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
+import org.usfirst.frc4904.standard.util.Storage;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -12,6 +12,7 @@ import java.time.Year;
 
 /** Silly shenanigans that are separated to not crowd the main Robot class */
 public final class Silly {
+    private Silly() {}
 
     private static final String odometerDistanceKey = "odometer-distance";
     private static double odometerDistance;
@@ -26,11 +27,11 @@ public final class Silly {
 
     public static void initialize() {
         // odometer
-        odometerDistance = Preferences.getDouble(odometerDistanceKey, 0);
+        odometerDistance = Storage.getDouble(odometerDistanceKey, 0);
 
         // progress
-        progress = Preferences.getDouble(progressKey, 0);
-        progressCompleted = Preferences.getInt(progressCompletedKey, 0);
+        progress = Storage.getDouble(progressKey, 0);
+        progressCompleted = Storage.getInt(progressCompletedKey, 0);
 
         // birthday
         SmartDashboard.putBoolean("birthday", LocalDate.now().equals(birthday));
@@ -44,7 +45,8 @@ public final class Silly {
             Translation2d pos = chassis.getPositionEstimate();
             if (lastPos != null) {
                 odometerDistance += pos.getDistance(lastPos);
-                Preferences.setDouble(odometerDistanceKey, odometerDistance);
+                Storage.setDouble(odometerDistanceKey, odometerDistance);
+                SmartDashboard.putNumber(odometerDistanceKey, odometerDistance);
             }
             lastPos = pos;
         } else {
@@ -58,9 +60,9 @@ public final class Silly {
 
             if (progress >= 99.95) { // rounds to 100
                 progress = 0;
-                Preferences.setInt(progressCompletedKey, ++progressCompleted);
+                Storage.setInt(progressCompletedKey, ++progressCompleted);
             }
-            Preferences.setDouble(progressKey, progress);
+            Storage.setDouble(progressKey, progress);
             SmartDashboard.putString("progress", String.format("%.1f%% (%d done)", progress, progressCompleted));
         } else {
             progressChance += 0.00001;
