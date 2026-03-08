@@ -15,10 +15,12 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShootSimIO implements ShootIO{
-    //public motor
+    public DCMotor motora = DCMotor.getKrakenX44(1);
+    public DCMotor motorb = DCMotor.getKrakenX44(1);
+    
  // public MotorController []  spinners = new MotorController[] {DCMotor.getKrakenX44(2) };
    // private final FlywheelSim sim = new FlywheelSim(LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX44(2), 0.005, 1), DCMotor.getKrakenX44(2), null);
-    private final FlywheelSim sim = new FlywheelSim(LinearSystemId.createFlywheelSystem(CustomTalonFX, 0.005, 1), DCMotor.getKrakenX44(2), null);
+    private final FlywheelSim sim = new FlywheelSim(LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX44(2), 0.005, 1), DCMotor.getKrakenX44(2), null);
     @Override
     public InputState getInstance() {
        

@@ -28,8 +28,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     public ShooterSubsystem(ShootSimIO shootIO) {
         super(
-            //todo add wmart motor controller
-            //4
+           ShootSimIO.
         );
 
         shooterMotor1.getConfigurator().apply(pidfConfig);
