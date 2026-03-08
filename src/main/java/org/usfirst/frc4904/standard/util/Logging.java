@@ -3,7 +3,6 @@ package org.usfirst.frc4904.standard.util;
 import edu.wpi.first.math.geometry.*;
 
 import java.lang.reflect.Array;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public final class Logging {
      *         was last called with the same {@code key}.
      */
     public static boolean cooldown(String key, double delaySeconds) {
-        double now = Instant.now().getEpochSecond();
+        double now = System.currentTimeMillis() / 1000.0;
         double prev = lastLogTimes.getOrDefault(key, Double.NEGATIVE_INFINITY);
 
         if (now - prev >= delaySeconds) {
