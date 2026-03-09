@@ -18,11 +18,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.usfirst.frc4904.robot.Auton.PathPlannerCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
-import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
+import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveDriver;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.standard.CommandRobotBase;
-import org.usfirst.frc4904.standard.Silly;
+import org.usfirst.frc4904.standard.silly.Silly;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.util.Util;
 
@@ -62,7 +62,7 @@ public class Robot extends CommandRobotBase {
         autonChooser.addOption("reverse", Auton.c_jankReverse());
         updateAuton();
 
-        driverChooser.setDefaultOption("swerve", new SwerveGain());
+        driverChooser.setDefaultOption("swerve", new SwerveDriver());
 
         operatorChooser.setDefaultOption("default", new DefaultOperator());
 
