@@ -16,11 +16,11 @@ import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.calcRobotAng
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.getShooterVelocityForDistance;
 import static org.usfirst.frc4904.standard.humaninput.Operator.c_smartShootAndIndex;
 
-public class SwerveGain extends Driver {
+public class SwerveDriver extends Driver {
 
     private static final double SPEED_EXP = 2, TURN_EXP = 2; // TODO TUNE
 
-    public SwerveGain() {
+    public SwerveDriver() {
         super("SwerveGain");
     }
 

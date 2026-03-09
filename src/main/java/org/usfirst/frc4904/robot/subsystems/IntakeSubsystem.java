@@ -29,18 +29,18 @@ public class IntakeSubsystem extends MotorSubsystem {
     public static final double MAX_VEL = 1;
     public static final double MAX_ACCEL = MAX_VEL * 4; // accelerate to max speed in 1/4 of a second
 
-    private final SmartMotorController verticalMotor;
+    private final SmartMotorController angleMotor;
     private final DutyCycleEncoder encoder;
     private final ArmFeedforward feedforward;
 
     public IntakeSubsystem(
-        SmartMotorController verticalMotor,
+        SmartMotorController angleMotor,
         SmartMotorController rollerMotor,
         DutyCycleEncoder encoder
     ) {
         super(rollerMotor, 6);
 
-        this.verticalMotor = verticalMotor;
+        this.angleMotor = angleMotor;
         this.encoder = encoder;
         this.feedforward = new ArmFeedforward(kS, kG, kV, kA);
     }
@@ -53,15 +53,23 @@ public class IntakeSubsystem extends MotorSubsystem {
         return c_forward(true);
     }
 
-    // private final Subsystem verticalMotorRequirement = new SubsystemBase("intake vertical motor") {};
-    private final Subsystem verticalMotorRequirement = Component.TEMPORARY_INTAKE_SHENANIGANS;
+    // private final Subsystem angleMotorRequirement = new SubsystemBase("intake vertical motor") {};
+    private final Subsystem angleMotorRequirement = Component.INTAKE_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+
+    public Command c_extend() {
+        return c_gotoAngle(EXTEND_ANGLE);
+    }
+
+    public Command c_retract() {
+        return c_gotoAngle(RETRACT_ANGLE);
+    }
 
     public Command c_gotoAngle(double angle) {
         ezControl control = new ezControl(
             kP, kI, kD,
-            (position, velocity) -> feedforward.calculate(
+            (pos, vel) -> feedforward.calculate(
                 Units.rotationsToRadians(getAngle() - HORIZONTAL),
-                velocity
+                vel
             )
         );
         control.pid.enableContinuousInput(0, 1);
@@ -70,19 +78,11 @@ public class IntakeSubsystem extends MotorSubsystem {
         return new ezMotion(
             control,
             this::getAngle,
-            verticalMotor::setVoltage,
+            angleMotor::setVoltage,
             angle,
             1,
             constraints,
-            verticalMotorRequirement
+            angleMotorRequirement
         ).finallyDo(this::stop);
-    }
-
-    public Command c_extend() {
-        return c_gotoAngle(EXTEND_ANGLE);
-    }
-
-    public Command c_retract() {
-        return c_gotoAngle(RETRACT_ANGLE);
     }
 }

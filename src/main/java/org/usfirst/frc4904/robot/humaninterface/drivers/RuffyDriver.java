@@ -13,11 +13,11 @@ import org.usfirst.frc4904.standard.humaninput.Driver;
 import static org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig.JOYSTICK_DEADZONE;
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.calcRobotAngle;
 
-public class RuffySwerveGain extends Driver {
+public class RuffyDriver extends Driver {
 
     private static final double SPEED_EXP = 2, TURN_EXP = 2; // TODO TUNE
 
-    public RuffySwerveGain() {
+    public RuffyDriver() {
         super("RuffySwerveGain");
     }
 

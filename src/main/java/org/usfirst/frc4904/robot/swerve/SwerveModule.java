@@ -20,7 +20,7 @@ import static org.usfirst.frc4904.robot.swerve.SwerveConstants.*;
 public class SwerveModule implements Sendable {
 
     final String name;
-    final Translation2d position;
+    final Translation2d pos;
 
     private final DriveController drive;
     private final RotationController rotation;
@@ -33,13 +33,13 @@ public class SwerveModule implements Sendable {
         CustomTalonFX driveMotor,
         SmartMotorController rotMotor,
         CustomDutyCycleEncoder rotEncoder,
-        Translation2d position
+        Translation2d pos
     ) {
         this.name = name;
         // TODO maybe remove normalization and make it the caller's responsibility to pass the position in meters
-        this.position = position.times(ROBOT_DIAGONAL / (2 * position.getNorm()));
+        this.pos = pos.times(ROBOT_DIAGONAL / (2 * pos.getNorm()));
 
-        Translation2d direction = position.rotateBy(Rotation2d.kCCW_90deg);
+        Translation2d direction = pos.rotateBy(Rotation2d.kCCW_90deg);
 
         drive = driveMotor != null ? new DriveController(name, driveMotor) : null;
         rotation = new RotationController(name, rotMotor, rotEncoder, direction);

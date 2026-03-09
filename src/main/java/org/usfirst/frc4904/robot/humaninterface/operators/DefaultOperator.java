@@ -35,8 +35,8 @@ public class DefaultOperator extends Operator {
         var joystick = RobotMap.HumanInput.Operator.joystick;
 
         /// TEMPORARY INTAKE SHENANIGANS
-        joystick.button4.whileTrue(Component.TEMPORARY_INTAKE_SHENANIGANS.c_forward(true));
-        joystick.button6.whileTrue(Component.TEMPORARY_INTAKE_SHENANIGANS.c_backward(true));
+        joystick.button4.whileTrue(Component.INTAKE_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.c_forward(true));
+        joystick.button6.whileTrue(Component.INTAKE_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.c_backward(true));
 
         // joystick.button10.whileTrue(
         //     Component.TEMPORARY_INTAKE_SHENANIGANS.c_DEBUG_tunePIDkG(() -> 1 - joystick.getAxis(Axis.SLIDER))

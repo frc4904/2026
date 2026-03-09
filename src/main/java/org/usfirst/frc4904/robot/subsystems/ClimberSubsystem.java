@@ -52,7 +52,7 @@ public class ClimberSubsystem extends MotorSubsystem {
     public Command c_gotoHeight(double height) {
         ezControl controller = new ezControl(
             kP, kI, kD,
-            (position, velocity) -> feedforward.calculate(velocity)
+            (pos, vel) -> feedforward.calculate(vel)
         );
         var constraints = new TrapezoidProfile.Constraints(MAX_VEL, MAX_ACCEL);
 

@@ -15,7 +15,6 @@ import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
 import org.usfirst.frc4904.robot.vision.VisionSubsystem;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandPS4;
-import org.usfirst.frc4904.standard.custom.controllers.CustomCommandXbox;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
@@ -46,8 +45,6 @@ public final class RobotMap {
 
     public static class Component {
 
-        public static IMU imu;
-
         // subsystems
         public static SwerveSubsystem chassis;
         public static LightSubsystem lights;
@@ -56,9 +53,9 @@ public final class RobotMap {
         public static IntakeSubsystem intake;
         public static ShooterSubsystem shooter;
         public static IndexerSubsystem indexer;
-        public static MotorSubsystem TEMPORARY_INTAKE_SHENANIGANS;
+        public static MotorSubsystem INTAKE_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
-        // motors
+        // swerve motors
         public static CustomTalonFX flDrive;
         public static CustomTalonFX flTurn;
         public static CustomTalonFX frDrive;
@@ -68,8 +65,9 @@ public final class RobotMap {
         public static CustomTalonFX brDrive;
         public static CustomTalonFX brTurn;
 
+        // subsystem motors
         public static SmartMotorController climbMotor;
-        public static SmartMotorController intakeVerticalMotor;
+        public static SmartMotorController intakeAngleMotor;
         public static SmartMotorController intakeRollerMotor;
         public static SmartMotorController indexerMotorBottom;
         public static SmartMotorController indexerMotorTop;
@@ -77,9 +75,9 @@ public final class RobotMap {
         public static CustomTalonFX shooterMotorLeft;
 
         // misc
-        public static AddressableLED ledStrip;
-
+        public static IMU imu;
         public static PowerDistribution pdh;
+        public static AddressableLED ledStrip;
 
         // encoders
         public static DutyCycleEncoder intakeEncoder;
@@ -99,7 +97,6 @@ public final class RobotMap {
             // NOT INITIALIZED
             public static CustomCommandJoystick xyJoystick;
             public static CustomCommandJoystick turnJoystick;
-            public static CustomCommandXbox xbox;
 
         }
 
@@ -181,7 +178,7 @@ public final class RobotMap {
         Component.climbMotor = new CustomTalonFX(1, true);
         Component.climberEncoder = new LinearDutyCycleEncoder(8);
 
-        Component.intakeVerticalMotor = new CustomTalonFX(22);
+        Component.intakeAngleMotor = new CustomTalonFX(22);
         Component.intakeRollerMotor = new CustomTalonFX(21, true);
         Component.intakeEncoder = new DutyCycleEncoder(9);
 
@@ -191,12 +188,12 @@ public final class RobotMap {
         Component.indexerMotorBottom = new CustomTalonFX(5, true);
         Component.indexerMotorTop = new CustomTalonFX(41, true);
 
-        Component.TEMPORARY_INTAKE_SHENANIGANS = new MotorSubsystem(
-            Component.intakeVerticalMotor,
+        Component.INTAKE_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = new MotorSubsystem(
+            Component.intakeAngleMotor,
             4
         );
 
-        Component.intake = new IntakeSubsystem(Component.intakeVerticalMotor, Component.intakeRollerMotor, Component.intakeEncoder);
+        Component.intake = new IntakeSubsystem(Component.intakeAngleMotor, Component.intakeRollerMotor, Component.intakeEncoder);
         Component.climber = new ClimberSubsystem(Component.climbMotor, Component.climberEncoder);
         Component.shooter = new ShooterSubsystem(Component.shooterMotorRight, Component.shooterMotorLeft);
         Component.indexer = new IndexerSubsystem(Component.indexerMotorTop, Component.indexerMotorBottom);

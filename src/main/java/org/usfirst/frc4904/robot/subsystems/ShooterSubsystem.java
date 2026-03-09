@@ -39,8 +39,7 @@ public class ShooterSubsystem extends MotorSubsystem {
     // TODO tune
     private static final double MAX_VEL = 8;
 
-    private static final double kP=0 , kI = 0, kD = 0, kS = 0, kV = 0.7
-    ;
+    private static final double kP = 0, kI = 0, kD = 0, kS = 0, kV = 0.7;
 
     /// MEASUREMENTS
 
@@ -56,8 +55,8 @@ public class ShooterSubsystem extends MotorSubsystem {
     public static final double HUB_HEIGHT = 1.829;
 
     public static final Hub
-        BLUE_HUB = new Hub(new Translation2d( 4.626, 4.035), Alliance.Blue, pos -> pos.getX() < 4.626),
-        RED_HUB  = new Hub(new Translation2d(11.915, 4.035), Alliance.Red,  pos -> pos.getX() > 11.915);
+        BLUE_HUB = new Hub(new Translation2d( 4.626, 4.035), Alliance.Blue),
+        RED_HUB  = new Hub(new Translation2d(11.915, 4.035), Alliance.Red);
 
     public static class Hub {
 
@@ -66,10 +65,13 @@ public class ShooterSubsystem extends MotorSubsystem {
 
         private final Predicate<Translation2d> inRange;
 
-        private Hub(Translation2d pos, Alliance alliance, Predicate<Translation2d> inRange) {
+        private Hub(Translation2d pos, Alliance alliance) {
             this.pos = pos;
             this.alliance = alliance;
-            this.inRange = inRange;
+            this.inRange =
+                p -> alliance == Alliance.Red
+                    ? p.getX() > pos.getX()
+                    : p.getX() < pos.getX();
         }
 
         public boolean isOwn() {
@@ -135,10 +137,10 @@ public class ShooterSubsystem extends MotorSubsystem {
     public static double getShooterVelocityForDistance(double dist) {
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
 
-        double determinant = dist * tanA - dz;
-        if (determinant <= 0) return MAX_VEL;
+        double det = dist * tanA - dz;
+        if (det <= 0) return MAX_VEL;
 
-        double vel = dist * secA * Math.sqrt(GRAVITY / (2 * determinant));
+        double vel = dist * secA * Math.sqrt(GRAVITY / (2 * det));
         return vel * VELOCITY_MULT / FLYWHEEL_CIRC;
     }
 

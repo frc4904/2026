@@ -61,7 +61,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         kinematics = new SwerveDriveKinematics(
             Arrays.stream(modules)
-                  .map(module -> module.position)
+                  .map(module -> module.pos)
                   .toArray(Translation2d[]::new)
         );
         estimator = new SwerveDrivePoseEstimator(
