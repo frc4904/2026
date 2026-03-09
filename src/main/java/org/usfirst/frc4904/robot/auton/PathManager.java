@@ -1,4 +1,4 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.auton;
 
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.json.simple.parser.ParseException;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
@@ -19,9 +17,11 @@ import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
-public final class Auton {
+public final class PathManager {
 
     /**
      * When {@code false}, PathPlanner paths will be moved so that the starting position
@@ -37,35 +37,10 @@ public final class Auton {
 
     private static final double PATHPLANNER_SLOWDOWN_FACTOR = 1.5;
 
-    private Auton() {}
-
     private static final FieldObject2d liveTraj = Dashboard.liveField.getObject("auton_traj");
     private static final FieldObject2d liveTarget = Dashboard.liveField.getObject("auton_next");
 
-    /**
-     * Move straight out of the starting zone and do nothing.
-     */
-    // public static Command c_straight() {
-    //     return Component.chassis.getAutonomousCommand("straight", true, false);
-    // }
-
-    public static Command c_jankStraight() {
-        return new SequentialCommandGroup(
-            new WaitCommand(12),
-            Component.chassis.c_driveRobotRelative(0.5, 0, 0).withTimeout(2),
-            Component.chassis.c_stop()
-        );
-    }
-
-    public static Command c_jankReverse() {
-        return new SequentialCommandGroup(
-            new WaitCommand(12),
-            Component.chassis.c_driveRobotRelative(-0.5, 0, 0).withTimeout(2),
-            Component.chassis.c_stop()
-        );
-    }
-
-    /// PATHPLANNER
+    private static final Map<String, PathPlannerCommand> paths = new HashMap<>();
 
     static RobotConfig pathPlannerConfig;
     static {
@@ -76,18 +51,30 @@ public final class Auton {
         }
     }
 
+    private PathManager() {}
+
     // can be called multiple times with different values of 'flip' and paths will be overridden
-    // if names are different, old paths will not be removed
-    public static void initPathplanner(
-        SendableChooser<? super Command> autonChooser,
-        boolean flip,
-        String... names
-    ) {
+    public static void init(SendableChooser<PathPlannerCommand> chooser, boolean flip, String... names) {
         if (pathPlannerConfig == null) return;
 
+        paths.clear();
         for (var name : names) {
-            autonChooser.addOption(name, c_pathPlanner(name, flip));
+            Command cmd = c_pathPlanner(name, flip);
+
+            if (cmd instanceof PathPlannerCommand pathCmd) {
+                paths.put(name, pathCmd);
+                chooser.addOption(name, pathCmd);
+            }
         }
+    }
+
+    public static Command c_path(String name) {
+        if (!paths.containsKey(name)) {
+            System.err.println("No loaded PathPlanner path '" + name + "'");
+            return new NoOp();
+        }
+
+        return paths.get(name);
     }
 
     public static Command c_pathPlanner(String file, boolean flip) {

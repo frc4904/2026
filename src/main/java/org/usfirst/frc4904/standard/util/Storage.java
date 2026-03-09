@@ -74,7 +74,7 @@ public final class Storage {
         try {
             Files.writeString(PATH, sb.toString());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            // throw new RuntimeException(e);
         }
     }
 

@@ -15,7 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.usfirst.frc4904.robot.Auton.PathPlannerCommand;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
+
+import org.usfirst.frc4904.robot.auton.Auton;
+import org.usfirst.frc4904.robot.auton.PathManager;
+import org.usfirst.frc4904.robot.auton.PathManager.PathPlannerCommand;
+
+import java.util.Set;
+import java.util.function.Consumer;
+
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveDriver;
@@ -47,7 +57,8 @@ public class Robot extends CommandRobotBase {
         // always true first time since lastAutonFlip is null
         if (lastAutonFlip == null || flipAuton != lastAutonFlip) {
             lastAutonFlip = flipAuton;
-            Auton.initPathplanner(autonChooser, flipAuton, AUTON_NAMES);
+
+            PathManager.init(pathChooser, flipAuton, AUTON_NAMES);
         }
     }
 
@@ -57,9 +68,16 @@ public class Robot extends CommandRobotBase {
 
         SmartDashboard.putData("scheduler", CommandScheduler.getInstance());
         SmartDashboard.putString("Elastic Working", "YES.");
+
         autonChooser.setDefaultOption("none", new NoOp());
         autonChooser.addOption("straight", Auton.c_jankStraight());
         autonChooser.addOption("reverse", Auton.c_jankReverse());
+        autonChooser.addOption("climb", Auton.c_climb());
+
+        Command plannerCmd = new DeferredCommand(() -> pathChooser.getSelected(), Set.of(Component.chassis));
+        plannerCmd.setName("pathplanner");
+        autonChooser.addOption("path", plannerCmd);
+
         updateAuton();
 
         driverChooser.setDefaultOption("swerve", new SwerveDriver());
@@ -67,20 +85,24 @@ public class Robot extends CommandRobotBase {
         operatorChooser.setDefaultOption("default", new DefaultOperator());
 
         // show selected auton path in elastic dashboard
-        autonChooser.onChange(_cmd -> {
+        Runnable onChange = () -> {
             updateAuton();
 
             // updateAuton() could've flipped the selected command
             Command cmd = autonChooser.getSelected();
 
-            if (cmd instanceof PathPlannerCommand pathCmd) {
+            if (cmd.getName().equals("pathplanner")) {
+                PathPlannerCommand pathCmd = pathChooser.getSelected();
                 autonPreview.setPoses(pathCmd.getTrajPreview());
                 autonStart.setPose(pathCmd.traj.getInitialPose());
                 autonEnd.setPose(pathCmd.traj.getEndState().pose);
             } else {
                 Util.clearPose(autonPreview, autonStart, autonEnd);
             }
-        });
+        };
+
+        autonChooser.onChange(_cmd -> onChange.run());
+        pathChooser.onChange(_cmd -> onChange.run());
 
         Component.chassis.startPoseEstimator(Translation2d.kZero);
 
@@ -113,7 +135,7 @@ public class Robot extends CommandRobotBase {
         // estimator assuming that we are. even if not, it's still probably a better
         // estimate than (0, 0) and it'll hopefully get adjusted with vision data.
         if (
-            Auton.ABSOLUTE_PATHPLANNER_POSITIONING
+            PathManager.ABSOLUTE_PATHPLANNER_POSITIONING
             && autonChooser.getSelected() instanceof PathPlannerCommand pathCmd
         ) {
             Pose2d pose = pathCmd.traj.getInitialPose();

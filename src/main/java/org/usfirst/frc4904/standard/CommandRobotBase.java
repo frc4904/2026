@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.usfirst.frc4904.robot.RobotMap;
+import org.usfirst.frc4904.robot.auton.PathManager.PathPlannerCommand;
 import org.usfirst.frc4904.standard.custom.CommandSendableChooser;
 import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
 import org.usfirst.frc4904.standard.humaninput.Driver;
@@ -36,11 +37,13 @@ public abstract class CommandRobotBase extends TimedRobot {
     private Operator operator;
 
     protected CommandSendableChooser autonChooser;
+    protected SendableChooser<PathPlannerCommand> pathChooser;
     protected SendableChooser<Driver> driverChooser;
     protected SendableChooser<Operator> operatorChooser;
 
     private void displayChoosers() {
         SmartDashboard.putData("chooser/auton", autonChooser);
+        SmartDashboard.putData("chooser/path", pathChooser);
         SmartDashboard.putData("chooser/driver", driverChooser);
         SmartDashboard.putData("chooser/operator", operatorChooser);
     }
@@ -97,6 +100,7 @@ public abstract class CommandRobotBase extends TimedRobot {
         RobotMap.initialize();
 
         autonChooser = new CommandSendableChooser();
+        pathChooser = new SendableChooser<>();
         driverChooser = new NamedSendableChooser<>();
         operatorChooser = new NamedSendableChooser<>();
 

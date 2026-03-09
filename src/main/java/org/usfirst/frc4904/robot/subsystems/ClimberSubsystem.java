@@ -49,6 +49,14 @@ public class ClimberSubsystem extends MotorSubsystem {
         return encoder.get();
     }
 
+    public Command c_gotoUp() {
+        return c_gotoHeight(MAX_HEIGHT); // FIX PROBABLY SHOULDNT
+    }
+
+    public Command c_gotoDown() {
+        return c_gotoHeight(MIN_HEIGHT); // USE ABSOLUTE MIN/MAX
+    }
+
     public Command c_gotoHeight(double height) {
         ezControl controller = new ezControl(
             kP, kI, kD,
