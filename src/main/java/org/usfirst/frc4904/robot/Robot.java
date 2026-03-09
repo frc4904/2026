@@ -29,7 +29,7 @@ import org.usfirst.frc4904.standard.util.Util;
 public class Robot extends CommandRobotBase {
 
     private static final String[] AUTON_NAMES = {
-        "STRET", "4", "7", "romtater", "aaahhh", "4904"
+        "STRET", "4", "7", "romtater", "aaahhh", "4904", "climb"
     };
 
     private static final FieldObject2d
@@ -37,7 +37,7 @@ public class Robot extends CommandRobotBase {
         autonStart = Dashboard.previewField.getRobotObject(),
         autonEnd = Dashboard.previewField.getObject("auton_end");
 
-    private Boolean lastAutonFlip; // FIX THIS CANNOT BE RIGHT4
+    private Boolean lastAutonFlip; // FIX THIS CANNOT BE RIGHT
     // alliance is not guaranteed to be set on startup
     // so we need to check it multiple times and flip the paths if necessary.
     // the chooser will remain selecting the auton with the same name even if the value is replaced.

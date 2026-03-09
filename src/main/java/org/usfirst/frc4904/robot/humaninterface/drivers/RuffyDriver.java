@@ -18,7 +18,7 @@ public class RuffyDriver extends Driver {
     private static final double SPEED_EXP = 2, TURN_EXP = 2; // TODO TUNE
 
     public RuffyDriver() {
-        super("RuffySwerveDriver");
+        super("RuffyDriver");
     }
 
     protected double scaleGain(double input, double exp) {
