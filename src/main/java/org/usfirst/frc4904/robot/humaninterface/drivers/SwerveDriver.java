@@ -24,10 +24,6 @@ public class SwerveDriver extends Driver {
         super("SwerveDriver");
     }
 
-    protected double scaleGain(double input, double exp) {
-        return MathUtil.copyDirectionPow(input, exp);
-    }
-
     @Override
     public void bindCommands() {
         CustomCommandPS4 ps4 = HumanInput.Driver.ps4;

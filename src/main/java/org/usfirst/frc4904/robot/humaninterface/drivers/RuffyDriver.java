@@ -21,10 +21,6 @@ public class RuffyDriver extends Driver {
         super("RuffyDriver");
     }
 
-    protected double scaleGain(double input, double exp) {
-        return MathUtil.copyDirectionPow(input, exp);
-    }
-
     @Override
     public void bindCommands() {
         var xyJoystick = HumanInput.Driver.xyJoystick;
