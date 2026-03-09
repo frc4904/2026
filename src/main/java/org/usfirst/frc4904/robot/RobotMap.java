@@ -3,11 +3,12 @@ package org.usfirst.frc4904.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-import org.usfirst.frc4904.robot.Simulation.MechanismSimulator;
+import org.usfirst.frc4904.robot.Simulation.ArmSimulator;
 import org.usfirst.frc4904.robot.subsystems.ClimberSubsystem;
 import org.usfirst.frc4904.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
@@ -75,6 +76,7 @@ public final class RobotMap {
         public static SmartMotorController climbMotor;
         public static SmartMotorController intakeVerticalMotor;
         public static SmartMotorController intakeRollerMotor;
+        public static DCMotor climberTwoMotor;
 
         // misc
         public static AddressableLED ledStrip;

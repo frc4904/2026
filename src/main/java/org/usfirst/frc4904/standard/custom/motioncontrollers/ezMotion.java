@@ -1,6 +1,7 @@
 package org.usfirst.frc4904.standard.custom.motioncontrollers;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -8,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import org.usfirst.frc4904.robot.subsystems.FolderIO.ClimberTwo;
 
 public class ezMotion extends Command {
 
@@ -66,6 +69,9 @@ public class ezMotion extends Command {
             requirements
         );
     }
+
+  
+    
 
     public double getElapsedTime() {
         return Timer.getFPGATimestamp() - initialTimestamp;
