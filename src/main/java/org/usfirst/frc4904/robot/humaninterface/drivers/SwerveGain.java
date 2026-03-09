@@ -3,8 +3,6 @@ package org.usfirst.frc4904.robot.humaninterface.drivers;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
@@ -14,9 +12,9 @@ import org.usfirst.frc4904.standard.custom.controllers.CustomCommandPS4;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 
 import static org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig.JOYSTICK_DEADZONE;
-import static org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator.SHOOT_INDEXER_DELAY;
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.calcRobotAngle;
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.getShooterVelocityForDistance;
+import static org.usfirst.frc4904.standard.humaninput.Operator.c_smartShootAndIndex;
 
 public class SwerveGain extends Driver {
 
@@ -89,12 +87,7 @@ public class SwerveGain extends Driver {
         );
 
         // index and shooter
-        ps4.R2().whileTrue(
-            new ParallelCommandGroup(
-                Component.shooter.c_smartShoot(),
-                new WaitCommand(SHOOT_INDEXER_DELAY).andThen(Component.indexer.c_forward(true))
-            )
-        );
+        ps4.R2().whileTrue(c_smartShootAndIndex());
     }
 
     @Override

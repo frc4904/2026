@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.standard.commands.SwitchingIfElseCommand;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.util.Util;
 
@@ -95,6 +94,8 @@ public class ShooterSubsystem extends MotorSubsystem {
         super(motors, 7);
 
         for (var motor : motors) {
+            motor.setMotorBrake(false);
+
             pid.put(motor, new PIDController(kP, kI, kD));
         }
     }
@@ -119,22 +120,17 @@ public class ShooterSubsystem extends MotorSubsystem {
         }, this::stop);
     }
 
-    public Command c_smartShoot() {
-        // TODO prefer closest instead? (maybe helpful for testing)
+    /// SHOOTER MATH
 
-        return new SwitchingIfElseCommand(
-            c_controlVelocity(() -> calcShooterVelocity(getOwnHub().pos)),
-            c_stop(), // TODO fun lights, elastic notif?, etc. on fail
-            () -> getOwnHub().isInRange(Component.chassis.getPositionEstimate())
-            // TODO maybe add back min distance check (but it shouldn't stop the flywheel)
-            // () -> hasSufficientDistance(getOwnHub().pos)
-        ).andThen(this::stop);
+    public boolean canShoot() {
+        return getOwnHub().isInRange(Component.chassis.getPositionEstimate());
     }
 
-    private static final double
-        // sin2A = Math.sin(2 * SHOOTER_ANGLE),
-        tanA = Math.tan(SHOOTER_ANGLE),
-        secA = 1 / Math.cos(SHOOTER_ANGLE);
+    public Command c_smartShoot() {
+        return c_controlVelocity(() -> calcShooterVelocity(getOwnHub().pos)).andThen(this::stop);
+    }
+
+    private static final double tanA = Math.tan(SHOOTER_ANGLE), secA = 1 / Math.cos(SHOOTER_ANGLE);
 
     public static double getShooterVelocityForDistance(double dist) {
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
@@ -176,18 +172,6 @@ public class ShooterSubsystem extends MotorSubsystem {
 
         SmartDashboard.putNumber("cheese distance", dx);
         return getShooterVelocityForDistance(dx);
-    }
-
-    private static boolean hasSufficientDistance(Translation2d pos) {
-        Translation2d robotPos = Component.chassis.getPositionEstimate();
-
-        double dx = pos.getDistance(robotPos) - SHOOTER_POS.getX();
-        // TODO tune (currently unused)
-        return dx > 1; // just tune it - the math is not particularly accurate in practice anyway
-
-        // double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
-        // double apex = (dx * dx * sin2A * secA * secA) / (4 * (dx * tanA - dz));
-        // return dx > apex;
     }
 
 }

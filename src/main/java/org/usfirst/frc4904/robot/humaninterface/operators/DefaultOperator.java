@@ -12,8 +12,6 @@ import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.getShooterVe
 
 public class DefaultOperator extends Operator {
 
-    public static final double SHOOT_INDEXER_DELAY = 0.25;
-
     public DefaultOperator() {
         super("DefaultOperator");
     }
@@ -53,12 +51,7 @@ public class DefaultOperator extends Operator {
 
 
         /// SHOOTER
-        joystick.button1.whileTrue(
-            new ParallelCommandGroup(
-                Component.shooter.c_smartShoot(),
-                new WaitCommand(SHOOT_INDEXER_DELAY).andThen(Component.indexer.c_forward(true))
-            )
-        );
+        joystick.button1.whileTrue(c_smartShootAndIndex());
         joystick.button2.whileTrue(
             new ParallelCommandGroup(
                 Component.shooter.c_controlVelocity(this::getVelocity),

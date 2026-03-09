@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 
@@ -192,6 +191,8 @@ public final class Util {
      * @return callback which returns true if any of the suppliers return true
      */
     public static BooleanSupplier any(BooleanSupplier... conditions) {
+        if (conditions.length == 1) return conditions[0];
+
         return () -> {
             for (var supplier : conditions) {
                 if (supplier.getAsBoolean()) return true;
@@ -207,6 +208,8 @@ public final class Util {
      * @return callback which returns true if all of the suppliers return true
      */
     public static BooleanSupplier all(BooleanSupplier... conditions) {
+        if (conditions.length == 1) return conditions[0];
+
         return () -> {
             for (var supplier : conditions) {
                 if (!supplier.getAsBoolean()) return false;
