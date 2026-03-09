@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.robot.vision.GoogleTagManager;
+import org.usfirst.frc4904.robot.vision.TagManager;
 import org.usfirst.frc4904.standard.util.CmdUtil;
 import org.usfirst.frc4904.standard.util.Util;
 
@@ -234,8 +234,8 @@ public class SwerveSubsystem extends SubsystemBase {
         if (estimatorEnabled) {
             estimator.update(getTrueRotation(), getModulePositions());
 
-            var tags = GoogleTagManager.getTagsSince(lastTagUpdateTime);
-            lastTagUpdateTime = GoogleTagManager.getLastTime();
+            var tags = TagManager.getTagsSince(lastTagUpdateTime);
+            lastTagUpdateTime = TagManager.getLastTime();
 
             for (var tag : tags) {
                 Translation2d cameraToTagRR = tag.pos().getTranslation().toTranslation2d();

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.robot.vision.GoogleTagManager.Tag;
+import org.usfirst.frc4904.robot.vision.TagManager.Tag;
 import org.usfirst.frc4904.standard.commands.WaitWhileCommand;
 import org.usfirst.frc4904.standard.util.Util;
 
@@ -255,7 +255,7 @@ public class VisionSubsystem extends SubsystemBase {
      * @return A list of possible targets
      */
     List<Tag> getResults() {
-        List<Tag> results = GoogleTagManager.getTags();
+        List<Tag> results = TagManager.getTags();
 
         results.sort(Comparator.comparingDouble(
             result -> result.pos().getTranslation().getSquaredNorm()
