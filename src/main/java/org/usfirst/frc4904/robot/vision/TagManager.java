@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public final class TagManager {
 
                 tags.add(new Tag(
                     id,
-                    Util.transform3d(-pos[2], pos[0], pos[1], el.path("rot").asDouble()),
+                    Util.transform3d(pos[2], -pos[0], pos[1], el.path("rot").asDouble()),
                     tagPose.get(),
                     time,
                     0

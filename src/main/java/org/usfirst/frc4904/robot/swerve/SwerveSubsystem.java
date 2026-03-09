@@ -223,7 +223,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private double lastTagUpdateTime;
 
     // TODO VISION not very accurate
-    private static final Translation2d CAMERA_OFFSET = new Translation2d(Units.inchesToMeters(-4), 0);
+    private static final Translation2d ROBOT_TO_CAMERA = new Translation2d(Units.inchesToMeters(-4), 0);
 
     @Override
     public void periodic() {
@@ -239,11 +239,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
             for (var tag : tags) {
                 Translation2d cameraToTagRR = tag.pos().getTranslation().toTranslation2d();
-                Translation2d robotToTagRR = cameraToTagRR.minus(CAMERA_OFFSET);
+                Translation2d robotToTagRR = cameraToTagRR.plus(ROBOT_TO_CAMERA);
                 Translation2d robotToTagFR = robotToTagRR.rotateBy(getTrueRotation());
 
                 Translation2d tagFR = tag.fieldPos().getTranslation().toTranslation2d();
-                Translation2d robotFR = tagFR.plus(robotToTagFR);
+                Translation2d robotFR = tagFR.minus(robotToTagFR);
 
                 // TODO VISION std devs
                 // estimator.setVisionMeasurementStdDevs(VecBuilder.fill(
