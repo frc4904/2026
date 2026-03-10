@@ -47,8 +47,8 @@ public class DefaultOperator extends Operator {
         joystick.button5.onTrue(Component.intake.c_retract());
 
         joystick.button3.or(joystick.button5).whileTrue(Component.intake.c_intake());
-        // joystick.button3.whileTrue(Component.intake.c_intake());
 
+        joystick.button12.whileTrue(Component.intake.c_wobble());
 
         /// SHOOTER
         joystick.button1.whileTrue(c_smartShootAndIndex());
