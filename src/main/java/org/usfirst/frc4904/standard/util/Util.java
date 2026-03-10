@@ -100,7 +100,7 @@ public final class Util {
      * @return The transformed value. Will be <em>outside</em> of [toMin, toMax] if the initial value was outside of [fromMin, fromMax]
      */
     public static double transformRange(double x, double fromMin, double fromMax, double toMin, double toMax) {
-        return (x - fromMin) / fromMax * toMax + toMin;
+        return (x - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin;
     }
 
     /** See {@link #transformRange(double, double, double, double, double)} */
