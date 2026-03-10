@@ -17,7 +17,6 @@ import org.usfirst.frc4904.standard.util.Util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
-import java.util.function.Predicate;
 
 public class ShooterSubsystem extends MotorSubsystem {
 
@@ -67,14 +66,9 @@ public class ShooterSubsystem extends MotorSubsystem {
         public final Translation2d pos;
         public final Alliance alliance;
 
-        private final Predicate<Translation2d> inRange;
-
         private Hub(Translation2d pos, Alliance alliance) {
             this.pos = pos;
             this.alliance = alliance;
-            this.inRange = alliance == Alliance.Red
-                ? p -> p.getX() > pos.getX()
-                : p -> p.getX() < pos.getX();
         }
 
         public boolean isOwn() {
@@ -82,7 +76,9 @@ public class ShooterSubsystem extends MotorSubsystem {
         }
 
         public boolean isInRange(Translation2d pos) {
-            return inRange.test(pos);
+            return alliance == Alliance.Red
+                ? pos.getX() > this.pos.getX()
+                : pos.getX() < this.pos.getX();
         }
 
     }
