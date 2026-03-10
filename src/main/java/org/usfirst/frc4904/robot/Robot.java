@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.util.List;
 
 import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.robot.SimulationContainer.ArmContainer;
-import org.usfirst.frc4904.robot.SimulationContainer.ClimbContainer;
 import org.usfirst.frc4904.robot.Simulation.ArmSimulator;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
@@ -27,7 +25,7 @@ import org.usfirst.frc4904.standard.util.Logging;
 
 public class Robot extends CommandRobotBase {
     private ArmContainer m_ArmContainer;
-    private ClimbContainer m_ClimbContainer;
+    private ClimberContainer m_ClimbContainer;
 
     @Override
     public void initialize() {
@@ -45,9 +43,9 @@ public class Robot extends CommandRobotBase {
 
         operatorChooser.setDefaultOption("default", new DefaultOperator());
 
-        m_ArmContainer = new SimulationContainer(ArmContainer(isSimulation());
-        m_ClimbContainer = new ClimbContainer(isSimulation());
-        )
+        m_ArmContainer = new ArmContainer(isSimulation());
+        m_ClimbContainer = new ClimberContainer(isSimulation());
+        
     
     }
 
@@ -128,7 +126,7 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void simulationPeriodic() {
-        SimulationContainer.armsim.periodic();
-        SimulationContainer.climbsim.periodic();
+        ArmContainer.armsim.periodic();
+        ClimberContainer.climbsim.periodic();
     }
 }

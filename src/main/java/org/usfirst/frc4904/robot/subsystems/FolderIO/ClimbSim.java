@@ -3,7 +3,7 @@ package org.usfirst.frc4904.robot.subsystems.FolderIO;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.robot.SimulationContainer;
+import org.usfirst.frc4904.robot.ClimberContainer;
 import org.usfirst.frc4904.robot.subsystems.FolderIO.ClimbState.InputState;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmState;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmState.OutputState;
@@ -23,7 +23,7 @@ public class ClimbSim implements ClimbIO{
         50, 
         true, 
         0, 
-        0);
+        0, 0);
 
     @Override
     public ClimbState.InputState getInstance() {
