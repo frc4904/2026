@@ -447,10 +447,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     return;
                 } else {
                     goal = lastGoal;
-
-                    if (current.getDistance(goal) <= DISTANCE_THRESHOLD) {
-                        done = true;
-                    }
+                    done |= current.getDistance(goal) <= DISTANCE_THRESHOLD;
                 }
             } else {
                 lastGoal = goal;
