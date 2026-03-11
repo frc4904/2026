@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
-import org.usfirst.frc4904.standard.silly.console;
-import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.HashMap;
@@ -38,8 +36,7 @@ public class ShooterSubsystem extends MotorSubsystem {
     // positive means that the fuel exits the robot to the left/counterclockwise of the expected angle
     private static final double ANGLE_OFFSET = Units.degreesToRadians(0);
 
-    // TODO tune
-    private static final double MAX_VEL = 8e9;
+    private static final double MAX_VOLTAGE = 11;
 
     private static final double kP = 0, kI = 0, kD = 0, kS = 0, kV = 0.1;
 
@@ -47,7 +44,6 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     public static final double GRAVITY = 9.8;
 
-    // TODO get measurements
     public static final double FLYWHEEL_CIRC = Units.inchesToMeters(4 * Math.PI);
     public static final double SHOOTER_ANGLE = Units.degreesToRadians(50); // 0 = horizontal
     public static final Translation3d SHOOTER_POS = new Translation3d(0, -0.22, 0.51) // forward, left, up
@@ -109,8 +105,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     public Command c_controlVelocity(DoubleSupplier getVelocity) {
         return runEnd(() -> {
-            double vel = Util.clamp(getVelocity.getAsDouble(), -MAX_VEL, MAX_VEL);
-
+            double vel = getVelocity.getAsDouble();
             double ff = kS * Math.signum(vel) + kV * vel;
 
             for (var entry : pid.entrySet()) {
@@ -118,7 +113,8 @@ public class ShooterSubsystem extends MotorSubsystem {
                 PIDController pid = entry.getValue();
 
                 double currentVel = motor.getVelocity().getValueAsDouble() * (motor.getInverted() ? -1 : 1);
-                motor.setVoltage(pid.calculate(currentVel, vel) + ff);
+                double voltage = pid.calculate(currentVel, vel) + ff;
+                motor.setVoltage(Util.clamp(voltage, -MAX_VOLTAGE, MAX_VOLTAGE));
             }
         }, this::stop);
     }
@@ -126,9 +122,7 @@ public class ShooterSubsystem extends MotorSubsystem {
     /// COMMANDS
 
     public boolean canShoot() {
-        return Logging.log(
-            "can shoot", getOwnHub().isInRange(Component.chassis.getPositionEstimate())
-        );
+        return getOwnHub().isInRange(Component.chassis.getPositionEstimate());
     }
 
     public Command c_smartShoot() {
@@ -157,7 +151,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
 
         double det = dist * tanA - dz;
-        if (det <= 0) return MAX_VEL;
+        if (det <= 0) return 100; // will eventually be clamped to MAX_VOLTAGE
 
         double ballVel = dist * secA * Math.sqrt(GRAVITY / (2 * det));
         double shooterVel = ballVel / FLYWHEEL_CIRC * VELOCITY_MULT;
