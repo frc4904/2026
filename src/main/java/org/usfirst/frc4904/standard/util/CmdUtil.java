@@ -109,7 +109,7 @@ public final class CmdUtil {
     ) {
         var state = new Supplier<T>() {
             T val;
-            public T get() { return val; }
+            @Override public T get() { return val; }
         };
 
         Command cmd = getCommand.apply(state);
