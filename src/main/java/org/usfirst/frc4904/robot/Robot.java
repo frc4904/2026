@@ -49,6 +49,7 @@ public class Robot extends CommandRobotBase {
 
         // pathplanner sequences
         autonChooser.addOption("shoot left", Auton.c_shootLeft());
+        autonChooser.addOption("shoot straight", Auton.c_shootStraight());
         autonChooser.addOption("shoot center left", Auton.c_shootCenterLeft());
         autonChooser.addOption("shoot right", Auton.c_shootRight());
         autonChooser.addOption("shoot center right", Auton.c_shootCenterRight());

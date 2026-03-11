@@ -29,7 +29,7 @@ public class IntakeSubsystem extends MotorSubsystem {
     public static final double kG = -0.5; // negative b/c positive voltage is down
 
     public static final double RETRACT_ANGLE = 0.94;
-    public static final double EXTEND_ANGLE = 0.175;
+    public static final double EXTEND_ANGLE = 0.185;
     public static final double HORIZONTAL = 0.175;
 
     public static final double MAX_VEL = 0.7;

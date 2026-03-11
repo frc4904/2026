@@ -60,6 +60,9 @@ public final class Auton {
     public static Command c_shootLeft() {
         return c_shoot("left", true);
     }
+    public static Command c_shootStraight() {
+        return c_shoot("straight", true);
+    }
 
     public static Command c_shootRight() {
         return c_shoot("right", true);

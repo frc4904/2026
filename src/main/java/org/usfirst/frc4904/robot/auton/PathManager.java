@@ -59,7 +59,8 @@ public final class PathManager {
     }
 
     public static Command c_path(String name) {
-        return pathCache.computeIfAbsent(name, PathManager::loadPathCommand);
+        // return pathCache.computeIfAbsent(name, PathManager::loadPathCommand);
+        return loadPathCommand(name);
     }
 
     private static Command loadPathCommand(String file) {
