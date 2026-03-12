@@ -15,7 +15,6 @@ import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
 import org.usfirst.frc4904.standard.commands.NoOp;
-import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.io.IOException;
@@ -184,8 +183,6 @@ public final class PathManager {
         @Override
         public void execute() {
             gotoPoseCommand.execute();
-
-            Logging.log("running the thing", null);
         }
 
         @Override
@@ -197,7 +194,6 @@ public final class PathManager {
 
         @Override
         public boolean isFinished() {
-            Logging.log("is pathplANNER CMD FINISHED??", "is it???");
             return gotoPoseCommand.isFinished();
         }
     }

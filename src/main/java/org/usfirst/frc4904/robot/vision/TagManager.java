@@ -9,8 +9,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
-import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.ArrayList;
@@ -25,22 +23,14 @@ public final class TagManager {
 
     public record Tag(int id, Transform3d pos, Pose3d fieldPos, double time, int camera) {}
 
-    private static final AprilTagFieldLayout field;
-
-    static {
-        long t = System.currentTimeMillis();
-        field = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-        Logging.log("field init", System.currentTimeMillis() - t);
-    }
+    private static final AprilTagFieldLayout field = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final NetworkTableEntry tagsEntry, timeEntry;
     static {
-        long t = System.currentTimeMillis();
         var table = NetworkTableInstance.getDefault();
         tagsEntry = table.getEntry("/dauntless/tags");
         timeEntry = table.getEntry("/dauntless/time");
-        Logging.log("nt init", System.currentTimeMillis() - t);
     }
 
     private static double lastTime;

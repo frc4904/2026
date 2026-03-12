@@ -21,9 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.vision.TagManager;
-import org.usfirst.frc4904.standard.silly.console;
 import org.usfirst.frc4904.standard.util.CmdUtil;
-import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.Arrays;
@@ -377,8 +375,6 @@ public class SwerveSubsystem extends SubsystemBase {
                 lastGoal = goal;
             }
 
-            Logging.log("rot diff", current - goal);
-
             rotPIDEffort = Util.clamp(
                 rotPID.calculate(current, goal),
                 -SwerveConstants.ROT_SPEED,
@@ -393,7 +389,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
         @Override
         public boolean isFinished() {
-            Logging.log("is rot done????", done);
             return done;
         }
     }
@@ -458,8 +453,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
             Translation2d diff = goal.minus(current);
 
-            console.log("position diff", diff.getNorm(), diff);
-
             double pidEffort = Util.clamp(
                 posPID.calculate(0, diff.getNorm()),
                 -SwerveConstants.LIN_SPEED,
@@ -477,7 +470,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
         @Override
         public boolean isFinished() {
-            Logging.log("am i (pos) done?", done);
             return done;
         }
     }
