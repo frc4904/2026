@@ -34,7 +34,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     // hardcoded offset between the robot angle and the exit angle of the fuel
     // positive means that the fuel exits the robot to the left/counterclockwise of the expected angle
-    private static final double ANGLE_OFFSET = Units.degreesToRadians(0);
+    private static final double ANGLE_OFFSET = Units.degreesToRadians(-5);
 
     private static final double MAX_VOLTAGE = 11;
 
@@ -46,7 +46,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     public static final double FLYWHEEL_CIRC = Units.inchesToMeters(4 * Math.PI);
     public static final double SHOOTER_ANGLE = Units.degreesToRadians(50); // 0 = horizontal
-    public static final Translation3d SHOOTER_POS = new Translation3d(0, -0.22, 0.51) // forward, left, up
+    public static final Translation3d SHOOTER_POS = new Translation3d(0, -0.24, 0.51) // forward, left, up
         .rotateBy(new Rotation3d(0, 0, -ANGLE_OFFSET));
 
     // https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf

@@ -52,11 +52,24 @@ public class DefaultOperator extends Operator {
         joystick.button4.whileTrue(Component.indexer.c_backward(true));
         joystick.button6.whileTrue(Component.indexer.c_forward(true));
 
+<<<<<<< HEAD
         /// SHOOTER
         joystick.button1.whileTrue(wrapShootCommand(Component.shooter.c_smartShoot()));
         joystick.button2.whileTrue(wrapShootCommand(Component.shooter.c_longShoot()));
         joystick.button12.whileTrue(
             wrapShootCommand(Component.shooter.c_controlVelocity(this::getVelocity))
+=======
+        joystick.button11.whileTrue(Component.intake.c_wobble());
+
+        /// SHOOTER
+        joystick.button1.whileTrue(c_smartShootAndIndex());
+        joystick.button2.whileTrue(Component.shooter.c_longShoot());
+        joystick.button12.whileTrue(
+            new ParallelCommandGroup(
+                Component.shooter.c_controlVelocity(this::getVelocity),
+                CmdUtil.delayed(SHOOT_INDEXER_DELAY, Component.indexer.c_forward(true))
+            )
+>>>>>>> 565cf6d (idk)
         );
 
         /// CLIMBER

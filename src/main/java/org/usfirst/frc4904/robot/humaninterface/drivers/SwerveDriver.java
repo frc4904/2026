@@ -73,9 +73,18 @@ public class SwerveDriver extends Driver {
         // intake extend
         ps4.L2().onTrue(Component.intake.c_extend());
         // intake wobble
+<<<<<<< HEAD
         ps4.povDown().whileTrue(Component.intake.c_wobble());
         // run intake while any of the above are held
         ps4.L1().or(ps4.L2()).or(ps4.povDown()).whileTrue(Component.intake.c_intake());
+=======
+        ps4.povDown().whileTrue(new ParallelCommandGroup(
+            Component.intake.c_wobble(),
+            Component.intake.c_intake().asProxy()
+        ));
+        // run intake while either extend or retract is held
+        ps4.L1().or(ps4.L2()).whileTrue(Component.intake.c_intake());
+>>>>>>> 565cf6d (idk)
 
         // align
         ps4.R1().whileTrue(ShooterSubsystem.c_smartShootAlign());
