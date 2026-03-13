@@ -2,6 +2,7 @@ package org.usfirst.frc4904.robot.humaninterface.drivers;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
@@ -34,6 +35,11 @@ public class SwerveDriver extends Driver {
         ps4.povUp().onTrue(
             new AlwaysRunnableInstantCommand(() -> Component.chassis.resetOdometry())
         );
+
+        // TODO REMOVE - TEMPORARY TESTING SHENANIGANS
+        ps4.povLeft().onTrue(new InstantCommand(
+            () -> ShooterSubsystem.ACCOUNT_FOR_ROBOT_VEL = !ShooterSubsystem.ACCOUNT_FOR_ROBOT_VEL
+        ));
 
         // flip zeroes
         // ps4.povLeft().onTrue(
