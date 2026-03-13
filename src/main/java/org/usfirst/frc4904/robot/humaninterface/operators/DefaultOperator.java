@@ -1,11 +1,9 @@
 package org.usfirst.frc4904.robot.humaninterface.operators;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.usfirst.frc4904.robot.RobotMap;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick.Axis;
 import org.usfirst.frc4904.standard.humaninput.Operator;
-import org.usfirst.frc4904.standard.util.CmdUtil;
 import org.usfirst.frc4904.standard.util.Util;
 
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.getShooterVelocityForDistance;
@@ -58,17 +56,14 @@ public class DefaultOperator extends Operator {
         joystick.button1.whileTrue(wrapShootCommand(Component.shooter.c_smartShoot()));
         joystick.button2.whileTrue(wrapShootCommand(Component.shooter.c_longShoot()));
         joystick.button12.whileTrue(
-            new ParallelCommandGroup(
-                Component.shooter.c_controlVelocity(this::getVelocity),
-                CmdUtil.delayed(SHOOT_INDEXER_DELAY, Component.indexer.c_forward(true))
-            )
+            wrapShootCommand(Component.shooter.c_controlVelocity(this::getVelocity))
         );
 
         /// CLIMBER
         joystick.button9.whileTrue(Component.climber.c_down());
         joystick.button10.whileTrue(Component.climber.c_up());
 
-        /// NOTIFS 
+        /// NOTIFS
         // joystick.button7.onTrue(Notifications.c_sendRandom());
 
         /// ORCHESTRA

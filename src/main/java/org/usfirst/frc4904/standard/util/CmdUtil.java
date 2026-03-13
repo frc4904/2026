@@ -27,7 +27,7 @@ public final class CmdUtil {
      */
     public static void cancelConflicting(Subsystem... requirements) {
         for (var subsystem : requirements) {
-            var cmd = scheduler().requiring(subsystem);
+            var cmd = subsystem.getCurrentCommand();
             if (cmd != null) cmd.cancel();
         }
     }
@@ -48,7 +48,7 @@ public final class CmdUtil {
      */
     public static boolean tryCancelConflicting(Subsystem... requirements) {
         for (var subsystem : requirements) {
-            var cmd = scheduler().requiring(subsystem);
+            var cmd = subsystem.getCurrentCommand();
             if (cmd.getInterruptionBehavior() == InterruptionBehavior.kCancelIncoming) {
                 return false;
             }
