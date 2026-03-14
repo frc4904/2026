@@ -110,8 +110,7 @@ public class Robot extends CommandRobotBase {
         ) {
             Pose2d pose = pathCmd.getInitialPose();
 
-            double offset = Robot.isRedAlliance() ? 0.5 : 0;
-            Component.imu.zeroYaw(pose.getRotation().getRotations() + offset);
+            Component.imu.zeroYaw(pose.getRotation().getRotations() + (Robot.isRedAlliance() ? 0.5 : 0));
             Component.chassis.startPoseEstimator(pose);
         }
     }
