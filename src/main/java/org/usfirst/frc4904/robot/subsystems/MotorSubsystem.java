@@ -6,14 +6,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.util.Logging;
 
+import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.function.DoubleSupplier;
+import java.util.stream.DoubleStream;
 
 public class MotorSubsystem extends SubsystemBase {
 
     public final SmartMotorController[] motors;
 
-    public final double forwardVoltage;
-    public final double backwardVoltage;
+    public final double[] forwardVoltages;
+    public final double[] backwardVoltages;
 
     /**
      * Control multiple motors with one subsystem. This constructor only controls one motor.
@@ -67,15 +70,22 @@ public class MotorSubsystem extends SubsystemBase {
      * @param backwardVoltage voltage when motors are running backwards - should be POSITIVE (is negated later)
      */
     public MotorSubsystem(SmartMotorController[] motors, double forwardVoltage, double backwardVoltage) {
-        this.motors = motors;
-        this.forwardVoltage = forwardVoltage;
-        this.backwardVoltage = backwardVoltage;
-
-        setMotorBrake(true);
+        this(
+            motors,
+            fill(motors.length, forwardVoltage),
+            fill(motors.length, backwardVoltage)
+        );
     }
 
-    public void setVoltage(double voltage) {
-        for (var motor : motors) motor.setVoltage(voltage);
+    /**
+     * TODO
+     */
+    public MotorSubsystem(SmartMotorController[] motors, double[] forwardVoltages, double[] backwardVoltages) {
+        this.motors = motors;
+        this.forwardVoltages = forwardVoltages;
+        this.backwardVoltages = backwardVoltages;
+
+        setMotorBrake(true);
     }
 
     public void stop() {
@@ -87,6 +97,16 @@ public class MotorSubsystem extends SubsystemBase {
         for (var motor : motors) motor.setMotorBrake(brake);
     }
 
+    /// SINGLE
+
+    public void setVoltage(double voltage) {
+        setVoltages(fill(motors.length, voltage));
+    }
+
+    public Command c_holdVoltage(double voltage, boolean stopOnEnd) {
+        return c_controlVoltage(() -> voltage, stopOnEnd);
+    }
+
     public Command c_controlVoltage(DoubleSupplier getVoltage, boolean stopOnEnd) {
         return runEnd(
             () -> setVoltage(getVoltage.getAsDouble()),
@@ -94,20 +114,39 @@ public class MotorSubsystem extends SubsystemBase {
         );
     }
 
-    public Command c_holdVoltage(double voltage, boolean stopOnEnd) {
-        return c_controlVoltage(() -> voltage, stopOnEnd);
+    /// MULTIPLE
+
+    public void setVoltages(double[] voltages) {
+        for (int i = 0; i < motors.length; i++) {
+            motors[i].setVoltage(voltages[i]);
+        }
+    }
+
+    public Command c_holdVoltages(double[] voltages, boolean stopOnEnd) {
+        return c_controlVoltages(() -> voltages, stopOnEnd);
+    }
+
+    public Command c_controlVoltages(Supplier<double[]> getVoltages, boolean stopOnEnd) {
+        return runEnd(
+            () -> setVoltages(getVoltages.get()),
+            stopOnEnd ? this::stop : () -> {}
+        );
     }
 
     public Command c_forward(boolean stopOnEnd) {
-        return c_holdVoltage(forwardVoltage, stopOnEnd);
+        return c_holdVoltages(forwardVoltages, stopOnEnd);
     }
 
     public Command c_backward(boolean stopOnEnd) {
-        return c_holdVoltage(-backwardVoltage, stopOnEnd);
+        return c_holdVoltages(Arrays.stream(backwardVoltages).map(v -> -v).toArray(), stopOnEnd);
     }
 
     public Command c_stop() {
         return runOnce(this::stop);
+    }
+
+    private static double[] fill(int length, double value) {
+        return DoubleStream.generate(() -> value).limit(length).toArray();
     }
 
     /**

@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
+import java.util.Arrays;
+
 public class IndexerSubsystem extends MotorSubsystem {
 
     public IndexerSubsystem(SmartMotorController top, SmartMotorController bottom) {
@@ -29,7 +31,7 @@ public class IndexerSubsystem extends MotorSubsystem {
 
             @Override
             public void execute() {
-                setVoltage(forwardVoltage * getMult());
+                setVoltages(Arrays.stream(forwardVoltages).map(v -> v * getMult()).toArray());
             }
 
             @Override

@@ -56,18 +56,13 @@ public class ClimberSubsystem extends MotorSubsystem {
 
     @Override
     public void setVoltage(double voltage) {
-        setVoltage(voltage, false);
-    }
-
-    public void setVoltage(double voltage, boolean bypassSoftwareStop) {
         if (
-            !bypassSoftwareStop && (
-                (this.getHeight() >= MAX_HEIGHT && voltage > 0) ||
-                (this.getHeight() <= MIN_HEIGHT && voltage < 0)
-            )
+            (this.getHeight() >= MAX_HEIGHT && voltage > 0) ||
+            (this.getHeight() <= MIN_HEIGHT && voltage < 0)
         ) {
             voltage = 0;
         }
+
         super.setVoltage(voltage);
     }
 }
