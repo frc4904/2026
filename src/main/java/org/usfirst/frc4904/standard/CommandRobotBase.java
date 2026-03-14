@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.usfirst.frc4904.robot.RobotMap;
+import org.usfirst.frc4904.robot.auton.Auton;
 import org.usfirst.frc4904.standard.custom.CommandSendableChooser;
 import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
 import org.usfirst.frc4904.standard.humaninput.Driver;
@@ -156,15 +157,17 @@ public abstract class CommandRobotBase extends TimedRobot {
         teleopCleanup();
     }
 
+    // private static final Command auton = Auton.c_shootLeft();
+
     /** Use {@link #autonomousInitialize()} for year-specific code. */
     @Override
     public final void autonomousInit() {
-        autonomousInitialize();
-
         autonCommand = autonChooser.getSelected();
         if (autonCommand != null) {
             CmdUtil.schedule(autonCommand);
         }
+
+        autonomousInitialize();
     }
 
     /** Use {@link #autonomousExecute()} for year-specific code. */

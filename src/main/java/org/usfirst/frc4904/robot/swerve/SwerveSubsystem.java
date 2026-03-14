@@ -438,15 +438,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
         @Override
         public void execute() {
-            console.log("AUTON HALP - PositionCommand.execute()");
-
             Translation2d current = getPositionEstimate();
             Translation2d goal = getPos.get();
+
+            console.log("AUTON HALP - PositionCommand.execute()", current, goal);
 
             if (goal == null) {
                 if (lastGoal == null) {
                     posPIDEffort = Translation2d.kZero;
-                    return;
+                    return; 
                 } else {
                     goal = lastGoal;
                     done |= current.getDistance(goal) <= DISTANCE_THRESHOLD;

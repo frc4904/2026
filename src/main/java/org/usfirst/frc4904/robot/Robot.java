@@ -56,8 +56,8 @@ public class Robot extends CommandRobotBase {
         autonChooser.addOption("shoot center left", Auton.c_shootCenterLeft());
         autonChooser.addOption("shoot right", Auton.c_shootRight());
         autonChooser.addOption("shoot center right", Auton.c_shootCenterRight());
-        autonChooser.addOption("shoot+climb left", Auton.c_shootAndClimbLeft());
-        autonChooser.addOption("shoot+climb center left", Auton.c_shootAndClimbCenterLeft());
+        autonChooser.addOption("shoot n' climb left", Auton.c_shootAndClimbLeft());
+        autonChooser.addOption("shoot n' climb center left", Auton.c_shootAndClimbCenterLeft());
         autonChooser.addOption("direct climb center left", Auton.c_climbCenterLeft());
 
         // pathplanner paths

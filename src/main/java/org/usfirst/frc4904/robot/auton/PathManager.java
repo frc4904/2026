@@ -121,11 +121,13 @@ public final class PathManager {
 
         @Override
         public Pose2d getInitialPose() {
+            updateFlip();
             return traj.getInitialPose();
         }
 
         @Override
         public Pose2d getEndPose() {
+            updateFlip();
             return traj.getEndState().pose;
         }
 

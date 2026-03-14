@@ -2,9 +2,14 @@ package org.usfirst.frc4904.robot.humaninterface.operators;
 
 import org.usfirst.frc4904.robot.RobotMap;
 import org.usfirst.frc4904.robot.RobotMap.Component;
+import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
+import org.usfirst.frc4904.standard.commands.AlwaysRunnableInstantCommand;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick.Axis;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 import org.usfirst.frc4904.standard.util.Util;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.getShooterVelocityForDistance;
 
@@ -60,8 +65,17 @@ public class DefaultOperator extends Operator {
         );
 
         /// CLIMBER
-        joystick.button7.whileTrue(Component.climber.c_down());
-        joystick.button8.whileTrue(Component.climber.c_up());
+        // joystick.button7.whileTrue(Component.climber.c_down());
+        // joystick.button8.whileTrue(Component.climber.c_up());
+        // GENUINELY TERRIBLE
+        joystick.button7.onTrue(new AlwaysRunnableInstantCommand(() -> {
+            ShooterSubsystem.VELOCITY_MULT -= 0.01;
+            SmartDashboard.putString("vel mult", String.format("%.2f", ShooterSubsystem.VELOCITY_MULT));
+        }));
+        joystick.button8.onTrue(new AlwaysRunnableInstantCommand(() -> {
+            ShooterSubsystem.VELOCITY_MULT += 0.01;
+            SmartDashboard.putString("vel mult", String.format("%.2f", ShooterSubsystem.VELOCITY_MULT));
+        }));
         joystick.button9.onTrue(Component.climber.c_gotoDown());
         joystick.button10.onTrue(Component.climber.c_gotoUp());
 

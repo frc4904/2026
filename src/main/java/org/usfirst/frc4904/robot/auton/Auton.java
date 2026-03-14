@@ -56,7 +56,7 @@ public final class Auton {
             CmdUtil.asInstant(Component.climber.c_gotoUp()),
             c_shoot(type, false),
             PathManager.c_path("climb from shoot " + type),
-            Component.climber.c_gotoDown()
+            Component.climber.c_gotoDown().asProxy()
         );
     }
 

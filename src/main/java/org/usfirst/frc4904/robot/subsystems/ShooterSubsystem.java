@@ -30,11 +30,11 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     // multiplier to get from target fuel velocity to target flywheel velocity
     // in theory, this would be ~2 to account for the rotation of the fuel as it leaves the shooter
-    private static final double VELOCITY_MULT = 2.45;
+    public static double VELOCITY_MULT = 2.36;
 
     // hardcoded offset between the robot angle and the exit angle of the fuel
     // positive means that the fuel exits the robot to the left/counterclockwise of the expected angle
-    private static final double ANGLE_OFFSET = Units.degreesToRadians(-5);
+    private static final double ANGLE_OFFSET = Units.degreesToRadians(-3);
 
     private static final double MAX_VOLTAGE = 11;
 
