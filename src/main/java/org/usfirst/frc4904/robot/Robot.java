@@ -45,8 +45,6 @@ public class Robot extends CommandRobotBase {
         SmartDashboard.putData("scheduler", CommandScheduler.getInstance());
         SmartDashboard.putString("Elastic Working", "YES.");
 
-        Constants.init();
-
         // basic autons
         autonChooser.setDefaultOption("none", new NoOp());
         autonChooser.addOption("straight", Auton.c_jankStraight());

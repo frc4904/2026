@@ -27,7 +27,7 @@ public interface SmartMotorController extends MotorController {
 
 		@Override
 		public SmartMotorController withSpeedMultiplier(double multiplier) {
-			return new SpeedModifiedSmartMotor(motor, multiplier * this.multiplier);
+			return new SpeedModifiedSmartMotor(motor, multiplier);
 		}
 
 		@Override

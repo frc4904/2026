@@ -1,10 +1,11 @@
 package org.usfirst.frc4904.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import org.usfirst.frc4904.robot.Constants;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class IndexerSubsystem extends MotorSubsystem {
@@ -12,11 +13,13 @@ public class IndexerSubsystem extends MotorSubsystem {
     public IndexerSubsystem(SmartMotorController top, SmartMotorController bottom) {
         super(
             new SmartMotorController[] {
-                top.withSpeedMultiplier(Constants.Indexer.topMult()),
-                bottom.withSpeedMultiplier(Constants.Indexer.bottomMult())
+                top.withSpeedMultiplier(SmartDashboard.getNumber("indexer/top mult", 1)),
+                bottom.withSpeedMultiplier(SmartDashboard.getNumber("indexer/bottom mult", 1))
             },
-            Constants.Indexer.bothVolts()
+            SmartDashboard.getNumber("indexer/both volts", 5)
         );
+
+        SmartDashboard.putData("indexer", this);
     }
 
     private static final double
@@ -26,12 +29,8 @@ public class IndexerSubsystem extends MotorSubsystem {
                         // as this value gets lower, the dip gets smaller than the declared duration above
         DIP_PERCENT = 0.5; // percentage decrease in voltage, in [0, 1]
 
-    @Override
-    public void periodic() {
-        motors[0] = motors[0].withSpeedMultiplier(Constants.Indexer.topMult());
-        motors[1] = motors[1].withSpeedMultiplier(Constants.Indexer.bottomMult());
-        forwardVoltage = backwardVoltage = Constants.Indexer.bothVolts();
-    }
+    private double topMult = 1;
+    private double bottomMult = 1;
 
     public Command c_pulse() {
         return new Command() {
@@ -66,4 +65,28 @@ public class IndexerSubsystem extends MotorSubsystem {
         };
     }
 
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty(
+            "both volts",
+            () -> forwardVoltage,
+            (v) -> forwardVoltage = backwardVoltage = v
+        );
+
+        builder.addDoubleProperty(
+            "top mult",
+            () -> topMult,
+            (m) -> {
+                motors[0] = motors[0].withSpeedMultiplier(topMult = m);
+            }
+        );
+
+        builder.addDoubleProperty(
+            "bottom mult",
+            () -> bottomMult,
+            (m) -> {
+                motors[1] = motors[1].withSpeedMultiplier(bottomMult = m);
+            }
+        );
+    }
 }

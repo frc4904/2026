@@ -6,13 +6,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import org.usfirst.frc4904.robot.Constants;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.custom.motioncontrollers.ezControl;
 import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion;
@@ -49,16 +50,13 @@ public class IntakeSubsystem extends MotorSubsystem {
         SmartMotorController rollerMotor,
         DutyCycleEncoder encoder
     ) {
-        super(rollerMotor, Constants.Intake.rollerVolts());
+        super(rollerMotor, SmartDashboard.getNumber("intake/roller volts", 6));
 
         this.angleMotor = angleMotor;
         this.encoder = encoder;
         this.feedforward = new ArmFeedforward(kS, kG, kV, kA);
-    }
 
-    @Override
-    public void periodic() {
-        forwardVoltage = backwardVoltage = Constants.Intake.rollerVolts();
+        SmartDashboard.putData("intake", this);
     }
 
     public double getAngle() {
@@ -135,5 +133,14 @@ public class IntakeSubsystem extends MotorSubsystem {
             },
             angleMotorRequirement
         ).finallyDo(this::stop);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty(
+            "roller volts",
+            () -> forwardVoltage,
+            (v) -> forwardVoltage = backwardVoltage = v
+        );
     }
 }

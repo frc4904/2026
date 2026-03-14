@@ -5,12 +5,12 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import org.usfirst.frc4904.robot.Constants;
 import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 public class ShooterSubsystem extends MotorSubsystem {
+
+    private static boolean accountForRobotVel;
+    private static double velocityMult;
 
     /// TUNING
 
@@ -93,6 +96,8 @@ public class ShooterSubsystem extends MotorSubsystem {
 
             pid.put(motor, new PIDController(kP, kI, kD));
         }
+
+        SmartDashboard.putData("shooter", this);
     }
 
     public Command c_basicShoot() {
@@ -150,7 +155,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         if (det <= 0) return 100; // will eventually be clamped to MAX_VOLTAGE
 
         double ballVel = dist * secA * Math.sqrt(GRAVITY / (2 * det));
-        double shooterVel = ballVel / FLYWHEEL_CIRC * Constants.Shooter.velocityMult();
+        double shooterVel = ballVel / FLYWHEEL_CIRC * velocityMult;
 
         SmartDashboard.putNumber("target shooter vel", shooterVel);
         return shooterVel;
@@ -162,7 +167,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
         double dx = dist.getNorm() - SHOOTER_POS.getX();
 
-        if (Constants.Shooter.accountForRobotVel()) {
+        if (accountForRobotVel) {
             Translation2d robotVel = Component.chassis.getVelocity();
             double vx = robotVel.dot(dist.div(dist.getNorm()));
             dx -= vx * AIRTIME_ESTIMATE;
@@ -185,7 +190,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         Translation2d robotPos = Component.chassis.getPositionEstimate();
         Translation2d dist = pos.minus(robotPos);
 
-        if (Constants.Shooter.accountForRobotVel()) {
+        if (accountForRobotVel) {
             Translation2d robotVel = Component.chassis.getVelocity();
             dist = dist.minus(robotVel.times(AIRTIME_ESTIMATE));
         }
@@ -197,4 +202,19 @@ public class ShooterSubsystem extends MotorSubsystem {
         return Units.radiansToRotations(angle + offset - ANGLE_OFFSET);
     }
 
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addBooleanProperty(
+            "account for robot vel",
+            () -> accountForRobotVel,
+            (on) -> accountForRobotVel = on
+        );
+
+        builder.addDoubleProperty(
+            "velocity mult",
+            () -> velocityMult,
+            (m) -> velocityMult = m
+        );
+    }
 }
