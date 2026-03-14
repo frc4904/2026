@@ -6,7 +6,7 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
-import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.*;
 
 public final class Logging {
 
@@ -30,22 +30,45 @@ public final class Logging {
         } else return false;
     }
 
+    private static final double DEFAULT_COOLDOWN = 0.5;
+
     /**
-     * Log values with a cooldown to not flood the RioLog™. Formatted as 'key: value' or 'key: [val1, val2, ...]'
+     * Log a string with a cooldown to not flood the RioLog™.
      *
-     * @param key    Key that is used to determine the cooldown since the last message with the same key was sent
+     * @param key String to log; also used to determine the time since the last message with the same key was sent
+     */
+    public static void log(String key) {
+        logWithDelay(key, DEFAULT_COOLDOWN);
+    }
+
+    /**
+     * Log a string with a cooldown to not flood the RioLog™.
+     *
+     * @param key String to log; also used to determine the time since the last message with the same key was sent
+     * @param delaySeconds Minimum cooldown between logs
+     */
+    public static void logWithDelay(String key, double delaySeconds) {
+        if (cooldown(key, delaySeconds)) {
+            System.out.println(key);
+        }
+    }
+
+    /**
+     * Log values with a cooldown to not flood the RioLog™. Formatted as 'key: value' or 'key: val1, val2, ...'
+     *
+     * @param key    Key that is used to determine the time since the last message with the same key was sent
      * @param value  Value to log
      * @param others Additional values to log
      * @return The first value (for chaining)
      */
     public static <T> T log(String key, T value, Object... others) {
-        return logWithDelay(key, 0.5, value, others);
+        return logWithDelay(key, DEFAULT_COOLDOWN, value, others);
     }
 
     /**
-     * Log values with a cooldown to not flood the RioLog™. Formatted as 'key: value'
+     * Log values with a cooldown to not flood the RioLog™. Formatted as 'key: value' or 'key: val1, val2, ...'
      *
-     * @param key          Key that is used to determine the cooldown since the last message with the same key was sent
+     * @param key          Key that is used to determine the time since the last message with the same key was sent
      * @param delaySeconds Minimum cooldown between logs
      * @param value        Value to log
      * @param others       Additional values to log
@@ -82,13 +105,13 @@ public final class Logging {
         } else if (value instanceof Pose2d pose) {
             return String.format("Pose2d(X: %.2f, Y: %.2f, Rot: %.1fdeg)", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
         } else if (value instanceof Transform2d trns) {
-            return String.format("Translation2d(X: %.2f, Y: %.2f, Rot: %.1fdeg)", trns.getX(), trns.getY(), trns.getRotation().getDegrees());
+            return String.format("Transform2d(X: %.2f, Y: %.2f, Rot: %.1fdeg)", trns.getX(), trns.getY(), trns.getRotation().getDegrees());
         } else if (value instanceof Rotation3d rot) {
             return String.format("Rotation3d(%s)", rot3dToString(rot));
         } else if (value instanceof Pose3d pose) {
             return String.format("Pose3d(X: %.2f, Y: %.2f, Z: %.2f, %s)", pose.getX(), pose.getY(), pose.getZ(), rot3dToString(pose.getRotation()));
         } else if (value instanceof Transform3d trns) {
-            return String.format("Pose3d(X: %.2f, Y: %.2f, Z: %.2f, %s)", trns.getX(), trns.getY(), trns.getZ(), rot3dToString(trns.getRotation()));
+            return String.format("Transform3d(X: %.2f, Y: %.2f, Z: %.2f, %s)", trns.getX(), trns.getY(), trns.getZ(), rot3dToString(trns.getRotation()));
         } else {
             return value.toString();
         }
