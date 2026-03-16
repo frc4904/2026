@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 final class SwerveConstants {
     private SwerveConstants() {}
 
@@ -111,6 +113,7 @@ public class SwerveSubsystem extends SubsystemBase {
             System.err.println("SwerveSubsystem.getPoseEstimate() called while pose estimator is disabled.");
             return Pose2d.kZero;
         }
+        Logger.recordOutput("Swerve/Pose", estimator.getEstimatedPosition());
 
         return estimator.getEstimatedPosition();
     }
