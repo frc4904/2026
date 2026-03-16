@@ -6,6 +6,8 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController
 import org.usfirst.frc4904.standard.custom.sensors.LinearDutyCycleEncoder;
 import org.usfirst.frc4904.standard.util.Util;
 
+import org.littletonrobotics.junction.Logger;
+
 public class ClimberSubsystem extends MotorSubsystem {
 
     public static final double kP = 30;

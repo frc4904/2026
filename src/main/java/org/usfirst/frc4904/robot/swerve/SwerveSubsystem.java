@@ -113,7 +113,6 @@ public class SwerveSubsystem extends SubsystemBase {
             System.err.println("SwerveSubsystem.getPoseEstimate() called while pose estimator is disabled.");
             return Pose2d.kZero;
         }
-        Logger.recordOutput("Swerve/Pose", estimator.getEstimatedPosition());
 
         return estimator.getEstimatedPosition();
     }

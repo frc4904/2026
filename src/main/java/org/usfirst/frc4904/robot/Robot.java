@@ -21,13 +21,18 @@ import org.usfirst.frc4904.robot.auton.PathManager.TrajectoryCommand;
 import org.usfirst.frc4904.robot.humaninterface.drivers.RuffyDriver;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveDriver;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
+import org.usfirst.frc4904.robot.subsystems.ClimberSubsystem;
+import org.usfirst.frc4904.robot.vision.TagManager;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.silly.Silly;
 import org.usfirst.frc4904.standard.silly.console;
 import org.usfirst.frc4904.standard.util.Util;
+import edu.wpi.first.math.geometry.Pose3d;
 
 import static org.usfirst.frc4904.robot.RobotMap.USE_RUFFY_DRIVER;
+
+import org.littletonrobotics.junction.Logger;
 
 public class Robot extends CommandRobotBase {
 
@@ -170,6 +175,26 @@ public class Robot extends CommandRobotBase {
 
         SmartDashboard.putNumber("climber encoder", Component.climberEncoder.get());
         SmartDashboard.putNumber("intake encoder", Component.intakeEncoder.get());
+
+
+        // AdvantageKit Logs
+
+        // Swerve
+        Logger.recordOutput("Swerve/PoseEstimate", Component.chassis.getPoseEstimate());
+        Logger.recordOutput("Swerve/ChassisSpeeds", Component.chassis.getChassisSpeeds());
+        Logger.recordOutput("Swerve/Velocity", Component.chassis.getVelocity());
+
+        // Vision
+
+        int[] tagIds = TagManager.getTags().stream().mapToInt(TagManager.Tag::id).toArray();
+        Logger.recordOutput("Vision/Tags", tagIds);
+        
+        Pose3d[] poses = TagManager.getTags().stream().map(TagManager.Tag::fieldPos).toArray(Pose3d[]::new);
+        Logger.recordOutput("Vision/TagPoses", poses);
+
+        // Mechanisms
+        
+        Logger.recordOutput("Climber/Encoder", Component.climber.getHeight());
     }
 
     @Override
