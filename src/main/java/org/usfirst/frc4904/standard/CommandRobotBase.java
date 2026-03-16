@@ -10,11 +10,16 @@ package org.usfirst.frc4904.standard;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.usfirst.frc4904.robot.RobotMap;
 import org.usfirst.frc4904.standard.custom.CommandSendableChooser;
 import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
@@ -22,13 +27,6 @@ import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 import org.usfirst.frc4904.standard.util.CmdUtil;
 import org.usfirst.frc4904.standard.util.Storage;
-
-import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,8 +38,6 @@ import java.util.Set;
  */
 public abstract class CommandRobotBase extends LoggedRobot {
 
-    public static final double TIME_STEP = LoggedRobot.defaultPeriodSecs;
-
     public static boolean isRedAlliance() {
         return DriverStation.getAlliance().orElse(null) == Alliance.Red;
     }
@@ -50,8 +46,6 @@ public abstract class CommandRobotBase extends LoggedRobot {
     }
 
     public CommandRobotBase() {
-        super(TIME_STEP);
-
         Logger.recordMetadata("ProjectName", "robor"); // Set a metadata value
 
         if (isReal()) {

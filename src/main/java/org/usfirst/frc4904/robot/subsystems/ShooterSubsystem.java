@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import org.littletonrobotics.junction.Logger;
 import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
@@ -108,11 +109,17 @@ public class ShooterSubsystem extends MotorSubsystem {
             double vel = getVelocity.getAsDouble();
             double ff = kS * Math.signum(vel) + kV * vel;
 
+            boolean first = true;
             for (var entry : pid.entrySet()) {
                 CustomTalonFX motor = entry.getKey();
                 PIDController pid = entry.getValue();
 
                 double currentVel = motor.getVelocity().getValueAsDouble() * (motor.getInverted() ? -1 : 1);
+                if (first) {
+                    Logger.recordOutput("Shooter/RealVelocity", currentVel);
+                    first = false;
+                }
+
                 double voltage = pid.calculate(currentVel, vel) + ff;
                 motor.setVoltage(Util.clamp(voltage, -MAX_VOLTAGE, MAX_VOLTAGE));
             }
@@ -147,6 +154,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     public static double getShooterVelocityForDistance(double dist) {
         SmartDashboard.putNumber("target shooter dist", dist);
+        Logger.recordOutput("Shooter/GoalDistance", dist);
 
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
 
@@ -157,6 +165,7 @@ public class ShooterSubsystem extends MotorSubsystem {
         double shooterVel = ballVel / FLYWHEEL_CIRC * VELOCITY_MULT;
 
         SmartDashboard.putNumber("target shooter vel", shooterVel);
+        Logger.recordOutput("Shooter/GoalVelocity", shooterVel);
         return shooterVel;
     }
 
@@ -199,11 +208,6 @@ public class ShooterSubsystem extends MotorSubsystem {
         double offset = Math.asin(-SHOOTER_POS.getY() / dist.getNorm());
 
         return Units.radiansToRotations(angle + offset - ANGLE_OFFSET);
-    }
-
-    // Logging
-    public double getVelocity(){
-        return calcShooterVelocity(getOwnHub().pos);
     }
 
 }

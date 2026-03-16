@@ -29,8 +29,6 @@ import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.Logger;
-
 final class SwerveConstants {
     private SwerveConstants() {}
 
