@@ -194,7 +194,10 @@ public class Robot extends CommandRobotBase {
 
         // Mechanisms
         
-        Logger.recordOutput("Climber/Encoder", Component.climber.getHeight());
+        Logger.recordOutput("Climber/Height", Component.climber.getHeight());
+        Logger.recordOutput("Intake/Angle", Component.intake.getAngle());
+        Logger.recordOutput("Shooter/RealVelocity", Component.shooterMotorLeft.getVelocity().getValueAsDouble());
+        Logger.recordOutput("Shooter/GoalVelocity", Component.shooter.getVelocity());
     }
 
     @Override

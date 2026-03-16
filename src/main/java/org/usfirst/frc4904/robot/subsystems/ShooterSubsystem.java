@@ -201,4 +201,9 @@ public class ShooterSubsystem extends MotorSubsystem {
         return Units.radiansToRotations(angle + offset - ANGLE_OFFSET);
     }
 
+    // Logging
+    public double getVelocity(){
+        return calcShooterVelocity(getOwnHub().pos);
+    }
+
 }
