@@ -28,7 +28,6 @@ import org.usfirst.frc4904.robot.vision.TagManager.Tag;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.silly.Silly;
-import org.usfirst.frc4904.standard.silly.console;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.List;
@@ -44,8 +43,6 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void initialize() {
-        console.log("AUTON HALP - Robot.initialize()");
-
         DriverStation.silenceJoystickConnectionWarning(true); // BEGONE
 
         SmartDashboard.putData("scheduler", CommandScheduler.getInstance());
@@ -110,8 +107,6 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void autonomousInitialize() {
-        console.log("AUTON HALP - Robot.autonomousInitialize()");
-
         // if we are using absolute pathplanner positioning (see javadoc on constant),
         // then we're probably starting in the right place, so let's zero the pose
         // estimator assuming that we are. even if not, it's still probably a better

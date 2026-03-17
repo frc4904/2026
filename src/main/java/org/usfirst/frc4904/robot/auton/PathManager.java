@@ -15,7 +15,6 @@ import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
 import org.usfirst.frc4904.standard.commands.NoOp;
-import org.usfirst.frc4904.standard.silly.console;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.io.IOException;
@@ -69,8 +68,6 @@ public final class PathManager {
             PathPlannerPath path = PathPlannerPath.fromPathFile(file);
             PathPlannerTrajectory traj = path.getIdealTrajectory(pathPlannerConfig).orElseThrow();
 
-            console.log("AUTON HALP - path loaded", file);
-
             return new PathPlannerCommand(traj);
         } catch (IOException | ParseException e) {
             System.err.println("Failed to load PathPlanner path '" + file + "':\n" + e.getMessage());
@@ -78,7 +75,6 @@ public final class PathManager {
             System.err.println("Failed to load PathPlanner path '" + file + "'. Paths must have an ideal starting state.");
         }
 
-        console.log("AUTON HALP - FAILED TO LOAD PATH COMMAND!!!!!!");
         return new NoOp();
     }
 
@@ -169,8 +165,6 @@ public final class PathManager {
 
         @Override
         public void initialize() {
-            console.log("AUTON HALP - PathPlannerCommand.initialize()");
-
             updateFlip();
 
             atEnd = false;
@@ -190,15 +184,11 @@ public final class PathManager {
 
         @Override
         public void execute() {
-            console.log("AUTON HALP - PathPlannerCommand.execute()");
-
             gotoPoseCommand.execute();
         }
 
         @Override
         public void end(boolean interrupted) {
-            console.log("AUTON HALP - PathPlannerCommand.end()", interrupted);
-
             Util.clearPose(liveTraj, liveTarget);
 
             gotoPoseCommand.end(interrupted);
