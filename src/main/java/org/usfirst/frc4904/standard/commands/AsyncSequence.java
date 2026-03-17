@@ -56,7 +56,7 @@ public class AsyncSequence extends Command {
 
         @Override
         public void initialize() {
-            throw new IllegalStateException("The returned command from `AsyncSequence.async()` can only be used as an argument to `new AsyncSequence()`. Do not schedule the returned command on its own or add it to a different composition.");
+            throw new IllegalStateException("The returned command from AsyncSequence.async() can only be used as an argument to the AsyncSequence() constructor. Do not schedule the returned command on its own or add it to a different composition.");
         }
     }
 
