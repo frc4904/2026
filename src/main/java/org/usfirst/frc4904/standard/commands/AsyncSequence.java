@@ -43,9 +43,14 @@ public class AsyncSequence extends Command {
         private final Command[] commands;
 
         private AsyncWrapper(Command... commands) {
+            if (commands.length == 0) {
+                throw new IllegalArgumentException("AsyncSequence.async() must be called with at least one command.");
+            }
+
             this.commands = commands;
 
             for (var cmd : commands) {
+                // aggregate requirements so that conflicting commands can be cancelled at once
                 var requirements = cmd.getRequirements();
                 if (!Collections.disjoint(requirements, getRequirements())) {
                     throw new IllegalArgumentException("Commands passed to AsyncSequence.async() must not have conflicting requirements.");
@@ -57,6 +62,26 @@ public class AsyncSequence extends Command {
         @Override
         public void initialize() {
             throw new IllegalStateException("The returned command from AsyncSequence.async() can only be used as an argument to the AsyncSequence() constructor. Do not schedule the returned command on its own or add it to a different composition.");
+        }
+
+        // should only be called once, so no need to precompute
+
+        @Override
+        public boolean runsWhenDisabled() {
+            for (var cmd : commands) {
+                if (!cmd.runsWhenDisabled()) return false;
+            }
+            return true;
+        }
+
+        @Override
+        public InterruptionBehavior getInterruptionBehavior() {
+            for (var cmd : commands) {
+                if (cmd.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf) {
+                    return InterruptionBehavior.kCancelSelf;
+                }
+            }
+            return InterruptionBehavior.kCancelIncoming;
         }
     }
 
