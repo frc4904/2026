@@ -28,11 +28,6 @@ import org.usfirst.frc4904.robot.vision.TagManager.Tag;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.silly.Silly;
-<<<<<<< HEAD
-=======
-import org.usfirst.frc4904.standard.silly.console;
-import org.usfirst.frc4904.standard.util.Logging;
->>>>>>> cd9e559 (swerve zeros and other stuff???)
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.List;

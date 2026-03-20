@@ -10,11 +10,6 @@ package org.usfirst.frc4904.standard;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-<<<<<<< HEAD
-=======
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
->>>>>>> cd9e559 (swerve zeros and other stuff???)
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,14 +21,11 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.usfirst.frc4904.robot.RobotMap;
-import org.usfirst.frc4904.robot.auton.Auton;
 import org.usfirst.frc4904.standard.custom.CommandSendableChooser;
 import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 import org.usfirst.frc4904.standard.util.CmdUtil;
-import org.usfirst.frc4904.standard.util.Logging;
-import org.usfirst.frc4904.standard.util.Storage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -131,8 +123,6 @@ public abstract class CommandRobotBase extends LoggedRobot {
     /** Use {@link #initialize()} for year-specific code. */
     @Override
     public final void robotInit() {
-        // Storage.init();
-
         RobotMap.initialize();
 
         autonChooser = new CommandSendableChooser();
@@ -161,9 +151,6 @@ public abstract class CommandRobotBase extends LoggedRobot {
         // tick command scheduler in mode-specific periodic methods since they run first
 
         alwaysExecute();
-
-        // robotPeriodic runs last, except for simulationPeriodic, so use that if sim is enabled
-        // if (!isSimulation()) Storage.save();
     }
 
     /** Use {@link #teleopInitialize()} for year-specific code. */
@@ -267,9 +254,6 @@ public abstract class CommandRobotBase extends LoggedRobot {
     @Override
     public void simulationPeriodic() {
         simulationExecute();
-
-        // simulationPeriodic runs latest of all methods (when sim is enabled)
-        Storage.save();
     }
 
 
