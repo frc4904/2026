@@ -187,14 +187,11 @@ public class AsyncSequence extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // end any active commands and reset
-        if (interrupted) {
-            if (index >= 0 && index < commands.length) {
-                commands[index].end(true);
-            }
-            for (var async : currentAsync) {
-                async.end(true);
-            }
+        if (index >= 0 && index < commands.length) {
+            commands[index].end(true);
+        }
+        for (var async : currentAsync) {
+            async.end(true);
         }
 
         index = -1;
@@ -203,8 +200,7 @@ public class AsyncSequence extends Command {
 
     @Override
     public boolean isFinished() {
-        // index is -1 if we are not running or have finished all sync commands
-        return index == -1 && currentAsync.isEmpty();
+        return index == -1;
     }
 
     @Override
