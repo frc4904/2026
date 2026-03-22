@@ -39,7 +39,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     private static final double MAX_VOLTAGE = 11;
 
-    private static final double kP = 0, kI = 0, kD = 0, kS = 0, kV = 0.1;
+    private static final double kP = 0, kI = 0.1, kD = 0, kS = 0, kV = 0.09; // 0.097;
 
     /// MEASUREMENTS
 
