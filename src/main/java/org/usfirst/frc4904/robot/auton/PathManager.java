@@ -14,6 +14,7 @@ import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.Dashboard;
 import org.usfirst.frc4904.standard.commands.NoOp;
+import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.io.IOException;
@@ -54,6 +55,7 @@ public final class PathManager {
 
     public static Command c_path(String name) {
         try {
+            Logging.log("path planed!!", name);
             PathPlannerPath path = PathPlannerPath.fromPathFile(name);
             PathPlannerTrajectory traj = path.getIdealTrajectory(pathPlannerConfig).orElseThrow();
 

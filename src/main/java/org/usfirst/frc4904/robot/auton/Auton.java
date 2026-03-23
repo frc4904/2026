@@ -62,11 +62,11 @@ public final class Auton {
     public static Command c_shootAndClimbFromHell() {
         return new AsyncPathPlannerSequence(
             async(Component.climber.c_gotoUp()),
-            // c_shoot("left", false),
+            c_shoot("left", false),
             PathManager.c_path("climb from hell"),
             Component.chassis.c_rotateTo(0.25, false).withTimeout(0.5),
-            Component.chassis.c_driveRobotRelative(0, 2, 0).withTimeout(1),
-            Component.climber.c_gotoDown()
+            Component.chassis.c_driveRobotRelative(0, 2, 0).withTimeout(1)
+            // Component.climber.c_gotoDown()
         );
     }
 

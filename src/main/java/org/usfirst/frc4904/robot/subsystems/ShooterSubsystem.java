@@ -31,7 +31,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     // multiplier to get from target fuel velocity to target flywheel velocity
     // in theory, this would be ~2 to account for the rotation of the fuel as it leaves the shooter
-    public static double VELOCITY_MULT = 2.6;
+    public static double VELOCITY_MULT = 2.6; //AGATA wants it lower
 
     // hardcoded offset between the robot angle and the exit angle of the fuel
     // positive means that the fuel exits the robot to the left/counterclockwise of the expected angle
@@ -39,7 +39,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     private static final double MAX_VOLTAGE = 11;
 
-    private static final double kP = 0, kI = 0.1, kD = 0, kS = 0, kV = 0.09; // 0.097;
+    private static final double kP = 0, kI = 0, kD = 0, kS = 0, kV = 0.097; // 0.097;
 
     /// MEASUREMENTS
 

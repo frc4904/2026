@@ -186,7 +186,7 @@ public final class RobotMap {
         Component.shooterMotorLeft = new CustomTalonFX(23);
         Component.shooterMotorRight = new CustomTalonFX(24, true);
 
-        Component.indexerMotorBottom = new CustomTalonFX(5, true);
+        Component.indexerMotorBottom = new CustomTalonFX(5);
         Component.indexerMotorTop = new CustomTalonFX(42, true);
 
         Component.INTAKE_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = new MotorSubsystem(

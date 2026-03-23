@@ -36,6 +36,8 @@ import static org.usfirst.frc4904.robot.RobotMap.USE_RUFFY_DRIVER;
 
 public class Robot extends CommandRobotBase {
 
+    private final boolean ADVANTAGEKIT_LOGS = false;
+
     private static final FieldObject2d
         autonPreview = Dashboard.previewField.getObject("auton_preview"),
         autonStart = Dashboard.previewField.getRobotObject(),
@@ -169,10 +171,27 @@ public class Robot extends CommandRobotBase {
 
         // AdvantageKit Logs
 
-        // Swerve
-        if (Component.chassis.poseEstimatorEnabled()) {
-            Logger.recordOutput("Swerve/PoseEstimate", Component.chassis.getPoseEstimate());
+        if (ADVANTAGEKIT_LOGS) {
+            // Swerve
+            if (Component.chassis.poseEstimatorEnabled()) {
+                Logger.recordOutput("Swerve/PoseEstimate", Component.chassis.getPoseEstimate());
+            }
+            Logger.recordOutput("Swerve/ChassisSpeeds", Component.chassis.getChassisSpeeds());
+
+            // Vision
+
+            List<Tag> tags = TagManager.getTags();
+            int[] tagIds = tags.stream().mapToInt(Tag::id).toArray();
+            Pose3d[] poses = tags.stream().map(Tag::fieldPos).toArray(Pose3d[]::new);
+            Logger.recordOutput("Vision/Tags", tagIds);
+            Logger.recordOutput("Vision/TagPoses", poses);
+
+            // Mechanisms
+
+            Logger.recordOutput("Climber/Height", Component.climber.getHeight());
+            Logger.recordOutput("Intake/Angle", Component.intake.getAngle());
         }
+
         Logger.recordOutput("Swerve/ChassisSpeeds", Component.chassis.getChassisSpeeds());
         Logger.recordOutput("Swerve/ModuleStates", Component.chassis.getModuleStates());
 
@@ -198,7 +217,6 @@ public class Robot extends CommandRobotBase {
         Logger.recordOutput("IMU/Yaw", Component.imu.getYaw());
         Logger.recordOutput("PDH/Temp", Util.fahrenheit(Component.pdh.getTemperature()));
         Logger.recordOutput("Game/MatchTime", Timer.getMatchTime());
-
     }
 
     @Override

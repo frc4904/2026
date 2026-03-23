@@ -12,7 +12,7 @@ public class ClimberSubsystem extends MotorSubsystem {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MAX_VOLTAGE = 6;
+    public static final double MAX_VOLTAGE = 8;
 
     private static final double MIN_HEIGHT = 0.93; // 0.623;
     private static final double MAX_HEIGHT = 2.8;

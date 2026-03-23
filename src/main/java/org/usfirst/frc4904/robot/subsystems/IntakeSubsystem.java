@@ -28,9 +28,9 @@ public class IntakeSubsystem extends MotorSubsystem {
     public static final double kA = 0;
     public static final double kG = -0.3; // negative b/c positive voltage is down
 
-    public static final double RETRACT_ANGLE = 0.94;
-    public static final double EXTEND_ANGLE = 0.18;
-    public static final double HORIZONTAL = 0.175;
+    public static final double RETRACT_ANGLE = 0.06;
+    public static final double EXTEND_ANGLE = 0.56;
+    public static final double HORIZONTAL = 0.56;
 
     public static final double MAX_VEL = 0.7;
     public static final double MAX_ACCEL = MAX_VEL * 4; // accelerate to max speed in 1/4 of a second

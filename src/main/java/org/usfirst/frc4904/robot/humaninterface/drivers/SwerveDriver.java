@@ -2,12 +2,14 @@ package org.usfirst.frc4904.robot.humaninterface.drivers;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.standard.commands.AlwaysRunnableInstantCommand;
 import org.usfirst.frc4904.standard.commands.RunIf;
+import org.usfirst.frc4904.standard.commands.RunUnless;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandPS4;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
@@ -42,20 +44,20 @@ public class SwerveDriver extends Driver {
         ));
 
         // flip zeroes
-        // ps4.povLeft().onTrue(
-        //     new RunUnless(
-        //         new AlwaysRunnableInstantCommand(() -> Component.chassis.flipZero()),
-        //         DriverStation::isTeleopEnabled
-        //     )
-        // );
+        ps4.povLeft().onTrue(
+            new RunUnless(
+                new AlwaysRunnableInstantCommand(() -> Component.chassis.flipZero()),
+                DriverStation::isTeleopEnabled
+            )
+        );
 
         // swerve reset
-        // ps4.povDown().onTrue(
-        //     new RunUnless(
-        //         new AlwaysRunnableInstantCommand(() -> Component.chassis.zero()),
-        //         DriverStation::isTeleopEnabled
-        //     )
-        // );
+        ps4.povDown().onTrue(
+            new RunUnless(
+                new AlwaysRunnableInstantCommand(() -> Component.chassis.zero()),
+                DriverStation::isTeleopEnabled
+            )
+        );
 
         // climber up
         ps4.triangle().onTrue(Component.climber.c_gotoUp());
