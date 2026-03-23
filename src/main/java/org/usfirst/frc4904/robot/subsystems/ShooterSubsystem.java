@@ -153,7 +153,6 @@ public class ShooterSubsystem extends MotorSubsystem {
     private static final double tanA = Math.tan(SHOOTER_ANGLE), secA = 1 / Math.cos(SHOOTER_ANGLE);
 
     public static double getShooterVelocityForDistance(double dist) {
-        SmartDashboard.putNumber("target shooter dist", dist);
         Logger.recordOutput("Shooter/GoalDistance", dist);
 
         double dz = HUB_HEIGHT - SHOOTER_POS.getZ();
@@ -164,7 +163,6 @@ public class ShooterSubsystem extends MotorSubsystem {
         double ballVel = dist * secA * Math.sqrt(GRAVITY / (2 * det));
         double shooterVel = ballVel / FLYWHEEL_CIRC * VELOCITY_MULT;
 
-        SmartDashboard.putNumber("target shooter vel", shooterVel);
         Logger.recordOutput("Shooter/GoalVelocity", shooterVel);
         return shooterVel;
     }

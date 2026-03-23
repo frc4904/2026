@@ -3,6 +3,8 @@ package org.usfirst.frc4904.standard.silly;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.littletonrobotics.junction.Logger;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
 
@@ -33,7 +35,7 @@ public final class Silly {
         progressCompleted = Preferences.getInt(progressCompletedKey, 0);
 
         // birthday
-        SmartDashboard.putBoolean("birthday", LocalDate.now().equals(birthday));
+        Logger.recordOutput("birthday", LocalDate.now().equals(birthday));
     }
 
     public static void periodic() {
@@ -61,7 +63,8 @@ public final class Silly {
                 Preferences.setInt(progressCompletedKey, ++progressCompleted);
             }
             Preferences.setDouble(progressKey, progress);
-            SmartDashboard.putString("progress", String.format("%.1f%% (%d done)", progress, progressCompleted));
+            Logger.recordOutput("progress", String.format("%.1f%% (%d done)", progress, progressCompleted));
+            Logger.recordOutput("progressRaw", progress);
         } else {
             progressChance += 0.00001;
         }

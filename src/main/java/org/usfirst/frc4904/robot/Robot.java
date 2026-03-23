@@ -45,8 +45,8 @@ public class Robot extends CommandRobotBase {
     public void initialize() {
         DriverStation.silenceJoystickConnectionWarning(true); // BEGONE
 
-        SmartDashboard.putData("scheduler", CommandScheduler.getInstance());
-        SmartDashboard.putString("Elastic Working", "YES.");
+        SmartDashboard.putData("scheduler", CommandScheduler.getInstance()); // TODO: make Logger
+        Logger.recordOutput("Elastic Working", "YES.");
 
         // basic autons
         autonChooser.setDefaultOption("none", new NoOp());
@@ -164,14 +164,7 @@ public class Robot extends CommandRobotBase {
             Util.clearPose(Dashboard.liveField.getRobotObject());
         }
 
-        SmartDashboard.putNumber("velocidad", Component.shooterMotorLeft.getVelocity().getValueAsDouble());
 
-        SmartDashboard.putNumber("imu temp", Component.imu.getTemperature());
-        SmartDashboard.putNumber("pdh temp", Util.fahrenheit(Component.pdh.getTemperature()));
-        SmartDashboard.putNumber("match time", Timer.getMatchTime());
-
-        SmartDashboard.putNumber("climber encoder", Component.climberEncoder.get());
-        SmartDashboard.putNumber("intake encoder", Component.intakeEncoder.get());
 
 
         // AdvantageKit Logs
@@ -194,7 +187,18 @@ public class Robot extends CommandRobotBase {
         // Mechanisms
 
         Logger.recordOutput("Climber/Height", Component.climber.getHeight());
+        Logger.recordOutput("Climber/Encoder", Component.climberEncoder.get());
         Logger.recordOutput("Intake/Angle", Component.intake.getAngle());
+        Logger.recordOutput("Intake/Encoder", Component.intakeEncoder.get());
+        Logger.recordOutput("Shooter/Velocity", Component.shooterMotorLeft.getVelocity().getValueAsDouble());
+
+        // Misc
+
+        Logger.recordOutput("IMU/Temp", Component.imu.getTemperature());
+        Logger.recordOutput("PDH/Temp", Util.fahrenheit(Component.pdh.getTemperature()));
+        Logger.recordOutput("Game/MatchTime", Timer.getMatchTime());
+
+
     }
 
     @Override
