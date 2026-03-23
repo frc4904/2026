@@ -195,9 +195,9 @@ public class Robot extends CommandRobotBase {
         // Misc
 
         Logger.recordOutput("IMU/Temp", Component.imu.getTemperature());
+        Logger.recordOutput("IMU/Yaw", Component.imu.getYaw());
         Logger.recordOutput("PDH/Temp", Util.fahrenheit(Component.pdh.getTemperature()));
         Logger.recordOutput("Game/MatchTime", Timer.getMatchTime());
-
 
     }
 
