@@ -51,7 +51,7 @@ public final class Storage {
             // generated files have a trailing blank line - ignore it
             for (int i = 0; i < lines.length - 1; i += 2) {
                 String key = lines[i], value = lines[i + 1];
-                char type = lines[i + 1].charAt(0);
+                char type = value.charAt(0);
 
                 map.put(key, new Item(type, parse(type, value.substring(1)), value));
             }

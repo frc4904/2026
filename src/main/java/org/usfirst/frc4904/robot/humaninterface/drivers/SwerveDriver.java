@@ -3,7 +3,6 @@ package org.usfirst.frc4904.robot.humaninterface.drivers;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
@@ -13,6 +12,7 @@ import org.usfirst.frc4904.standard.commands.RunUnless;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandPS4;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
+import org.usfirst.frc4904.standard.util.Storage;
 
 import static org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig.JOYSTICK_DEADZONE;
 
@@ -39,9 +39,10 @@ public class SwerveDriver extends Driver {
         );
 
         // TODO REMOVE - TEMPORARY TESTING SHENANIGANS
-        ps4.povLeft().onTrue(new InstantCommand(
-            () -> ShooterSubsystem.ACCOUNT_FOR_ROBOT_VEL = !ShooterSubsystem.ACCOUNT_FOR_ROBOT_VEL
-        ));
+        ps4.povRight().onTrue(new AlwaysRunnableInstantCommand(() -> {
+            Storage.setDouble("test", 10);
+            Storage.save();
+        }));
 
         // flip zeroes
         ps4.povLeft().onTrue(
