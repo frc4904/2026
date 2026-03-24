@@ -2,10 +2,14 @@ package org.usfirst.frc4904.robot.humaninterface.drivers;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
+
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.standard.commands.AlwaysRunnableInstantCommand;
+import org.usfirst.frc4904.standard.commands.RunUnless;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 
 import static org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig.JOYSTICK_DEADZONE;
@@ -36,12 +40,7 @@ public class RuffyDriver extends Driver {
         );
 
         // no zeroing when enabled (prevent accidental mid-match zeroing)
-        // xyJoystick.button2.onTrue(
-        //     new RunUnless(
-        //         new AlwaysRunnableInstantCommand(() -> Component.chassis.zero()),
-        //         DriverStation::isTeleopEnabled
-        //     )
-        // );
+       
         // turnJoystick.button2.onTrue(
         //     new RunUnless(
         //         new AlwaysRunnableInstantCommand(() -> Component.chassis.flipZero()),

@@ -2,8 +2,10 @@ package org.usfirst.frc4904.robot.humaninterface.operators;
 
 import org.usfirst.frc4904.robot.RobotMap;
 import org.usfirst.frc4904.robot.RobotMap.Component;
+import org.usfirst.frc4904.robot.subsystems.ClimberSubsystem;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick.Axis;
 import org.usfirst.frc4904.standard.humaninput.Operator;
+import org.usfirst.frc4904.standard.silly.Frogging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import static org.usfirst.frc4904.robot.subsystems.ShooterSubsystem.getShooterVelocityForDistance;
@@ -64,6 +66,7 @@ public class DefaultOperator extends Operator {
         joystick.button8.whileTrue(Component.climber.c_up());
         joystick.button9.onTrue(Component.climber.c_gotoDown());
         joystick.button10.onTrue(Component.climber.c_gotoUp());
+
 
         /// NOTIFS
         // joystick.button7.onTrue(Notifications.c_sendRandom());

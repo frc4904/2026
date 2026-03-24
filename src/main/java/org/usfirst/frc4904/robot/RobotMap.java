@@ -21,7 +21,7 @@ import org.usfirst.frc4904.standard.custom.sensors.LinearDutyCycleEncoder;
 
 public final class RobotMap {
 
-    public static final boolean USE_RUFFY_DRIVER = false;
+    public static final boolean USE_RUFFY_DRIVER = true;
 
     public static class Port {
 
