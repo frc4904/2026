@@ -28,6 +28,7 @@ import org.usfirst.frc4904.robot.vision.TagManager.Tag;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.silly.Silly;
+import org.usfirst.frc4904.standard.util.Storage;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.List;
@@ -92,6 +93,16 @@ public class Robot extends CommandRobotBase {
         Component.chassis.startPoseEstimator(Translation2d.kZero);
 
         Silly.initialize();
+
+        // storage load test
+        Storage.init();
+        double test1 = Storage.getDouble("test", 0);
+        SmartDashboard.putNumber("storage test 1", test1);
+        // storage save test
+        // Storage.setDouble("test", test1 + 1);
+        // Storage.save();
+        // double test2 = Storage.getDouble("test", 0);
+        // SmartDashboard.putNumber("storage test 2", test2);
     }
 
     @Override
