@@ -18,7 +18,11 @@ public class ClimberSubsystem extends MotorSubsystem {
     private static final double MAX_HEIGHT = 2.8;
 
     private final LinearDutyCycleEncoder encoder;
-
+   //"@param" adds description to the constructor...hover over below to see
+   /**
+    * @param motor :it's the motor
+    * @param encoder :there is only one encoder, what do you think it's for?
+    */
     public ClimberSubsystem(SmartMotorController motor, LinearDutyCycleEncoder encoder) {
         super(motor, 3);
 
