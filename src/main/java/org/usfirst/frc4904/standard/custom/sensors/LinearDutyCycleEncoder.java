@@ -1,7 +1,7 @@
 package org.usfirst.frc4904.standard.custom.sensors;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Preferences;
+import org.usfirst.frc4904.standard.util.Storage;
 
 /**
  * Converts a DutyCycleEncoder into encoding a linear position
@@ -20,21 +20,21 @@ public class LinearDutyCycleEncoder {
         lastReadingKey = "lastReading/" + channel;
         encoder = new DutyCycleEncoder(channel);
 
-        resetOffset = Preferences.getDouble(resetOffsetKey, 0);
+        resetOffset = Storage.getDouble(resetOffsetKey, 0);
 
-        if (Preferences.containsKey(lastReadingKey)) {
-            lastReading = Preferences.getDouble(lastReadingKey, 0);
+        if (Storage.has(lastReadingKey)) {
+            lastReading = Storage.getDouble(lastReadingKey, 0);
         }
     }
 
     public void reset() {
         resetOffset = encoder.get();
-        // Preferences.setDouble(resetOffsetKey, resetOffset);
+        Storage.setDouble(resetOffsetKey, resetOffset);
     }
 
     public double get() {
         double reading = encoder.get();
-        // Preferences.setDouble(lastReadingKey, reading);
+        Storage.setDouble(lastReadingKey, reading);
 
         if (lastReading == null) {
             lastReading = reading;
@@ -48,7 +48,7 @@ public class LinearDutyCycleEncoder {
                 resetOffset++;
             }
 
-            // Preferences.setDouble(resetOffsetKey, resetOffset);
+            Storage.setDouble(resetOffsetKey, resetOffset);
         }
 
         lastReading = reading;
