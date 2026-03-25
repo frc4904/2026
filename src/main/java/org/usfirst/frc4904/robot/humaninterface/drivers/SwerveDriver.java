@@ -40,12 +40,6 @@ public class SwerveDriver extends Driver {
             new AlwaysRunnableInstantCommand(() -> Component.chassis.resetOdometry())
         );
 
-        // TODO REMOVE - TEMPORARY TESTING SHENANIGANS
-        ps4.povRight().onTrue(new AlwaysRunnableInstantCommand(() -> {
-            Storage.setDouble("test", 10);
-            Storage.save();
-        }));
-
         // flip zeroes
         ps4.povLeft().onTrue(
             new RunUnless(

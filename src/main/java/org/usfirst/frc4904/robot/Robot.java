@@ -95,16 +95,6 @@ public class Robot extends CommandRobotBase {
         Component.chassis.startPoseEstimator(Translation2d.kZero);
 
         Silly.initialize();
-
-        // storage load test
-        Storage.init();
-        double test1 = Storage.getDouble("test", 0);
-        SmartDashboard.putNumber("storage test 1", test1);
-        // storage save test
-        // Storage.setDouble("test", test1 + 1);
-        // Storage.save();
-        // double test2 = Storage.getDouble("test", 0);
-        // SmartDashboard.putNumber("storage test 2", test2);
     }
 
     @Override
