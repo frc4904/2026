@@ -103,11 +103,9 @@ public class IntakeSubsystem extends MotorSubsystem {
             angleMotor::setVoltage,
             () -> {
                 double current = getAngle();
-                double wrappedGoal = angle;
-                // double wrappedGoal = MathUtil.inputModulus(angle, current - 0.5, current + 0.5);
 
                 var startState = new State(current, 0);
-                var goalState = new State(wrappedGoal, 0);
+                var goalState = new State(angle, 0);
 
                 return (elapsed) -> {
                     State setpoint = profile.calculate(elapsed, startState, goalState);

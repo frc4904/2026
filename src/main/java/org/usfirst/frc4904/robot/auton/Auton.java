@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.auton.TrajectoryCommand.AsyncPathPlannerSequence;
-import org.usfirst.frc4904.robot.auton.TrajectoryCommand.SequentialPathPlannerGroup;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 
@@ -95,8 +94,8 @@ public final class Auton {
     }
 
     public static Command c_climbCenterLeft() {
-        return new SequentialPathPlannerGroup(
-            Component.climber.c_gotoUp(),
+        return new AsyncPathPlannerSequence(
+            async(Component.climber.c_gotoUp()),
             PathManager.c_path("climb"),
             Component.climber.c_gotoDown()
         );
