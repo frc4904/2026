@@ -16,10 +16,10 @@ public class ClimbSimulator {
     private final MechanismRoot2d climbroot;
     private final MechanismLigament2d climber;
 
-    private final ClimberTwo climbSubsystem;    
+    private ClimberTwo climb;    
 
     public ClimbSimulator(ClimberTwo climb) {
-        this.climbSubsystem = climb;
+        this.climb = climb;
     
 
     this.panel = new Mechanism2d(

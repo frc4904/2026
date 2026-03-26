@@ -1,14 +1,12 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.subsystems.IO;
 
 import org.usfirst.frc4904.robot.Simulation.ArmSimulator;
-import org.usfirst.frc4904.robot.subsystems.IO.ArmSimIO;
-import org.usfirst.frc4904.robot.subsystems.IO.ArmSubsystem;
 
-public class ArmContainer {
+public class ArmInit {
     public static ArmSimulator armsim;
     public static ArmSubsystem arm;
-    public ArmContainer(boolean isSim){
-            if (isSim) {
+    public ArmInit(boolean IsSim) {
+        if (IsSim) {
                 arm = new ArmSubsystem(
                     new ArmSimIO()
                 );
@@ -17,6 +15,6 @@ public class ArmContainer {
             }
                 
             armsim = new ArmSimulator(arm);
+    }  
     }
 
-}

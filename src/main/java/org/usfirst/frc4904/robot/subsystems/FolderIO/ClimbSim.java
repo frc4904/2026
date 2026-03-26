@@ -3,10 +3,11 @@ package org.usfirst.frc4904.robot.subsystems.FolderIO;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.usfirst.frc4904.robot.RobotMap.Component;
-import org.usfirst.frc4904.robot.ClimberContainer;
+import org.usfirst.frc4904.robot.Simulation.ClimbSimulator;
 import org.usfirst.frc4904.robot.subsystems.FolderIO.ClimbState.InputState;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmState;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmState.OutputState;
+import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -24,6 +25,7 @@ public class ClimbSim implements ClimbIO{
         true, 
         0, 
         0, 0);
+    
 
     @Override
     public ClimbState.InputState getInstance() {
@@ -40,4 +42,5 @@ public class ClimbSim implements ClimbIO{
             climbersim.setInputVoltage(Volts);
         });
     }
+
 }

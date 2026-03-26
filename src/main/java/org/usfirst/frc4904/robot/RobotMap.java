@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import org.usfirst.frc4904.robot.Simulation.ArmSimulator;
-import org.usfirst.frc4904.robot.subsystems.ClimberSubsystem;
+import org.usfirst.frc4904.robot.Simulation.ClimbSimulator;
 import org.usfirst.frc4904.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
+import org.usfirst.frc4904.robot.subsystems.FolderIO.ClimbSim;
+import org.usfirst.frc4904.robot.subsystems.FolderIO.ClimberTwo;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmSimIO;
 import org.usfirst.frc4904.robot.subsystems.IO.ArmSubsystem;
 import org.usfirst.frc4904.robot.swerve.SwerveModule;
@@ -23,6 +25,7 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
 import org.usfirst.frc4904.standard.custom.sensors.CustomNavx;
+import org.usfirst.frc4904.standard.custom.sensors.LinearDutyCycleEncoder;
 
 public final class RobotMap {
      
@@ -59,8 +62,9 @@ public final class RobotMap {
         public static SwerveSubsystem chassis;
         public static LightSubsystem lights;
         public static VisionSubsystem vision;
-        public static ClimberSubsystem climber;
         public static IntakeSubsystem intake;
+        public static ArmSubsystem arm;
+        public static ClimberTwo climber;
 
       
         // motors
@@ -73,16 +77,16 @@ public final class RobotMap {
         public static CustomTalonFX brDrive;
         public static CustomTalonFX brTurn;
 
-        public static SmartMotorController climbMotor;
         public static SmartMotorController intakeVerticalMotor;
         public static SmartMotorController intakeRollerMotor;
-        public static DCMotor climberTwoMotor;
+        public static SmartMotorController climberTwoMotor;
 
         // misc
         public static AddressableLED ledStrip;
 
         // encoders
         public static DutyCycleEncoder intakeEncoder;
+        public static LinearDutyCycleEncoder climbEncoder;
     }
 
     public static class Input {}
@@ -101,6 +105,28 @@ public final class RobotMap {
             public static CustomCommandJoystick joystick;
         }
     }
+
+    public static class ClimbInit {
+        private ClimberTwo climber;
+        public static ClimbSimulator climbsim;
+
+        public ClimbInit (boolean isSim) {
+        if (isSim) {
+            climber = new ClimberTwo(
+                Component.climberTwoMotor,
+                Component.climbEncoder, 
+                new ClimbSim()
+            );
+            } else {
+                climber = null;
+            }
+
+        climbsim = new ClimbSimulator(climber);     
+    }
+
+    }
+
+    
 
     private static boolean initialized = false;
 
@@ -157,7 +183,6 @@ public final class RobotMap {
         // );
 
         // Component.climbMotor = new CustomTalonFX(32);
-
         // Component.intakeVerticalMotor = new CustomTalonFX(17);
         // Component.intakeRollerMotor = new CustomTalonFX(2);
         // Component.intakeEncoder = new DutyCycleEncoder(Port.PWM.ENCODER_FL);
@@ -174,7 +199,6 @@ public final class RobotMap {
         );
         HumanInput.Operator.joystick = new CustomCommandJoystick(Port.HumanInput.joystick, 0.01);
     }
-
-    private RobotMap() {}
-
 }
+
+
