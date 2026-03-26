@@ -7,6 +7,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Storage for values that need to persist on robot restart.
  * Values are stored in plain text in the format
@@ -43,9 +47,15 @@ public final class Storage {
         if (!Files.exists(PATH)) return;
 
         long start = System.currentTimeMillis();
+        SmartDashboard.putString("THE STORAGE: ", "");
 
         try {
-            String str = Files.readString(PATH);
+            String str = "";
+            Thread.sleep(1000);
+            str = Files.readString(PATH);
+
+            SmartDashboard.putString("THE STORAGE: ", str);
+            Logger.recordOutput("THE STORAGE", str);
             String[] lines = str.split("\n");
 
             // generated files have a trailing blank line - ignore it
@@ -57,6 +67,9 @@ public final class Storage {
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize storage: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            // womp womp
+            System.out.println("Storage failed to load???? idk");
         } finally {
             long time = System.currentTimeMillis() - start;
             System.out.println("Storage.init(): " + time + "ms");

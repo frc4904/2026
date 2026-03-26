@@ -26,6 +26,7 @@ import org.usfirst.frc4904.standard.custom.NamedSendableChooser;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 import org.usfirst.frc4904.standard.util.CmdUtil;
+import org.usfirst.frc4904.standard.util.Storage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -123,6 +124,8 @@ public abstract class CommandRobotBase extends LoggedRobot {
     /** Use {@link #initialize()} for year-specific code. */
     @Override
     public final void robotInit() {
+        Storage.init();
+
         RobotMap.initialize();
 
         autonChooser = new CommandSendableChooser();
@@ -151,6 +154,8 @@ public abstract class CommandRobotBase extends LoggedRobot {
         // tick command scheduler in mode-specific periodic methods since they run first
 
         alwaysExecute();
+
+        Storage.save();
     }
 
     /** Use {@link #teleopInitialize()} for year-specific code. */

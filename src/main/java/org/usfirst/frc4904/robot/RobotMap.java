@@ -81,7 +81,7 @@ public final class RobotMap {
         public static AddressableLED ledStrip;
 
         // encoders
-        public static DutyCycleEncoder intakeEncoder;
+        public static CustomDutyCycleEncoder intakeEncoder;
         public static LinearDutyCycleEncoder climberEncoder;
 
 
@@ -181,7 +181,7 @@ public final class RobotMap {
 
         Component.intakeAngleMotor = new CustomTalonFX(22, true);
         Component.intakeRollerMotor = new CustomTalonFX(21, true);
-        Component.intakeEncoder = new DutyCycleEncoder(9);
+        Component.intakeEncoder = new CustomDutyCycleEncoder(9);
 
         Component.shooterMotorLeft = new CustomTalonFX(23);
         Component.shooterMotorRight = new CustomTalonFX(24, true);

@@ -22,8 +22,8 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
 
         key = "zeros/" + channel;
 
-        resetOffset = Storage.getDouble(key, 0);
-        // resetOffset = channel < ZEROS.length ? ZEROS[channel] : 0;
+        // resetOffset = Storage.getDouble(key, 0);
+        resetOffset = channel < ZEROS.length ? ZEROS[channel] : 0;
     }
 
     public void reset() {

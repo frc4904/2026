@@ -95,6 +95,10 @@ public class Robot extends CommandRobotBase {
         Component.chassis.startPoseEstimator(Translation2d.kZero);
 
         Silly.initialize();
+
+        double test = Storage.getDouble("test", 0);
+        SmartDashboard.putNumber("le test", test);
+        Storage.setDouble("test", test + 1);
     }
 
     @Override
@@ -209,10 +213,8 @@ public class Robot extends CommandRobotBase {
 
         // Mechanisms
 
-        Logger.recordOutput("Climber/Height", Component.climber.getHeight());
         Logger.recordOutput("Climber/Encoder", Component.climberEncoder.get());
-        Logger.recordOutput("Intake/Angle", Component.intake.getAngle());
-        Logger.recordOutput("Intake/Encoder", Component.intakeEncoder.get());
+        Logger.recordOutput("Intake/Encoder", Component.intakeEncoder.getAbsolute());
         Logger.recordOutput("Shooter/Velocity", Component.shooterMotorLeft.getVelocity().getValueAsDouble());
 
         // Misc
