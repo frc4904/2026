@@ -98,7 +98,7 @@ public class LightSubsystem extends SubsystemBase {
 
         for (int i = 0; i < length; i++) {
             float[] c1 = colors[i];
-            float strength = (progress * length - i) * a;
+            float strength = Util.clamp(progress * length - i, 0, 1) * a;
 
             if (strength >= 1) {
                 c1[0] = r;
