@@ -33,7 +33,6 @@ import org.usfirst.frc4904.standard.util.Storage;
 import org.usfirst.frc4904.standard.util.Util;
 
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import static org.usfirst.frc4904.robot.RobotMap.USE_RUFFY_DRIVER;
 
@@ -45,6 +44,11 @@ public class Robot extends CommandRobotBase {
         autonPreview = Dashboard.previewField.getObject("auton_preview"),
         autonStart = Dashboard.previewField.getRobotObject(),
         autonEnd = Dashboard.previewField.getObject("auton_end");
+
+    LightSubsystem.ProgressBar pigeonTemp = Component.lights.new ProgressBar(
+        new int[] { 255, 255, 255 },
+        new boolean[] { true, false, true }
+    );
 
     @Override
     public void initialize() {
@@ -175,6 +179,8 @@ public class Robot extends CommandRobotBase {
         } else {
             Util.clearPose(Dashboard.liveField.getRobotObject());
         }
+
+        pigeonTemp.setProgress(Util.transformRange(Component.imu.getTemperature(), 60, 120, 0, 1));
 
         // AdvantageKit Logs
 

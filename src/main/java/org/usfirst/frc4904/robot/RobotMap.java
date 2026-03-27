@@ -2,7 +2,6 @@ package org.usfirst.frc4904.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -173,7 +172,7 @@ public final class RobotMap {
             Component.ledStrip,
             50,
             new int[] { 19, 11, 20 },
-            new boolean[] { false, false, false }
+            new boolean[] { false, false, true }
         );
 
         Component.climbMotor = new CustomTalonFX(1, true);

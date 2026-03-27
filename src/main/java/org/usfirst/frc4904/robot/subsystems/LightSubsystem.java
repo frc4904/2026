@@ -1,15 +1,14 @@
 package org.usfirst.frc4904.robot.subsystems;
+
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.standard.util.Perlin2D;
 import org.usfirst.frc4904.standard.util.Util;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.AddressableLEDBufferView;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class LightSubsystem extends SubsystemBase {
 
@@ -25,8 +24,6 @@ public class LightSubsystem extends SubsystemBase {
         private Color() {}
 
     }
-
-    public double visionProgress = -1;
 
     private float[] flashColor = new float[4];
     private float flashStrength = 0;
@@ -73,8 +70,7 @@ public class LightSubsystem extends SubsystemBase {
         led.start();
 
         this.views = new BufferViewData[lengths.length];
-        int start = 0;
-        for (int i = 0; i < lengths.length; i++) {
+        for (int i = 0, start = 0; i < lengths.length; i++) {
             this.views[i] = new BufferViewData(buffer, start, lengths[i], reverse[i]);
             start += lengths[i];
         }
@@ -86,12 +82,12 @@ public class LightSubsystem extends SubsystemBase {
         float a2 = c2[3] * mix;
 
         for (float[] c1 : colors) {
-            float a1 = c1[3];
-            float a = a2 + a1 * (1 - a2);
+            float a1 = c1[3] * (1 - a2);
+            float a = a1 + a2;
 
-            c1[0] = (c2[0] * a2 + c1[0] * a1 * (1 - a2)) / a;
-            c1[1] = (c2[1] * a2 + c1[1] * a1 * (1 - a2)) / a;
-            c1[2] = (c2[2] * a2 + c1[2] * a1 * (1 - a2)) / a;
+            c1[0] = (c2[0] * a2 + c1[0] * a1) / a;
+            c1[1] = (c2[1] * a2 + c1[1] * a1) / a;
+            c1[2] = (c2[2] * a2 + c1[2] * a1) / a;
             c1[3] = a;
         }
     }
@@ -101,21 +97,6 @@ public class LightSubsystem extends SubsystemBase {
 
         for (int i = 0; i < length; i++) {
             float strength = Util.clamp(progress * length - i, 0, 1);
-            if (strength > 0) {
-                colors[i][0] = color[0] / 255f;
-                colors[i][1] = color[1] / 255f;
-                colors[i][2] = color[2] / 255f;
-            }
-            float alpha = color.length == 4 ? color[3] : 1;
-            colors[i][3] = alpha * strength;
-        }
-    }
-    
-    private void pigeonTemp(float[][] colors, float pigeonTemp, int[] color) {
-    int length = colors.length;
-
-        for (int i = 0; i < length; i++) {
-            float strength = Util.clamp((pigeonTemp/140) * length - i, 0, 1);
             if (strength > 0) {
                 colors[i][0] = color[0] / 255f;
                 colors[i][1] = color[1] / 255f;
@@ -178,6 +159,49 @@ public class LightSubsystem extends SubsystemBase {
         flashStrength = 1;
     }
 
+    private final Set<ProgressBar> progressBars = new LinkedHashSet<>();
+
+    public class ProgressBar {
+        private final int[] color;
+        private final boolean[] viewsEnabled;
+        private float progress = 0;
+
+        public ProgressBar(int[] color) {
+            this(color, null);
+        }
+
+        public ProgressBar(int[] color, boolean[] viewsEnabled) {
+            if (color.length != 3 && color.length != 4) {
+                System.err.println("LightSubsystem.addProgressBar() must take an array of 3 or 4 ints for RGB or RGBA");
+                this.color = new int[3];
+            } else {
+                this.color = color;
+            }
+
+            if (viewsEnabled != null && viewsEnabled.length != views.length) {
+                System.err.println("LightSubsystem.addProgressBar() enabled views must be the same length as number of LED buffer views");
+                viewsEnabled = null;
+            }
+            if (viewsEnabled == null) {
+                this.viewsEnabled = new boolean[views.length];
+                Arrays.fill(this.viewsEnabled, true);
+            } else {
+                this.viewsEnabled = viewsEnabled;
+            }
+
+
+            progressBars.add(this);
+        }
+
+        public void setProgress(double progress) {
+            this.progress = (float) progress;
+        }
+
+        public void delete() {
+            progressBars.remove(this);
+        }
+    }
+
     private final LEDPattern rainbowPattern =
         LEDPattern.rainbow(255, 128).scrollAtAbsoluteSpeed(Units.MetersPerSecond.of(0.3), Units.Meters.of(1.0 / 60));
 
@@ -190,14 +214,17 @@ public class LightSubsystem extends SubsystemBase {
         if (DriverStation.isDisabled()) {
             rainbowPattern.applyTo(buffer);
         } else {
-            for (var view : views) {
+            for (int i = 0; i < views.length; i++) {
+                var view = views[i];
                 float[][] colors = view.colorArray;
 
-                // if (visionProgress != -1) {
-                //     progressBar(colors, (float) visionProgress, Color.VISION);
-                // } else {
                 fire(colors, DriverStation.isAutonomous());
-                // }
+
+                for (var bar : progressBars) {
+                    if (bar.viewsEnabled[i] && bar.progress > 0) {
+                        progressBar(colors, bar.progress, bar.color);
+                    }
+                }
 
                 if (flashStrength > 0) {
                     alphaBlend(colors, flashColor, (float) Math.sqrt(flashStrength));
