@@ -2,6 +2,8 @@ package org.usfirst.frc4904.robot.auton;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import org.usfirst.frc4904.standard.commands.AsyncSequence;
 
@@ -24,11 +26,56 @@ public interface TrajectoryCommand {
 
     /// COMMAND GROUP WRAPPERS
 
+    class ParallelPathPlannerGroup extends ParallelCommandGroup implements TrajectoryWrapperSingle {
+
+        private final TrajectoryCommand trajCommand;
+
+        public ParallelPathPlannerGroup(Command... commands) {
+            super(commands);
+
+            trajCommand = findTrajCommand(commands);
+
+            if (trajCommand == null) {
+                throw new IllegalArgumentException("ParallelPathPlannerGroup must be constructed with exactly one TrajectoryCommand");
+            }
+        }
+
+        @Override
+        public TrajectoryCommand getCommand() {
+            return trajCommand;
+        }
+
+    }
+
+    class ParallelDeadlinePathPlannerGroup extends ParallelDeadlineGroup implements TrajectoryWrapperSingle {
+
+        private final TrajectoryCommand trajCommand;
+
+        public ParallelDeadlinePathPlannerGroup(Command deadline, Command... otherCommands) {
+            super(deadline, otherCommands);
+
+            Command[] commands = new Command[otherCommands.length + 1];
+            commands[0] = deadline;
+            System.arraycopy(otherCommands, 0, commands, 1, otherCommands.length);
+            trajCommand = findTrajCommand(commands);
+
+            if (trajCommand == null) {
+                throw new IllegalArgumentException("ParallelDeadlinePathPlannerGroup must be constructed with exactly one TrajectoryCommand");
+            }
+        }
+
+        @Override
+        public TrajectoryCommand getCommand() {
+            return trajCommand;
+        }
+
+    }
+
     /**
      * Note: Using {@link SequentialCommandGroup#addCommands(Command...) addCommands()} will not
      * add trajectories to the preview.
      */
-    class SequentialPathPlannerGroup extends SequentialCommandGroup implements TrajectoryWrapper {
+    class SequentialPathPlannerGroup extends SequentialCommandGroup implements TrajectoryWrapperMulti {
 
         private final double duration;
         private final TrajectoryCommand[] trajCommands;
@@ -64,7 +111,7 @@ public interface TrajectoryCommand {
     /**
      * Note: Path trajectory is only assembled from synchronous commands.
      */
-    class AsyncPathPlannerSequence extends AsyncSequence implements TrajectoryWrapper {
+    class AsyncPathPlannerSequence extends AsyncSequence implements TrajectoryWrapperMulti {
 
         private final double duration;
         private final TrajectoryCommand[] trajCommands;
@@ -103,10 +150,15 @@ public interface TrajectoryCommand {
                      .toArray(TrajectoryCommand[]::new);
     }
 
+    private static TrajectoryCommand findTrajCommand(Command... commands) {
+        var trajCommands = filterTrajCommands(commands);
+        return trajCommands.length == 1 ? trajCommands[0] : null;
+    }
+
 }
 
-// utility for wrapping existing command groups with TrajectoryCommand
-interface TrajectoryWrapper extends TrajectoryCommand {
+// utility for wrapping existing sequential command groups with TrajectoryCommand
+interface TrajectoryWrapperMulti extends TrajectoryCommand {
 
     TrajectoryCommand[] getCommands();
 
@@ -129,6 +181,33 @@ interface TrajectoryWrapper extends TrajectoryCommand {
     default Pose2d getEndPose() {
         var commands = getCommands();
         return commands[commands.length - 1].getEndPose();
+    }
+
+}
+
+// utility for wrapping existing parallel command groups with TrajectoryCommand
+interface TrajectoryWrapperSingle extends TrajectoryCommand {
+
+    TrajectoryCommand getCommand();
+
+    @Override
+    default double getDuration() {
+        return getCommand().getDuration();
+    }
+
+    @Override
+    default Pose2d[] getTrajPreview(int totalSteps) {
+        return getCommand().getTrajPreview(totalSteps);
+    }
+
+    @Override
+    default Pose2d getInitialPose() {
+        return getCommand().getInitialPose();
+    }
+
+    @Override
+    default Pose2d getEndPose() {
+        return getCommand().getEndPose();
     }
 
 }

@@ -1,13 +1,12 @@
 package org.usfirst.frc4904.robot.auton;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.auton.TrajectoryCommand.AsyncPathPlannerSequence;
+import org.usfirst.frc4904.robot.auton.TrajectoryCommand.ParallelDeadlinePathPlannerGroup;
 import org.usfirst.frc4904.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 
@@ -140,12 +139,12 @@ public final class Auton {
     public static Command c_dipthesecond(){
         return new AsyncPathPlannerSequence(
             PathManager.c_path("intake 1"),
-            new ParallelDeadlineGroup(
+            new ParallelDeadlinePathPlannerGroup(
                 PathManager.c_path("intake 2"),
                 Component.intake.c_intake(),
                 Component.intake.c_extend()
             ),
-            new ParallelDeadlineGroup(
+            new ParallelDeadlinePathPlannerGroup(
                 PathManager.c_path("intake 3"),
                 Component.intake.c_retract()
             ),
@@ -156,7 +155,6 @@ public final class Auton {
                 Component.intake.c_intake(),
                 Component.intake.c_wobble()
             ).withTimeout(5)
-        
         );
     }
 }
