@@ -135,4 +135,12 @@ public final class Auton {
         );
     }
 
+    public static Command c_dip(){
+        return new AsyncPathPlannerSequence(
+            PathManager.c_path("intake 1"),
+            // Component.intake.c_extend(),
+            async(Component.intake.c_intake().withTimeout(2))
+        );
+    }
+
 }
