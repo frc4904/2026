@@ -12,11 +12,8 @@ import org.usfirst.frc4904.standard.commands.RunUnless;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandPS4;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 import org.usfirst.frc4904.standard.humaninput.Operator;
-import org.usfirst.frc4904.standard.util.Storage;
 
 import static org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig.JOYSTICK_DEADZONE;
-
-import java.util.prefs.Preferences;
 
 public class SwerveDriver extends Driver {
 
@@ -34,6 +31,7 @@ public class SwerveDriver extends Driver {
             Component.chassis.c_input(this::getTranslation, this::getTurnSpeed)
                 .withName("Driver - swerve drive")
         );
+        Component.chassis.setAutoBrickWhenStill(true);
 
         // navx reset
         ps4.povUp().onTrue(
@@ -99,6 +97,7 @@ public class SwerveDriver extends Driver {
     @Override
     public void unbindCommands() {
         Component.chassis.removeDefaultCommand();
+        Component.chassis.setAutoBrickWhenStill(false);
     }
 
     protected double getRawForward() {

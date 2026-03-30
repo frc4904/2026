@@ -209,27 +209,31 @@ public class SwerveSubsystem extends SubsystemBase {
             var translation = posCommand != null ? posPIDEffort : driveTranslation;
             var theta = rotCommand != null ? rotPIDEffort : driveTheta;
 
-            Translation2d[] translations = new Translation2d[modules.length];
-            double maxMag = SwerveConstants.LIN_SPEED;
+            if (autoBrickWhenStill && theta == 0 && translation.equals(Translation2d.kZero)) {
+                brickMode();
+            } else {
+                Translation2d[] translations = new Translation2d[modules.length];
+                double maxMag = SwerveConstants.LIN_SPEED;
 
-            for (int i = 0; i < modules.length; i++) {
-                Translation2d rotation = modules[i].rotToTranslation(theta);
-                Translation2d sum = translation.plus(rotation);
+                for (int i = 0; i < modules.length; i++) {
+                    Translation2d rotation = modules[i].rotToTranslation(theta);
+                    Translation2d sum = translation.plus(rotation);
 
-                translations[i] = sum;
-                maxMag = Math.max(sum.getNorm(), maxMag);
-            }
+                    translations[i] = sum;
+                    maxMag = Math.max(sum.getNorm(), maxMag);
+                }
 
-            double norm = maxMag / SwerveConstants.LIN_SPEED;
+                double norm = maxMag / SwerveConstants.LIN_SPEED;
 
-            for (int i = 0; i < modules.length; i++) {
-                Translation2d normalized = translations[i].div(norm);
+                for (int i = 0; i < modules.length; i++) {
+                    Translation2d normalized = translations[i].div(norm);
 
-                double magnitude = normalized.getNorm();
-                modules[i].moveTo(
-                    magnitude,
-                    magnitude > 0 ? normalized.getAngle().getRotations() : 0
-                );
+                    double magnitude = normalized.getNorm();
+                    modules[i].moveTo(
+                        magnitude,
+                        magnitude > 0 ? normalized.getAngle().getRotations() : 0
+                    );
+                }
             }
 
             for (var module : modules) module.periodic();
@@ -565,6 +569,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setMotorBrake(boolean brake) {
         for (var module : modules) module.setMotorBrake(brake);
+    }
+
+    public void brickMode() {
+        for (var module : modules) module.brickMode();
+    }
+
+    private boolean autoBrickWhenStill = false;
+
+    public void setAutoBrickWhenStill(boolean enabled) {
+        autoBrickWhenStill = enabled;
     }
 
     @Override

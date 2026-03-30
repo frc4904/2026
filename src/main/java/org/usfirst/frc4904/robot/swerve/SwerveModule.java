@@ -1,6 +1,5 @@
 package org.usfirst.frc4904.robot.swerve;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -83,6 +82,11 @@ public class SwerveModule implements Sendable {
     void moveTo(double magnitude, double theta) {
         this.magnitude = magnitude;
         if (magnitude > 0) this.theta = theta;
+    }
+
+    void brickMode() {
+        magnitude = 0;
+        theta = pos.getAngle().getRotations();
     }
 
     void periodic() {
