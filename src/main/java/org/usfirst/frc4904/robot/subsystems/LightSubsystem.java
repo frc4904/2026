@@ -232,7 +232,8 @@ public class LightSubsystem extends SubsystemBase {
                 var view = views[i];
                 float[][] colors = view.colorArray;
 
-                fire(colors, DriverStation.isAutonomous());
+                // TODO hack - dont show fire on middle segment cause it looks stupid
+                if (i != 1) fire(colors, DriverStation.isAutonomous());
 
                 for (var bar : progressBars) {
                     if (bar.viewsEnabled[i] && bar.progress > 0) {

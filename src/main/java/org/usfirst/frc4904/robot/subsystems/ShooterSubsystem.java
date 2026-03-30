@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
 import org.usfirst.frc4904.robot.Robot;
@@ -88,6 +87,8 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     /// IMPL
 
+    private LightSubsystem.ProgressBar velocityDisplay;
+
     private final Map<CustomTalonFX, PIDController> pid = new HashMap<>();
 
     public ShooterSubsystem(CustomTalonFX... motors) {
@@ -105,6 +106,14 @@ public class ShooterSubsystem extends MotorSubsystem {
     }
 
     public Command c_controlVelocity(DoubleSupplier getVelocity) {
+        if (velocityDisplay == null) {
+            // all subsystems should be initialized by now
+            velocityDisplay = Component.lights.new ProgressBar(
+                new int[] { 255, 0, 0 },
+                new boolean[] { true, false, true }
+            );
+        }
+
         return runEnd(() -> {
             double vel = getVelocity.getAsDouble();
             double ff = kS * Math.signum(vel) + kV * vel;
@@ -116,6 +125,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
                 double currentVel = motor.getVelocity().getValueAsDouble() * (motor.getInverted() ? -1 : 1);
                 if (first) {
+                    velocityDisplay.setProgress(Math.pow(currentVel / vel, 4));
                     Logger.recordOutput("Shooter/RealVelocity", currentVel);
                     first = false;
                 }

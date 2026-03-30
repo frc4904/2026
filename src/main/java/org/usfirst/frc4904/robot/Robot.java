@@ -45,7 +45,7 @@ public class Robot extends CommandRobotBase {
         autonStart = Dashboard.previewField.getRobotObject(),
         autonEnd = Dashboard.previewField.getObject("auton_end");
 
-    LightSubsystem.ProgressBar pigeonTemp;
+    // private LightSubsystem.ProgressBar pigeonTemp;
 
     @Override
     public void initialize() {
@@ -97,10 +97,10 @@ public class Robot extends CommandRobotBase {
 
         Component.chassis.startPoseEstimator(Translation2d.kZero);
 
-        pigeonTemp = Component.lights.new ProgressBar(
-            new int[] { 255, 255, 255 },
-            new boolean[] { true, false, true }
-        );
+        // pigeonTemp = Component.lights.new ProgressBar(
+        //     new int[] { 255, 255, 255 },
+        //     new boolean[] { true, false, true }
+        // );
 
         Silly.initialize();
 
@@ -183,7 +183,7 @@ public class Robot extends CommandRobotBase {
             Util.clearPose(Dashboard.liveField.getRobotObject());
         }
 
-        pigeonTemp.setProgress(Util.transformRange(Component.imu.getTemperature(), 60, 120, 0, 1));
+        // pigeonTemp.setProgress(Util.transformRange(Component.imu.getTemperature(), 60, 120, 0, 1));
 
         // AdvantageKit Logs
 
@@ -206,7 +206,7 @@ public class Robot extends CommandRobotBase {
 
             Logger.recordOutput("Climber/Height", Component.climber.getHeight());
             Logger.recordOutput("Intake/Angle", Component.intake.getAngle());
-            
+
             Logger.recordOutput("Shooter/Current", Component.shooterMotorLeft.getSupplyCurrent().getValueAsDouble());
         }
 
