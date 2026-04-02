@@ -116,8 +116,39 @@ public class Robot extends CommandRobotBase {
         Component.lights.flashColor(LightSubsystem.Color.TELEOP);
     }
 
+    private static final double shiftFlashDur = 3;
+    private static final int[] shiftDurations = { 10, 25, 25, 25, 25, 30 };
+
+    private static final int[] shiftEndTimes = new int[shiftDurations.length];
+    static {
+        for (int i = 0, acc = 0; i < shiftDurations.length; i++) {
+            shiftEndTimes[i] = acc += shiftDurations[i];
+        }
+    }
+
+    private int getShift(double elapsed) {
+        for (int i = 0; i < shiftEndTimes.length; i++) {
+            if (shiftEndTimes[i] > elapsed) return i;
+        }
+        return -1;
+    }
+
+    private int lastShift;
+
     @Override
-    public void teleopExecute() {}
+    public void teleopExecute() {
+        double time = 140 - Timer.getMatchTime();
+        int upcomingShift = getShift(time + shiftFlashDur);
+        if (lastShift != upcomingShift) {
+            if (upcomingShift == getShift(time)) {
+                Component.lights.flashColor(0, 255, 0);
+                lastShift = upcomingShift;
+            } else {
+                int[] color = time % 1 < 0.5 ? new int[] { 255, 255, 255 } : new int[] { 0, 0, 0 };
+                Component.lights.flashColor(color);
+            }
+        }
+    }
 
     @Override
     public void teleopCleanup() {}
