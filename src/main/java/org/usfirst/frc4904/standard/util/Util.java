@@ -108,6 +108,10 @@ public final class Util {
         return transformRange(x, from.min, from.max, to.min, to.max);
     }
 
+    public static double lerp(double x, double a, double b) {
+        return a + (b - a) * x;
+    }
+
     public record Range(double min, double max) {
         public Range {
             if (min > max) {
