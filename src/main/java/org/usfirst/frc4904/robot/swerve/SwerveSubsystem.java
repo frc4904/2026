@@ -255,21 +255,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
             for (var tag : tags) {
                 double secondsAgo = now - tag.time();
-                if (secondsAgo >= 1) continue;
+                int framesAgo = (int) Math.round(secondsAgo / Robot.defaultPeriodSecs);
+                if (framesAgo >= prevHeadings.length) continue;
 
-                double exactIndex = prevHeadingIndex - secondsAgo / Robot.defaultPeriodSecs;
-                while (exactIndex < 0) exactIndex += prevHeadings.length;
-                int floorIndex = (int) exactIndex;
-                double heading;
-                if (exactIndex == floorIndex) {
-                    heading = prevHeadings[floorIndex];
-                } else {
-                    heading = Util.lerp(
-                        exactIndex % 1,
-                        prevHeadings[floorIndex],
-                        prevHeadings[(floorIndex + 1) % prevHeadings.length]
-                    );
-                }
+                int headingIndex = prevHeadingIndex - framesAgo;
+                if (headingIndex < 0) headingIndex += prevHeadings.length;
+                double heading = prevHeadings[headingIndex];
 
                 Translation2d robotToTagRR = tag.pos().getTranslation().toTranslation2d();
                 Translation2d robotToTagFR = robotToTagRR.rotateBy(Rotation2d.fromRotations(heading));
