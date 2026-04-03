@@ -133,19 +133,23 @@ public class Robot extends CommandRobotBase {
         return -1;
     }
 
+    private Double flashStartTime;
     private int lastShift;
 
     @Override
     public void teleopExecute() {
-        if (DriverStation.isFMSAttached() && DriverStation.isTeleopEnabled()) {
+        if (DriverStation.isFMSAttached() && DriverStation.isEnabled()) {
             double time = 140 - Timer.getMatchTime();
             int upcomingShift = getShift(time + shiftFlashDur);
             if (lastShift != upcomingShift) {
                 if (upcomingShift == getShift(time)) {
                     Component.lights.flashColor(0, 255, 0);
                     lastShift = upcomingShift;
+                    flashStartTime = null;
                 } else {
-                    int[] color = time % 1 < 0.5 ? new int[] { 255, 255, 255 } : new int[] { 0, 0, 0 };
+                    if (flashStartTime == null) flashStartTime = Timer.getFPGATimestamp();
+                    double flashTime = Timer.getFPGATimestamp() - flashStartTime;
+                    int[] color = flashTime % 1 < 0.5 ? new int[] { 255, 255, 255 } : new int[] { 0, 0, 0 };
                     Component.lights.flashColor(color);
                 }
             }

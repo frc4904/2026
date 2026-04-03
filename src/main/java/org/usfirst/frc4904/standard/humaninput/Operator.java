@@ -21,9 +21,9 @@ public abstract class Operator extends HumanInput {
         return new ParallelCommandGroup(
             command,
             CmdUtil.delayed(SHOOT_INDEXER_DELAY, new ParallelCommandGroup(
-                Component.indexer.c_forward(true),
-                Component.intake.c_wobble()
-            )).asProxy()
+                Component.indexer.c_forward(true).asProxy(),
+                Component.intake.c_wobble().asProxy()
+            ))
         );
     }
 

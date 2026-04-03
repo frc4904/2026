@@ -67,11 +67,10 @@ public final class Auton {
                 Component.shooter.c_smartShoot(),
                 ShooterSubsystem.c_smartShootAlign(),
                 Component.indexer.c_forward(true),
-                Component.intake.c_intake(),
                 Component.intake.c_retract(),
                 Component.intake.c_wobble()
             ).withTimeout(6),
-            Component.intake.c_retract(),
+            async(Component.intake.c_retract()),
             c_sams5StepPlanToWealthAndHappiness(),
             Component.climber.c_gotoDown()
         );

@@ -10,7 +10,7 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
         0.607, // fl
         0.676, // fr
         0.361, // bl
-        0.461  // br
+        0.810  // br
     };
 
     private final String key;

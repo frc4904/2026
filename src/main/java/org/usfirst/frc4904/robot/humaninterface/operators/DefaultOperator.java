@@ -64,18 +64,20 @@ public class DefaultOperator extends Operator {
             wrapShootCommand(Component.shooter.c_controlVelocity(this::getVelocity))
         );
 
+        /// JANK CLIMBER
+        // joystick.button7.whileTrue(Component.climber.c_down());
+        // joystick.button8.whileTrue(Component.climber.c_up());
+
+        joystick.button7.onTrue(new AlwaysRunnableInstantCommand(() -> {
+            ShooterSubsystem.VELOCITY_MULT -= 0.01;
+            SmartDashboard.putString("vel mult", String.format("%.2f", ShooterSubsystem.VELOCITY_MULT));
+        }));
+        joystick.button8.onTrue(new AlwaysRunnableInstantCommand(() -> {
+            ShooterSubsystem.VELOCITY_MULT += 0.01;
+            SmartDashboard.putString("vel mult", String.format("%.2f", ShooterSubsystem.VELOCITY_MULT));
+        }));
+
         /// CLIMBER
-        joystick.button7.whileTrue(Component.climber.c_down());
-        joystick.button8.whileTrue(Component.climber.c_up());
-        // GENUINELY TERRIBLE
-        // joystick.button7.onTrue(new AlwaysRunnableInstantCommand(() -> {
-        //     ShooterSubsystem.VELOCITY_MULT -= 0.01;
-        //     SmartDashboard.putString("vel mult", String.format("%.2f", ShooterSubsystem.VELOCITY_MULT));
-        // }));
-        // joystick.button8.onTrue(new AlwaysRunnableInstantCommand(() -> {
-        //     ShooterSubsystem.VELOCITY_MULT += 0.01;
-        //     SmartDashboard.putString("vel mult", String.format("%.2f", ShooterSubsystem.VELOCITY_MULT));
-        // }));
         joystick.button9.onTrue(Component.climber.c_gotoDown());
         joystick.button10.onTrue(Component.climber.c_gotoUp());
 
