@@ -52,8 +52,6 @@ public final class TagManager {
         if (lastTime == timeSeconds && lastTags != null) return lastTags;
         lastTime = timeSeconds;
 
-        double time = Util.epochSecondsToFPGATimestamp(timeSeconds);
-
         List<Tag> tags = lastTags = new ArrayList<>();
 
         String json = tagsEntry.getString("");
@@ -78,6 +76,8 @@ public final class TagManager {
 
                 Transform3d robotToTag = Util.transform3d(pos[2], -pos[0], pos[1], el.path("rot").asDouble());
                 Transform3d cameraOffset = CAMERA_OFFSETS[camera];
+
+                double time = Util.epochSecondsToFPGATimestamp(el.path("time").asDouble());
 
                 tags.add(new Tag(
                     id,
