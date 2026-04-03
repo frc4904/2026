@@ -137,15 +137,17 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void teleopExecute() {
-        double time = 140 - Timer.getMatchTime();
-        int upcomingShift = getShift(time + shiftFlashDur);
-        if (lastShift != upcomingShift) {
-            if (upcomingShift == getShift(time)) {
-                Component.lights.flashColor(0, 255, 0);
-                lastShift = upcomingShift;
-            } else {
-                int[] color = time % 1 < 0.5 ? new int[] { 255, 255, 255 } : new int[] { 0, 0, 0 };
-                Component.lights.flashColor(color);
+        if (DriverStation.isFMSAttached() && DriverStation.isTeleopEnabled()) {
+            double time = 140 - Timer.getMatchTime();
+            int upcomingShift = getShift(time + shiftFlashDur);
+            if (lastShift != upcomingShift) {
+                if (upcomingShift == getShift(time)) {
+                    Component.lights.flashColor(0, 255, 0);
+                    lastShift = upcomingShift;
+                } else {
+                    int[] color = time % 1 < 0.5 ? new int[] { 255, 255, 255 } : new int[] { 0, 0, 0 };
+                    Component.lights.flashColor(color);
+                }
             }
         }
     }
