@@ -3,6 +3,7 @@ package org.usfirst.frc4904.robot.humaninterface.drivers;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 import org.usfirst.frc4904.robot.RobotMap.Component;
@@ -73,7 +74,14 @@ public class SwerveDriver extends Driver {
         ps4.cross().onTrue(Component.climber.c_gotoDown());
 
         // long shoot
-        ps4.circle().whileTrue(Operator.wrapShootCommand(Component.shooter.c_longShoot()));
+        // ps4.circle().whileTrue(Operator.wrapShootCommand(Component.shooter.c_longShoot()));
+
+        // reverse intake
+        ps4.circle().whileTrue(new ParallelCommandGroup(
+            Component.intake.c_backward(true),
+            Component.indexer.c_backward(true)
+        ));
+        ps4.circle().onTrue(Component.intake.c_extend());
 
         // indexer
         ps4.square().whileTrue(Component.indexer.c_forward(true));

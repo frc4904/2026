@@ -22,7 +22,7 @@ public class ShooterSubsystem extends MotorSubsystem {
 
     /// TUNING
 
-    public static boolean ACCOUNT_FOR_ROBOT_VEL = true; // TODO make private final
+    private static final boolean ACCOUNT_FOR_ROBOT_VEL = false;
 
     // approximate amount of seconds the fuel spends in the air
     // used to account for robot velocity
