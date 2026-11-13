@@ -14,6 +14,7 @@ import org.usfirst.frc4904.standard.custom.controllers.CustomCommandPS4;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
+import org.usfirst.frc4904.standard.custom.sensors.CustomNavx;
 import org.usfirst.frc4904.standard.custom.sensors.CustomPigeon;
 import org.usfirst.frc4904.standard.custom.sensors.IMU;
 import org.usfirst.frc4904.standard.custom.sensors.LinearDutyCycleEncoder;
@@ -131,7 +132,8 @@ public final class RobotMap {
 
         Component.pdh = new PowerDistribution(9, PowerDistribution.ModuleType.kRev);
 
-        Component.imu = new CustomPigeon(59);
+        // Component.imu = new CustomPigeon(59);
+        Component.imu = new CustomNavx(0);
 
         Component.chassis = new SwerveSubsystem(
             new SwerveModule(
@@ -143,22 +145,22 @@ public final class RobotMap {
             ),
             new SwerveModule(
                 "Front Right",
-                Component.frDrive = new CustomTalonFX(2),
-                Component.frTurn = new CustomTalonFX(17),
+                Component.frDrive = new CustomTalonFX(4),
+                Component.frTurn = new CustomTalonFX(18),
                 new CustomDutyCycleEncoder(1),
                 new Translation2d(1, -1)
             ),
             new SwerveModule(
                 "Back Left",
-                Component.blDrive = new CustomTalonFX(10),
+                Component.blDrive = new CustomTalonFX(10, true),
                 Component.blTurn = new CustomTalonFX(16),
                 new CustomDutyCycleEncoder(2),
                 new Translation2d(-1, 1)
             ),
             new SwerveModule(
                 "Back Right",
-                Component.brDrive = new CustomTalonFX(4),
-                Component.brTurn = new CustomTalonFX(18),
+                Component.brDrive = new CustomTalonFX(2),
+                Component.brTurn = new CustomTalonFX(17),
                 new CustomDutyCycleEncoder(3),
                 new Translation2d(-1, -1)
             )

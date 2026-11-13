@@ -34,8 +34,8 @@ public class IntakeSubsystem extends MotorSubsystem {
     public static final double kA = 0;
     public static final double kG = -0.3; // 0.3
 
-    public static final double EXTEND_ANGLE = 0.515;
-    public static final double RETRACT_ANGLE = EXTEND_ANGLE + 0.5;
+    public static final double EXTEND_ANGLE = 0.39;
+    public static final double RETRACT_ANGLE = EXTEND_ANGLE + 0.52;
 
     public static final double HORIZONTAL = EXTEND_ANGLE, ENCODER_RATIO = 37 / 18.0; // encoder rots/intake rots
     private static final double ENCODER_OFFSET = EXTEND_ANGLE - 0.1;

@@ -75,6 +75,8 @@ public class Robot extends CommandRobotBase {
         autonChooser.addOption("climb from hell", Auton.c_climbFromHell());
         autonChooser.addOption("ragebait", Auton.c_ragebait());
         autonChooser.addOption("intake SOME of the balls", Auton.c_dipthesecond());
+        autonChooser.addOption("climb fixed?", Auton.c_climbFixed());
+
 
         // pathplanner paths
         String[] names = { "STRET", "romtater", "aaahhh", "go", "climbnew" };

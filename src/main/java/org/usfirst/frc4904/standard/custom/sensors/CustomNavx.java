@@ -5,6 +5,8 @@ import com.studica.frc.Navx;
 import static edu.wpi.first.units.Units.Fahrenheit;
 import static edu.wpi.first.units.Units.Rotations;
 
+import org.usfirst.frc4904.robot.RobotMap.Component;
+
 /**
  * NavX should be mounted to robot according to WPILib coordinates:
  * +X is forward, +Y is left, +Z is up
@@ -13,11 +15,12 @@ public class CustomNavx implements IMU {
 
     protected final Navx navx;
     private double yawOffset;
+    private double lastYaw;
 
     /**
      * Creates a new NavX
      *
-     * @param id the CAN id of the navx. For whatever reason, this must be 0. Don't ask why.
+     * @param id the CAN id of the navx.
      */
     public CustomNavx(int id) {
         navx = new Navx(id);
@@ -25,7 +28,12 @@ public class CustomNavx implements IMU {
 
     @Override
     public double getYaw() {
-        return IMU.wrapAnglePositive(navx.getYaw().in(Rotations) + yawOffset);
+        double raw = navx.getYaw().in(Rotations);
+        System.out.println("raw: " + raw);
+
+        if (raw == 1) return lastYaw;
+
+        return lastYaw = IMU.wrapAnglePositive(raw + yawOffset);
     }
     @Override
     public double getPitch() {
@@ -38,7 +46,7 @@ public class CustomNavx implements IMU {
 
     @Override
     public void zeroYaw(double offset) {
-        yawOffset = offset;
+        yawOffset = offset; 
         navx.resetYaw();
     }
 

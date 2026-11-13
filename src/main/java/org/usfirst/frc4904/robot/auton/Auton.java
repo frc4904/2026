@@ -71,7 +71,25 @@ public final class Auton {
                 Component.intake.c_wobble()
             ).withTimeout(6),
             async(Component.intake.c_retract()),
-            c_sams5StepPlanToWealthAndHappiness(),
+            c_sams5StepPlanToWorldDomination(),
+            Component.climber.c_gotoDown()
+        ); 
+    }
+    
+    public static Command c_climbFixed() {
+        return new AsyncPathPlannerSequence(
+            async(Component.climber.c_gotoUp()),
+            PathManager.c_path("climb fixed 1"),
+            new ParallelCommandGroup(
+                Component.shooter.c_smartShoot(),
+                ShooterSubsystem.c_smartShootAlign(),
+                Component.indexer.c_forward(true),
+                Component.intake.c_retract(),
+                Component.intake.c_wobble()
+            ).withTimeout(4),
+            async(Component.intake.c_retract()),
+            PathManager.c_path("climb fixed 2"),
+            c_sams5StepPlanToWorldDomination(),
             Component.climber.c_gotoDown()
         );
     }
@@ -80,7 +98,7 @@ public final class Auton {
         return new AsyncPathPlannerSequence(
             async(Component.climber.c_gotoUp()),
             PathManager.c_path("climb from hell"),
-            c_sams5StepPlanToWealthAndHappiness(),
+            c_sams5StepPlanToWorldDomination(),
             Component.climber.c_gotoDown().withTimeout(2.5),
             Component.climber.c_gotoUp().withTimeout(2.5),
             Component.climber.c_gotoDown().withTimeout(2.5)
@@ -128,15 +146,15 @@ public final class Auton {
         );
     }
     
-    public static Command c_sams5StepPlanToWealthAndHappiness(){
+    private static Command c_sams5StepPlanToWorldDomination() {
         return new SequentialCommandGroup(
             Component.chassis.c_rotateTo(0.25, false).withTimeout(1.5),
-            Component.chassis.c_driveRobotRelative(-2, 0, 0).withTimeout(1.5),
+            Component.chassis.c_driveRobotRelative(-2, 0, 0).withTimeout(2),
             Component.chassis.c_driveRobotRelative(0, 2, 0).withTimeout(1)
         );
     }
 
-    public static Command c_dipthesecond(){
+    public static Command c_dipthesecond() {
         return new AsyncPathPlannerSequence(
             PathManager.c_path("intake 1"),
             new ParallelDeadlinePathPlannerGroup(

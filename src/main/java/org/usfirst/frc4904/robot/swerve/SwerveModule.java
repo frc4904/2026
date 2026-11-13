@@ -12,9 +12,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CustomDutyCycleEncoder;
+import org.usfirst.frc4904.standard.util.Logging;
 import org.usfirst.frc4904.standard.util.Util;
 
 import static org.usfirst.frc4904.robot.swerve.SwerveConstants.*;
+
+import org.usfirst.frc4904.robot.RobotMap.Component;
 
 public class SwerveModule implements Sendable {
 
@@ -92,6 +95,12 @@ public class SwerveModule implements Sendable {
     void periodic() {
         double angleDist = rotation.rotateToward(theta);
         if (drive != null) drive.setMagnitude(magnitude * angleDist);
+
+        // System.out.println("yaw: " + Component.imu.getYaw());
+
+        // if (name.equals("Back Left")) {
+        //     Logging.log("dist", angleDist);
+        // }
     }
 
     /// SMART DASHBOARD

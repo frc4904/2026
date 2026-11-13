@@ -7,10 +7,10 @@ public class CustomDutyCycleEncoder extends DutyCycleEncoder {
 
     // TODO worst thing since sliced bread
     private static final double[] ZEROS = {
-        0.614, // fl
-        0.183, // fr
-        0.367, // bl
-        0.796  // br
+        0.253, // fl
+        0.226, // fr
+        0.162, // bl
+        0.589  // br
     };
 
     private final String key;

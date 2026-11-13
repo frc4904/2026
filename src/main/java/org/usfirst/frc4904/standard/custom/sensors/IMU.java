@@ -42,6 +42,7 @@ public interface IMU {
 
     /** Set the zero position to the current yaw */
     default void zeroYaw() {
+        System.out.println("reset imu");
         zeroYaw(0);
     }
     /** Set the current yaw to the provided rotation */

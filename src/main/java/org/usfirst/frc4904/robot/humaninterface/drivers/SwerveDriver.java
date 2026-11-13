@@ -74,7 +74,7 @@ public class SwerveDriver extends Driver {
         ps4.cross().onTrue(Component.climber.c_gotoDown());
 
         // long shoot
-        // ps4.circle().whileTrue(Operator.wrapShootCommand(Component.shooter.c_longShoot()));
+        ps4.square().whileTrue(Operator.wrapShootCommand(Component.shooter.c_longShoot()));
 
         // reverse intake
         ps4.circle().whileTrue(new ParallelCommandGroup(
@@ -84,7 +84,7 @@ public class SwerveDriver extends Driver {
         ps4.circle().onTrue(Component.intake.c_extend());
 
         // indexer
-        ps4.square().whileTrue(Component.indexer.c_forward(true));
+        // ps4.square().whileTrue(Component.indexer.c_forward(true));
 
         // intake retract
         ps4.L1().onTrue(Component.intake.c_retract());
